@@ -1170,8 +1170,10 @@ function fuelleWidget(listeId, metaId, spiele, leerText, meta){
 }
 function widgetsBauen(){
   var laufend = D.spiele.filter(function(s){ return s.sa === D.saison; });
-  // Die naechsten 5 Spiele ab heute, aufsteigend nach Datum+Zeit.
-  var naechste = laufend.filter(function(s){ return s.d >= HEUTE; })
+  // Die naechsten 5 Spiele ab heute, aufsteigend nach Datum+Zeit. Sobald ein
+  // Spiel ein Ergebnis hat, faellt es raus (es steht dann im Ergebnis-Widget) --
+  // sonst blockierte ein heute schon gespieltes Spiel einen der fuenf Plaetze.
+  var naechste = laufend.filter(function(s){ return s.d >= HEUTE && !s.e; })
     .sort(function(a,b){ return zeitschluessel(a) < zeitschluessel(b) ? -1 : 1; })
     .slice(0,5);
   fuelleWidget("w-naechste","w-naechste-meta", naechste,
