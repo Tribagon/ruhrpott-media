@@ -234,8 +234,8 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .zeile .pa>span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
 .zeile .pa small{color:var(--muted);font-size:12px}
 /* Gespieltes Spiel: Sieger fett hervorheben, Verlierer daempfen. */
-.zeile .pa .tn.sieger{font-weight:800;color:var(--ink)}
-.zeile .pa .tn.verlierer{color:var(--muted)}
+.tn.sieger{font-weight:800;color:var(--ink)}
+.tn.verlierer{color:var(--muted)}
 .zeile .erg{font-family:var(--f-eng);font-weight:800;font-variant-numeric:tabular-nums;font-size:18px}
 .lchip{font-family:var(--f-eng);font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 7px;
   background:var(--sunken);color:var(--ink-2);border-left:3px solid var(--pk);white-space:nowrap}
@@ -1141,7 +1141,7 @@ function widgetZeile(s){
   b.appendChild(tg);
   b.appendChild(zeitKnoten(s,"wz-zeit"));
   var pa = mk("span","wz-paar");
-  pa.appendChild(mk("span",null,paarText(s)));
+  pa.appendChild(teamKnoten(s));           // hebt bei Ergebnissen den Sieger hervor
   var sub = mk("small");
   sub.appendChild(mk("span","wz-liga", ligaLabel(D.ligen[s.lk])));
   sub.appendChild(document.createTextNode(" · " + (s.halle || "Halle offen")));
