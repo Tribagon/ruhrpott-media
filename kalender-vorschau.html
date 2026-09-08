@@ -197,6 +197,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .eintrag.aktiv .zt,.zeile.aktiv .zt{color:var(--accent-ink)}
 .tagnr{font-family:var(--f-eng);font-size:13px;font-weight:700;color:var(--ink-2);
   align-self:flex-start;padding:1px 6px;border-radius:5px;font-variant-numeric:tabular-nums}
+.t-lang{display:none}   /* nur auf dem Handy: Wochentag + Datum ausgeschrieben */
 .zelle.fremd .tagnr{color:var(--muted);font-weight:400}
 .zelle.heute .tagnr{background:var(--accent);color:#fff}
 .tagnr:hover{background:var(--line)}
@@ -354,6 +355,11 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   .raster{display:flex;flex-direction:column}
   .zelle{border-right:none;min-height:0}
   .zelle.fremd,.zelle.ohne{display:none}
+  /* Ohne Spaltenkopf ist eine nackte Zahl kein erkennbares Datum -- darum hier
+     Wochentag + Datum ausschreiben und die Zeile als Tages-Kopf hervorheben. */
+  .t-kurz{display:none}
+  .t-lang{display:inline}
+  .zelle .tagnr{font-size:13.5px;margin:2px 0 4px}
   .eintrag .pa{display:block}
   .wochentage{display:none}
   .zeile{grid-template-columns:3px 56px 1fr;gap:9px}
@@ -851,7 +857,11 @@ function monatBauen(ziel){
       var z = mk("div","zelle" + (fremd ? " fremd" : "") + (tag === HEUTE ? " heute" : "") +
                        (tag === zustand.ziel ? " ziel" : "") +
                        (spiele.length ? "" : " ohne"));
-      var nr = mk("button","tagnr", String(s2d(tag).getUTCDate()));
+      var nr = mk("button","tagnr");
+      nr.appendChild(mk("span","t-kurz", String(s2d(tag).getUTCDate())));
+      // Auf dem Handy (Kachel wird zur Zeile ohne Spaltenkopf) sagt eine nackte
+      // "13" nicht, dass ein Datum gemeint ist -- dann Wochentag + Datum ausschreiben.
+      nr.appendChild(mk("span","t-lang", WT[wtag(tag)] + " · " + fmtKurz(tag)));
       nr.setAttribute("aria-label", fmtTag(tag) + ", " + spiele.length + " Spiele");
       (function(t){ nr.addEventListener("click", function(){ tagOeffnen(t); }); })(tag);
       z.appendChild(nr);
@@ -926,10 +936,9 @@ function jahrBauen(ziel){
           b.style.background = "color-mix(in srgb, var(--accent) " + Math.round(stufe*100) + "%, var(--sunken))";
           b.title = fmtTag(tag) + ": " + n + (n === 1 ? " Spiel" : " Spiele");
           (function(t){ b.addEventListener("click", function(){
-            // Den angesprungenen Tag merken und hervorheben -- sonst landet man
-            // in einem Monat mit bis zu 24 Spielen und muss den Tag suchen,
-            // den man gerade angeklickt hat.
-            zustand.cursor = t; zustand.ziel = t; wechsle("monat"); }); })(tag);
+            // Klick im Jahr zeigt genau diesen Tag -- alle Spiele, im selben
+            // Tagesfenster wie ein Klick auf den Tag in der Monatsansicht.
+            tagOeffnen(t); }); })(tag);
         } else { b.disabled = true; }
         r.appendChild(b);
       }
