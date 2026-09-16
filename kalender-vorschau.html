@@ -1315,6 +1315,18 @@ function teamsFuellen(){
   var o = mk("option",null,"Alle Teams"); o.value = ""; t.appendChild(o);
   var jeVerein = teamsVonVerein[zustand.saison] || {};
   var liste = zustand.verein ? (jeVerein[zustand.verein] || []) : [];
+  // Ist eine Liga gewaehlt, nur die Teams des Vereins, die in DIESER Liga spielen
+  // (Hendrik 17.09.2026) -- ermittelt wie bei den Vereinen aus den Spielen.
+  if(zustand.liga){
+    var inLiga = {};
+    saisonSpiele().forEach(function(s){
+      var l = D.ligen[s.lk];
+      if(!l || ligaLabel(l) !== zustand.liga) return;
+      if(s.ht != null) inLiga[s.ht] = true;
+      if(s.gt != null) inLiga[s.gt] = true;
+    });
+    liste = liste.filter(function(team){ return inLiga[team.id]; });
+  }
   // Reihenfolge kommt aus dem Export (Herren, Damen, Jugend, Pokal) -- nicht neu
   // sortieren. Wert ist die Team-Id, Text das sprechende Label.
   liste.forEach(function(team){
@@ -1323,6 +1335,9 @@ function teamsFuellen(){
   // Team-Auswahl nur zeigen, wenn ein Verein gewaehlt ist -- sonst gibt es nichts
   // Sinnvolles zu waehlen.
   el("feld-team").hidden = !zustand.verein;
+  // Passt das gewaehlte Team nicht mehr (Liga gewechselt), faellt es raus.
+  t.value = zustand.team;
+  if(t.value !== zustand.team){ zustand.team = ""; t.value = ""; }
 }
 
 function legendeBauen(){
