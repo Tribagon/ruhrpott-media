@@ -634,6 +634,29 @@ function saisonSpiele(){
   return D.spiele.filter(function(s){ return s.sa === zustand.saison; });
 }
 
+// Vorfilter fuer die Dropdowns (Hendrik 17.09.2026): Altersklassen-Chips und Liga
+// schraenken ein, was in Liga/Verein/Team ueberhaupt angeboten wird.
+function alterPasst(s){
+  var l = D.ligen[s.lk];
+  return !!l && !!zustand.alter[farbGruppe(l.alter)];
+}
+function vorfilterSpiele(mitLiga){
+  return saisonSpiele().filter(function(s){
+    if(!alterPasst(s)) return false;
+    return !(mitLiga && zustand.liga && ligaLabel(D.ligen[s.lk]) !== zustand.liga);
+  });
+}
+// Liga -> Verein -> Team neu aufbauen; was nicht mehr passt, faellt raus.
+function auswahlKaskade(){
+  ligenFuellen();
+  if(el("f-liga").value !== zustand.liga){ zustand.liga = ""; el("f-liga").value = ""; }
+  vereineFuellen();
+  if(el("f-verein").value !== zustand.verein){
+    zustand.verein = ""; zustand.team = ""; el("f-verein").value = "";
+  }
+  teamsFuellen();
+}
+
 function passt(s){
   var l = D.ligen[s.lk];
   if(!l) return false;
@@ -1209,8 +1232,7 @@ function filterBauen(){
     // Die Ligen unterscheiden sich je Saison -- neu aufbauen und die Wahl
     // zuruecksetzen, sonst zeigt der Filter eine Liga, die es hier nicht gibt.
     zustand.liga = "";
-    ligenFuellen();
-    vereineFuellen();
+    auswahlKaskade();
     // "Heute" liegt ausserhalb einer vergangenen Saison -- dann waere der
     // Kalender nach dem Umschalten leer und man muesste blind blaettern.
     // Also auf den ersten Spieltag der gewaehlten Saison springen, ausser
@@ -1220,17 +1242,13 @@ function filterBauen(){
     var drin = tage.length && HEUTE >= tage[0] && HEUTE <= tage[tage.length - 1];
     zustand.cursor = drin ? monatsErster(HEUTE)
                           : (tage.length ? monatsErster(tage[0]) : zustand.cursor);
-    teamsFuellen();
     zeichne();
   });
 
   ligenFuellen();
   el("f-liga").addEventListener("change", function(){
     zustand.liga = el("f-liga").value;
-    vereineFuellen();
-    // Passt der gewaehlte Verein nicht mehr zur Liga, faellt er (und das Team) raus.
-    if(el("f-verein").value !== zustand.verein){ zustand.verein = ""; zustand.team = ""; }
-    teamsFuellen();
+    auswahlKaskade();
     zeichne();
   });
 
@@ -1255,6 +1273,7 @@ function filterBauen(){
     b.addEventListener("click", function(){
       zustand.alter[g] = !zustand.alter[g];
       b.setAttribute("aria-pressed", zustand.alter[g] ? "true" : "false");
+      auswahlKaskade();
       zeichne();
     });
     chips.appendChild(b);
@@ -1265,7 +1284,7 @@ function filterBauen(){
     Object.keys(zustand.alter).forEach(function(g){ zustand.alter[g] = true; });
     el("f-liga").value = ""; el("f-suche").value = "";
     Array.prototype.forEach.call(chips.children, function(b){ b.setAttribute("aria-pressed","true"); });
-    vereineFuellen(); teamsFuellen(); zeichne();
+    auswahlKaskade(); zeichne();
   });
 }
 function ligenFuellen(){
@@ -1276,7 +1295,7 @@ function ligenFuellen(){
   // Nach Label deduplizieren (Pokal-Phasen teilen sich eins), dann nach
   // Altersklasse sortieren. Wert und Text sind dasselbe Label.
   var gesehen = {}, ligen = [];
-  saisonSpiele().forEach(function(s){
+  vorfilterSpiele(false).forEach(function(s){
     var li = D.ligen[s.lk]; if(!li) return;
     var lab = ligaLabel(li);
     if(gesehen[lab]) return;
@@ -1295,11 +1314,10 @@ function vereineFuellen(){
   var v = leer(el("f-verein"));
   var o0 = mk("option",null,"Alle Vereine"); o0.value = ""; v.appendChild(o0);
   var erlaubt = null;
-  if(zustand.liga){
+  var alterAktiv = Object.keys(zustand.alter).some(function(g){ return !zustand.alter[g]; });
+  if(zustand.liga || alterAktiv){
     erlaubt = {};
-    saisonSpiele().forEach(function(s){
-      var l = D.ligen[s.lk];
-      if(!l || ligaLabel(l) !== zustand.liga) return;
+    vorfilterSpiele(true).forEach(function(s){
       if(s.hv) erlaubt[s.hv] = true;
       if(s.gv) erlaubt[s.gv] = true;
     });
@@ -1315,18 +1333,15 @@ function teamsFuellen(){
   var o = mk("option",null,"Alle Teams"); o.value = ""; t.appendChild(o);
   var jeVerein = teamsVonVerein[zustand.saison] || {};
   var liste = zustand.verein ? (jeVerein[zustand.verein] || []) : [];
-  // Ist eine Liga gewaehlt, nur die Teams des Vereins, die in DIESER Liga spielen
-  // (Hendrik 17.09.2026) -- ermittelt wie bei den Vereinen aus den Spielen.
-  if(zustand.liga){
-    var inLiga = {};
-    saisonSpiele().forEach(function(s){
-      var l = D.ligen[s.lk];
-      if(!l || ligaLabel(l) !== zustand.liga) return;
-      if(s.ht != null) inLiga[s.ht] = true;
-      if(s.gt != null) inLiga[s.gt] = true;
-    });
-    liste = liste.filter(function(team){ return inLiga[team.id]; });
-  }
+  // Nur die Teams des Vereins, die in der gewaehlten Liga spielen (Hendrik
+  // 17.09.2026) -- ermittelt wie bei den Vereinen aus den Spielen.
+  // Gilt ebenso fuer die Altersklassen-Chips.
+  var imFilter = {};
+  vorfilterSpiele(true).forEach(function(s){
+    if(s.ht != null) imFilter[s.ht] = true;
+    if(s.gt != null) imFilter[s.gt] = true;
+  });
+  liste = liste.filter(function(team){ return imFilter[team.id]; });
   // Reihenfolge kommt aus dem Export (Herren, Damen, Jugend, Pokal) -- nicht neu
   // sortieren. Wert ist die Team-Id, Text das sprechende Label.
   liste.forEach(function(team){
