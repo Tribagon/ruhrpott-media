@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>dobasket Startseite</title>
+<meta name="description" content="Basketballkreis Dortmund: Spiele, Ergebnisse, News, Vorstand und Dokumente.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23ef5a00'/%3E%3C/svg%3E">
+<script>
+/* Theme so frueh wie moeglich setzen (kein Aufblitzen). Gleicher Schluessel wie
+   im Kalender, damit die Wahl auf allen dobasket-Seiten gilt. */
+try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")document.documentElement.setAttribute("data-theme",g);}catch(e){}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&family=Caveat:wght@600&display=swap">
+<style>
+/* Tokens: DESIGN.md Abschnitt 2 -- Namen 1:1 wie kalender-/vereine-vorschau. */
+:root{
+  color-scheme:light;
+  --ground:#f8f8f6; --surface:#ffffff; --sunken:#eef1ef;
+  --stage:#151616; --stage-2:#202324;
+  --line:#e4e7e4; --line-2:#d2d7d3;
+  --ink:#1f1f1f; --ink-2:#3a4650; --muted:#6a7480;
+  --on-stage:#f4f2ee; --on-stage-muted:#a3a9ad;
+  --accent:#ef5a00; --accent-hover:#d94f00; --accent-weich:#ffe7db; --accent-ink:#b8420a;
+  --accent-cta:#cc4d00; --accent-cta-hover:#b84400; --on-accent:#ffffff;
+  --ink-rgb:31,31,31; --accent-rgb:239,90,0; --ground-rgb:248,248,246;
+  --herren:#2b3a44; --damen:#007fa3;
+  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200;
+  --schatten:0 1px 2px rgba(var(--ink-rgb),.06), 0 8px 24px -12px rgba(var(--ink-rgb),.18);
+  --schatten-hoch:0 2px 4px rgba(var(--ink-rgb),.06), 0 24px 48px -20px rgba(var(--ink-rgb),.28);
+  --f-display:"Archivo","Segoe UI",system-ui,sans-serif;
+  --f-ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-eng:"Archivo Narrow","Archivo",system-ui,sans-serif;
+  --f-hand:"Caveat","Segoe Print",cursive;
+  --r:18px;
+  --rand:clamp(16px,4vw,40px);
+  --abschnitt:clamp(72px,10vw,128px);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#14181b; --surface:#1d2226; --sunken:#262c31;
+    --stage:#0c0e0f; --stage-2:#171a1c;
+    --line:#2c343a; --line-2:#3b444b;
+    --ink:#f1f2ef; --ink-2:#c6ccd0; --muted:#8b959c;
+    --accent:#ff7d3f; --accent-hover:#ff9258; --accent-weich:#3a1f10; --accent-ink:#ffb184;
+    --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
+    --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
+    --herren:#b9c4cb; --damen:#35a9cc;
+    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#14181b; --surface:#1d2226; --sunken:#262c31;
+  --stage:#0c0e0f; --stage-2:#171a1c;
+  --line:#2c343a; --line-2:#3b444b;
+  --ink:#f1f2ef; --ink-2:#c6ccd0; --muted:#8b959c;
+  --accent:#ff7d3f; --accent-hover:#ff9258; --accent-weich:#3a1f10; --accent-ink:#ffb184;
+  --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
+  --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
+  --herren:#b9c4cb; --damen:#35a9cc;
+  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);font-size:16.5px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+svg{display:block}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.inhalt{max-width:1240px;margin:0 auto;padding:0 var(--rand)}
+.punkt{color:var(--accent)}
+.nur-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Typo-Bausteine ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.eyebrow::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--accent)}
+.h2{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,4.6vw,58px);line-height:1;letter-spacing:-.03em}
+.lead{font-size:clamp(18px,1.6vw,21px);font-weight:500;line-height:1.5;color:var(--ink-2);max-width:40ch}
+.abschnitt{padding:var(--abschnitt) 0}
+.abschnitt-kopf{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 40px;margin-bottom:44px}
+.abschnitt-kopf .links{display:flex;flex-direction:column;gap:16px;max-width:760px}
+.abschnitt-kopf p{color:var(--ink-2);max-width:56ch}
+
+/* ---------- Buttons / Links / Tags ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;
+  font:800 16px/1 var(--f-ui);letter-spacing:-.005em;text-decoration:none;cursor:pointer;border:2px solid transparent;
+  transition:background .18s,color .18s,border-color .18s,transform .18s var(--ease)}
+.btn-primaer{background:var(--accent-cta);color:var(--on-accent)}
+.btn-primaer:hover{background:var(--accent-cta-hover)}
+.btn-sekundaer{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-sekundaer:hover{background:var(--ink);color:var(--ground)}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:999px}
+.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.btn svg{width:18px;height:18px;transition:transform .18s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.magnet{will-change:transform}
+.link{color:var(--ink);font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 2px no-repeat;transition:background-size .25s var(--ease);padding:4px 0}
+.link:hover,.link:focus-visible{background-size:100% 2px}
+.link svg{width:16px;height:16px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;
+  font:700 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;background:var(--sunken);color:var(--ink-2);white-space:nowrap}
+.tag-akzent{background:var(--accent-weich);color:var(--accent-ink)}
+.tag-platzhalter{border:1px dashed var(--line-2);background:transparent;color:var(--muted)}
+button.tag{min-height:44px;padding:0 18px;font-size:12px;transition:background .15s,color .15s}
+button.tag:hover{background:var(--line)}
+button.tag[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+button.tag:focus-visible{border-radius:999px}
+
+/* ---------- Navigation ---------- */
+.nav{position:sticky;top:0;z-index:60;transition:background .25s,box-shadow .25s}
+.nav.gescrollt{background:rgba(var(--ground-rgb),.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.nav-innen{display:flex;align-items:center;gap:20px;height:76px;transition:height .25s var(--ease)}
+.nav.gescrollt .nav-innen{height:64px}
+.marke{position:relative;display:block;color:var(--ink);flex:none}
+.marke svg{height:44px;width:auto;transition:height .25s var(--ease)}
+.nav.gescrollt .marke svg{height:38px}
+.marke-link{display:block;border-radius:8px}
+/* Unsichtbarer Knopf genau ueber dem Ball im Schriftzug (Easter Egg) */
+.ball-knopf{position:absolute;left:10.5%;top:22%;width:14%;height:52%;border-radius:50%}
+.ball-knopf:focus-visible{outline-offset:0}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:auto}
+.nav-links a{color:var(--ink-2);font-weight:600;font-size:15px;text-decoration:none;padding:10px 13px;border-radius:999px;transition:background .15s,color .15s}
+.nav-links a:hover{color:var(--ink);background:var(--sunken)}
+.nav-links a:focus-visible{border-radius:999px}
+.nav-links .unterseite::after{content:"↗";font-size:11px;margin-left:3px;color:var(--muted)}
+.rund-knopf{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;
+  border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);flex:none;transition:background .15s,color .15s,border-color .15s}
+.rund-knopf:hover{background:var(--sunken);color:var(--ink);border-color:var(--accent)}
+.rund-knopf:focus-visible{border-radius:999px}
+.rund-knopf svg{width:19px;height:19px}
+.burger{display:none;margin-left:auto}
+.menue{position:fixed;inset:0;z-index:70;background:var(--ground);padding:22px var(--rand);display:flex;flex-direction:column;gap:8px;
+  opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .2s,transform .2s var(--ease),visibility 0s .2s}
+.menue.offen{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .2s var(--ease)}
+.menue-kopf{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.menue a{font:900 34px/1.15 var(--f-display);letter-spacing:-.03em;text-decoration:none;color:var(--ink);padding:8px 0;border-bottom:1px solid var(--line)}
+.menue a:hover{color:var(--accent-ink)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;overflow:hidden;padding:clamp(28px,5vw,64px) 0 clamp(64px,8vw,104px);isolation:isolate}
+.hallenlinien{position:absolute;inset:0;z-index:-2;width:100%;height:100%;color:var(--line-2);opacity:.5}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(520px circle at var(--gx,78%) var(--gy,30%),rgba(var(--accent-rgb),.10),transparent 65%);transition:background-position .3s}
+.hero-raster{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(24px,4vw,64px);align-items:center}
+.hero-text{display:flex;flex-direction:column;gap:26px}
+.h1{font-family:var(--f-display);font-weight:900;font-size:clamp(50px,7.2vw,108px);line-height:.92;letter-spacing:-.035em}
+.maske{display:block;white-space:nowrap;overflow:hidden;padding:0 .04em .07em 0;margin-bottom:-.07em}
+.maske>span{display:block;transform:translateY(105%);animation:hoch .95s var(--ease) forwards}
+.maske:nth-child(2)>span{animation-delay:.12s}
+.maske:nth-child(3)>span{animation-delay:.24s}
+.h1 .punkt{display:inline-block;transform:scale(0);animation:plopp .5s .95s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes hoch{to{transform:none}}
+@keyframes plopp{to{transform:scale(1)}}
+.einblenden{opacity:0;transform:translateY(16px);animation:ein .7s var(--d,.5s) var(--ease) forwards}
+@keyframes ein{to{opacity:1;transform:none}}
+.hero-knoepfe{display:flex;flex-wrap:wrap;gap:12px}
+.hero-bild{position:relative;padding-bottom:110px}
+.skyline{width:100%;height:auto;overflow:visible}
+.skyline .strich{fill:none;stroke:var(--ink);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:1;animation:zeichnen 1.6s var(--ease) forwards;animation-delay:var(--d,.3s)}
+.skyline .ball-strich{stroke:var(--accent)}
+.skyline .flaeche{fill:var(--ground)}
+.skyline .fuell{fill:var(--ink);opacity:0;animation:ein .6s var(--d,1.4s) forwards}
+.skyline .sonne{transform-box:fill-box;transform-origin:center;transform:translateY(60px);opacity:0;animation:aufgang 1.3s .5s var(--ease) forwards}
+.skyline .sonne.treffer{animation:treffer .6s var(--ease)}
+@keyframes zeichnen{to{stroke-dashoffset:0}}
+@keyframes aufgang{to{transform:none;opacity:1}}
+@keyframes treffer{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+.wolken{will-change:transform}
+.live-karte{position:absolute;left:-4%;bottom:0;width:min(360px,86%);background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--schatten-hoch);padding:18px 20px;display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;
+  transition:transform .22s var(--ease),border-color .22s}
+.live-karte:hover{transform:translateY(-4px);border-color:var(--accent)}
+.live-karte:focus-visible{border-radius:var(--r)}
+.live-kopf{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.puls{display:inline-flex;align-items:center;gap:8px;color:var(--accent-ink)}
+.puls::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(var(--accent-rgb),.5);animation:puls 2s infinite}
+@keyframes puls{70%{box-shadow:0 0 0 9px rgba(var(--accent-rgb),0)}100%{box-shadow:0 0 0 0 rgba(var(--accent-rgb),0)}}
+.live-paar{font-weight:800;font-size:17px;line-height:1.25;letter-spacing:-.01em}
+.live-paar span{display:block}
+.live-paar small{display:block;font-weight:600;font-size:13px;color:var(--muted);margin:1px 0}
+.live-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink-2)}
+.live-meta b{font-family:var(--f-eng);font-variant-numeric:tabular-nums;font-size:15px}
+
+/* ---------- Laufband ---------- */
+.laufband{background:var(--stage);color:var(--on-stage);overflow:hidden;padding:18px 0;border-block:1px solid var(--stage-2)}
+.laufband-spur{display:flex;width:max-content;animation:laufen 38s linear infinite}
+.laufband:hover .laufband-spur{animation-play-state:paused}
+.laufband-spur span{font:900 clamp(26px,3.6vw,44px)/1 var(--f-display);letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:clamp(20px,3vw,40px);padding-right:clamp(20px,3vw,40px)}
+.laufband-spur i{width:.5em;height:.5em;border-radius:50%;background:var(--accent);display:inline-block}
+.laufband-spur em{font-style:normal;-webkit-text-stroke:1.5px var(--on-stage);color:transparent}
+@keyframes laufen{to{transform:translateX(-50%)}}
+
+/* ---------- Spieltag ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-block:1px solid var(--line);margin-bottom:40px}
+.stat{padding:26px 22px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:none;padding-left:0}
+.stat b{display:block;font:700 clamp(44px,5.6vw,72px)/1 var(--f-eng);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat span{font-size:14px;color:var(--muted);font-weight:600}
+.widgets{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.widget{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--schatten);overflow:hidden;display:flex;flex-direction:column}
+.widget-kopf{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.widget-kopf h3{font-size:18px;font-weight:800;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.widget-kopf h3 svg{width:20px;height:20px;color:var(--accent)}
+.widget-kopf span{white-space:nowrap;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.widget-liste{display:flex;flex-direction:column;flex:1}
+.wz{display:grid;grid-template-columns:3px 38px 58px 1fr auto;align-items:center;gap:12px;padding:12px 20px;text-align:left;width:100%;
+  border-top:1px solid var(--line);transition:background .12s;text-decoration:none;color:inherit;min-height:60px}
+.wz:first-child{border-top:none}
+.wz:hover{background:var(--sunken)}
+.wz:focus-visible{outline-offset:-2px;border-radius:0}
+.wz-rail{width:3px;align-self:stretch;min-height:32px;border-radius:2px;background:var(--pk,var(--muted))}
+.wz-tag{font-family:var(--f-eng);font-size:12px;font-weight:600;color:var(--muted);text-align:center;line-height:1.1}
+.wz-tag b{display:block;font-size:19px;color:var(--ink);font-variant-numeric:tabular-nums}
+.wz-zeit{font-family:var(--f-eng);font-weight:700;font-variant-numeric:tabular-nums;font-size:15.5px}
+.wz-zeit.offen{font-size:12px;color:var(--muted);font-weight:500}
+.wz-paar{font-size:14.5px;min-width:0;line-height:1.4}
+.wz-paar>span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wz-paar small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12.5px}
+.wz-liga{font-family:var(--f-eng);font-weight:700;color:var(--pk,var(--ink-2))}
+.wz-erg{font-family:var(--f-eng);font-weight:800;font-variant-numeric:tabular-nums;font-size:19px}
+.tn.sieger{font-weight:800;color:var(--ink)}
+.tn.verlierer{color:var(--muted)}
+.widget-fuss{padding:14px 20px;border-top:1px solid var(--line);font-size:14px}
+.widget-leer{padding:32px 20px;text-align:center;color:var(--muted);font-size:14px}
+
+/* ---------- Karten (Spotlight) ---------- */
+.karte{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .22s var(--ease),border-color .22s,box-shadow .22s}
+.karte::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .25s;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(var(--accent-rgb),.13),transparent 60%)}
+.karte:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--schatten-hoch)}
+.karte:hover::before{opacity:1}
+.karte:focus-visible{border-radius:var(--r);border-color:var(--accent)}
+.karte:active{transform:translateY(-1px)}
+
+/* News-Bento */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:24px}
+.bento .gross{grid-column:span 4;grid-row:span 3}
+.bento .klein{grid-column:span 2}
+.cover{position:relative;color:var(--ink);background:var(--sunken);overflow:hidden}
+.cover svg.muster{position:absolute;inset:0;width:100%;height:100%}
+.gross .cover{flex:1;min-height:280px;background:var(--stage);color:var(--on-stage)}
+.klein .cover{height:92px}
+.cover-glyphe{position:absolute;right:22px;bottom:18px;width:64px;height:64px;border-radius:50%;background:var(--surface);
+  display:grid;place-items:center;color:var(--accent);box-shadow:var(--schatten)}
+.cover-glyphe svg{width:30px;height:30px}
+.klein .cover-glyphe{width:46px;height:46px;right:16px;bottom:12px}
+.klein .cover-glyphe svg{width:22px;height:22px}
+.news-text{padding:22px 24px 24px;display:flex;flex-direction:column;gap:10px}
+.gross .news-text{padding:28px 30px 30px;gap:14px}
+.news-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.news-text h3{font-size:20px;font-weight:800;line-height:1.2;letter-spacing:-.015em}
+.gross .news-text h3{font-size:clamp(26px,2.6vw,34px);font-weight:900;letter-spacing:-.025em;line-height:1.08}
+.news-text p{color:var(--ink-2);font-size:15.5px}
+.weiter{margin-top:auto;padding-top:4px;font-weight:700;font-size:14.5px;display:inline-flex;align-items:center;gap:8px;color:var(--accent-ink)}
+.weiter svg{width:16px;height:16px;transition:transform .2s var(--ease)}
+.karte:hover .weiter svg{transform:translateX(4px)}
+
+/* ---------- Statement (Graphit-Buehne) ---------- */
+.buehne{background:var(--stage);color:var(--on-stage);position:relative;overflow:hidden}
+.buehne .eyebrow{color:var(--on-stage-muted)}
+.statement{font:900 clamp(30px,4.4vw,60px)/1.08 var(--f-display);letter-spacing:-.03em;margin:26px 0 0;max-width:20ch}
+.statement .wl{opacity:.18;transition:opacity .35s}
+.statement .wl.an{opacity:1}
+.statement .akz{color:var(--accent)}
+.claim{display:inline-block;margin-top:44px;font:600 clamp(34px,4vw,50px)/1 var(--f-hand);color:var(--on-stage);transform:rotate(-4deg);transform-origin:left}
+.claim svg{width:100%;height:18px;margin-top:4px;color:var(--accent)}
+.claim path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s .3s var(--ease)}
+.claim.sichtbar path{stroke-dashoffset:0}
+.buehne-welle{position:absolute;right:-4%;bottom:-2px;width:min(760px,70%);color:var(--stage-2);pointer-events:none}
+.buehne-inhalt{position:relative;display:grid;grid-template-columns:1.5fr 1fr;gap:48px;align-items:end}
+.fakten{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--stage-2)}
+.fakt{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--stage-2);align-items:start}
+.fakt svg{width:26px;height:26px;color:var(--accent);margin-top:2px}
+.fakt b{display:block;font-weight:800;font-size:17px}
+.fakt span{color:var(--on-stage-muted);font-size:15px}
+
+/* ---------- Entdecken ---------- */
+.zwei{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.tuer{padding:34px;min-height:320px;justify-content:space-between;gap:30px}
+.tuer-oben{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.tuer-icon{width:64px;height:64px;border-radius:16px;background:var(--accent-weich);color:var(--accent-ink);display:grid;place-items:center}
+.tuer-icon svg{width:30px;height:30px}
+.tuer-pfeil{width:52px;height:52px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;transition:background .2s,color .2s,transform .3s var(--ease),border-color .2s}
+.tuer-pfeil svg{width:22px;height:22px}
+.tuer:hover .tuer-pfeil{background:var(--ink);color:var(--ground);border-color:var(--ink);transform:rotate(-45deg)}
+.tuer h3{font:900 clamp(32px,3.6vw,46px)/1 var(--f-display);letter-spacing:-.03em}
+.tuer p{color:var(--ink-2);margin-top:12px;max-width:42ch}
+.tuer-zahl{font:700 15px/1 var(--f-eng);color:var(--muted);margin-top:18px;display:flex;gap:18px;flex-wrap:wrap}
+.tuer-zahl b{color:var(--ink);font-size:22px;font-variant-numeric:tabular-nums;margin-right:4px}
+
+/* ---------- Vorstand ---------- */
+.vorstand{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.person{padding:26px;flex-direction:row;gap:20px;align-items:center}
+.d-avatar{position:relative;width:78px;height:92px;flex:none;color:var(--ink)}
+.d-avatar svg.rahmen{position:absolute;inset:0;width:100%;height:100%}
+.d-avatar .rolle-icon{position:absolute;left:18px;top:30px;width:32px;height:32px;color:var(--accent)}
+.person-text{min-width:0;display:flex;flex-direction:column;gap:3px}
+.person-amt{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
+.person-name{font-size:19px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.person-text a{font-size:14px;color:var(--ink-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-bottom:-10px}
+.person-text a:hover{color:var(--accent-ink)}
+.person-text a svg{width:15px;height:15px}
+
+/* ---------- Dokumente ---------- */
+.filter{display:flex;flex-wrap:wrap;gap:8px}
+.doku-liste{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--schatten)}
+.doku{display:grid;grid-template-columns:44px 1fr auto auto;gap:18px;align-items:center;padding:16px 22px;border-top:1px solid var(--line);
+  text-decoration:none;color:inherit;transition:background .15s}
+.doku:first-child{border-top:none}
+.doku:hover{background:var(--sunken)}
+.doku:focus-visible{outline-offset:-3px;border-radius:0}
+.doku-icon{width:40px;height:48px;color:var(--ink-2)}
+.doku-titel{font-weight:700;font-size:16px;line-height:1.3}
+.doku-titel small{display:block;font-weight:500;font-size:13px;color:var(--muted);margin-top:2px}
+.doku-groesse{font:600 14px/1 var(--f-eng);color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.doku-laden{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-2);color:var(--ink);transition:background .15s,color .15s,border-color .15s}
+.doku:hover .doku-laden{background:var(--accent-cta);color:var(--on-accent);border-color:var(--accent-cta)}
+.doku-laden svg{width:19px;height:19px}
+.doku-leer{padding:30px;text-align:center;color:var(--muted)}
+
+/* ---------- Footer ---------- */
+.fuss{background:var(--stage);color:var(--on-stage);padding:72px 0 32px}
+.fuss-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+.fuss .marke{color:var(--on-stage)}
+.fuss .marke svg{height:auto;width:min(300px,100%)}
+.fuss h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage-muted);margin-bottom:14px}
+.fuss ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.fuss ul a{color:var(--on-stage);text-decoration:none;display:inline-block;padding:8px 0;opacity:.85;transition:opacity .15s,color .15s}
+.fuss ul a:hover{opacity:1;color:var(--accent)}
+.fuss-unten{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:56px;padding-top:22px;border-top:1px solid var(--stage-2);
+  font-size:13px;color:var(--on-stage-muted)}
+.buzzer{font-weight:700;color:var(--accent);opacity:0;transform:translateY(6px);transition:opacity .5s,transform .5s var(--ease)}
+.buzzer.an{opacity:1;transform:none}
+
+/* ---------- Scroll-Reveal & Wort-Float ---------- */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--i,0) * 70ms)}
+[data-reveal].sichtbar{opacity:1;transform:none}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.w>span{display:inline-block;transform:translateY(110%);transition:transform .8s var(--ease);transition-delay:calc(var(--i,0) * 60ms)}
+.sichtbar .w>span{transform:none}
+
+/* ---------- Easter Egg ---------- */
+.flugball{position:fixed;left:0;top:0;width:34px;height:34px;z-index:90;pointer-events:none;color:var(--accent)}
+.toast{position:fixed;z-index:91;pointer-events:none;font:900 28px/1 var(--f-display);letter-spacing:-.02em;color:var(--ink);
+  background:var(--surface);border:2px solid var(--accent);padding:10px 16px;border-radius:999px;box-shadow:var(--schatten-hoch);
+  transform:translate(-50%,-50%)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1100px){
+  .nav-links a{padding:10px 9px;font-size:14.5px}
+}
+@media (max-width:1024px){
+  .hero-raster{grid-template-columns:1fr}
+  .hero-bild{max-width:620px;width:100%;margin:10px auto 40px}
+  .live-karte{left:0}
+  .bento{grid-template-columns:repeat(2,1fr)}
+  .bento .gross{grid-column:span 2;grid-row:auto}
+  .bento .klein{grid-column:span 1}
+  .vorstand{grid-template-columns:repeat(2,1fr)}
+  .buehne-inhalt{grid-template-columns:1fr}
+  .fuss-raster{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .thema{margin-left:auto}
+  .burger{display:inline-flex;margin-left:0}
+}
+@media (max-width:760px){
+  .widgets,.zwei,.bento,.vorstand{grid-template-columns:1fr}
+  .bento>*{grid-column:auto!important}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat{padding:20px 16px}
+  .stat:nth-child(odd){border-left:none;padding-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .live-karte{position:relative;left:auto;bottom:auto;width:100%;margin-top:-30px}
+  .hero-bild{margin-bottom:0;padding-bottom:0}
+  .doku{grid-template-columns:36px 1fr auto;gap:14px;padding:14px 16px}
+  .doku-groesse{display:none}
+  .doku-icon{width:34px;height:42px}
+  .tuer{padding:26px;min-height:0}
+  .wz{grid-template-columns:3px 34px 46px 1fr auto;gap:9px;padding:11px 14px}
+  .fuss-raster{grid-template-columns:1fr}
+  .marke svg{height:38px}
+  .gross .cover{min-height:200px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
+  .maske>span,.einblenden,[data-reveal],.w>span{opacity:1!important;transform:none!important}
+  .laufband-spur{animation:none!important}
+  .statement .wl{opacity:1!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ======= SVG-Bibliothek: Wortmarke, Icons, Muster ======= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="wortmarke" shape-rendering="geometricPrecision"><path d="M 1505,657 L 1505,701 L 1526,701 L 1534,698 L 1540,692 L 1543,683 L 1543,674 L 1539,664 L 1533,659 L 1528,657 Z M 1515,664 L 1527,665 L 1533,672 L 1534,676 L 1533,685 L 1531,689 L 1525,693 L 1515,693 L 1514,692 L 1514,665 Z M 1438,657 L 1438,701 L 1447,701 L 1447,675 L 1448,674 L 1452,678 L 1466,701 L 1475,701 L 1475,657 L 1466,657 L 1466,681 L 1465,682 L 1462,680 L 1448,657 Z M 1373,657 L 1373,689 L 1376,696 L 1381,700 L 1390,702 L 1402,699 L 1406,695 L 1409,687 L 1409,657 L 1400,657 L 1400,686 L 1399,689 L 1393,694 L 1386,693 L 1383,690 L 1382,687 L 1382,657 Z M 1299,656 L 1299,701 L 1307,701 L 1307,677 L 1308,676 L 1311,679 L 1316,694 L 1317,695 L 1325,695 L 1333,675 L 1335,676 L 1335,701 L 1343,701 L 1343,656 L 1336,656 L 1332,658 L 1322,682 L 1319,681 L 1310,658 L 1308,656 Z M 1239,656 L 1238,657 L 1238,664 L 1249,664 L 1250,665 L 1250,700 L 1251,701 L 1259,701 L 1259,665 L 1260,664 L 1271,664 L 1271,656 Z M 1182,656 L 1181,657 L 1181,700 L 1182,701 L 1189,701 L 1190,700 L 1190,686 L 1192,684 L 1195,684 L 1198,687 L 1201,694 L 1206,701 L 1215,701 L 1213,696 L 1206,686 L 1206,683 L 1212,678 L 1214,672 L 1213,664 L 1209,659 L 1201,656 Z M 1190,665 L 1191,664 L 1200,664 L 1202,665 L 1205,669 L 1204,674 L 1200,677 L 1192,677 L 1190,675 Z M 1048,656 L 1048,700 L 1071,700 L 1078,697 L 1082,693 L 1086,683 L 1086,674 L 1083,665 L 1077,659 L 1068,656 Z M 1058,664 L 1068,664 L 1072,666 L 1076,672 L 1077,682 L 1075,687 L 1070,692 L 1067,693 L 1058,693 L 1057,692 L 1057,665 Z M 912,656 L 912,700 L 921,700 L 921,656 Z M 855,656 L 855,700 L 884,700 L 884,693 L 883,692 L 882,693 L 874,693 L 864,691 L 864,682 L 865,681 L 881,681 L 882,676 L 881,674 L 865,674 L 864,673 L 864,665 L 866,663 L 884,663 L 884,656 Z M 794,656 L 794,700 L 802,700 L 803,685 L 804,684 L 808,684 L 810,686 L 817,700 L 828,700 L 818,684 L 824,678 L 826,673 L 826,666 L 823,660 L 816,656 Z M 803,664 L 804,663 L 813,664 L 817,668 L 816,673 L 813,676 L 804,676 L 803,675 Z M 1130,655 L 1123,657 L 1116,663 L 1112,671 L 1111,681 L 1113,689 L 1119,697 L 1127,701 L 1137,701 L 1145,698 L 1150,693 L 1153,686 L 1154,675 L 1152,667 L 1147,660 L 1140,656 Z M 1130,663 L 1138,664 L 1144,672 L 1143,687 L 1137,693 L 1133,694 L 1128,693 L 1123,688 L 1121,684 L 1122,670 L 1126,665 Z M 961,655 L 953,660 L 951,664 L 951,672 L 953,676 L 957,679 L 970,683 L 973,686 L 973,690 L 970,693 L 963,693 L 956,687 L 950,693 L 954,698 L 958,700 L 970,701 L 976,699 L 982,692 L 982,683 L 976,676 L 963,672 L 960,669 L 960,666 L 963,663 L 969,663 L 975,667 L 981,662 L 973,656 Z M 732,655 L 731,656 L 731,700 L 740,700 L 740,686 L 744,682 L 746,683 L 756,700 L 767,700 L 751,676 L 752,673 L 766,656 L 755,656 L 745,670 L 741,673 L 740,672 L 740,656 L 733,656 Z M 677,656 L 677,700 L 704,700 L 704,692 L 687,692 L 686,691 L 686,680 L 685,679 L 686,676 L 685,657 L 686,656 L 685,655 L 684,656 Z M 623,655 L 622,656 L 622,700 L 649,700 L 649,692 L 632,692 L 631,691 L 631,655 Z M 570,655 L 554,700 L 563,700 L 567,691 L 582,691 L 584,693 L 586,700 L 595,700 L 580,656 L 579,655 Z M 574,667 L 576,668 L 580,681 L 579,683 L 570,683 L 569,682 Z M 497,655 L 496,656 L 496,700 L 519,700 L 526,697 L 529,693 L 530,689 L 529,682 L 523,677 L 528,668 L 526,660 L 520,656 L 515,655 Z M 505,682 L 506,681 L 517,681 L 521,685 L 521,688 L 515,693 L 506,693 L 505,692 Z M 505,664 L 506,663 L 515,663 L 518,666 L 518,670 L 515,673 L 506,673 L 505,672 Z M 436,655 L 436,663 L 447,663 L 448,664 L 448,700 L 457,700 L 457,664 L 458,663 L 469,663 L 469,656 L 468,655 Z M 381,655 L 381,700 L 410,700 L 410,692 L 391,692 L 390,691 L 390,682 L 391,681 L 407,681 L 407,673 L 391,673 L 390,672 L 390,664 L 391,663 L 409,663 L 409,655 Z M 319,655 L 318,656 L 318,672 L 319,673 L 318,678 L 318,690 L 319,691 L 318,699 L 319,700 L 327,700 L 327,686 L 332,682 L 339,694 L 344,700 L 354,700 L 338,676 L 339,673 L 352,658 L 353,655 L 343,655 L 329,673 L 327,672 L 327,655 Z M 206,655 L 190,700 L 199,700 L 201,693 L 203,691 L 219,691 L 222,700 L 232,700 L 216,655 Z M 210,668 L 213,670 L 216,680 L 215,683 L 206,683 L 205,682 Z M 132,655 L 132,676 L 131,677 L 132,700 L 155,700 L 160,698 L 164,694 L 166,688 L 164,681 L 159,677 L 159,675 L 163,671 L 163,663 L 161,659 L 152,655 Z M 140,682 L 141,681 L 153,681 L 156,684 L 156,689 L 153,692 L 150,693 L 142,693 L 140,691 Z M 140,664 L 141,663 L 151,663 L 154,666 L 154,670 L 151,673 L 141,673 L 140,672 Z M 273,654 L 265,656 L 261,659 L 259,662 L 258,670 L 259,673 L 264,678 L 278,683 L 281,688 L 276,693 L 270,693 L 263,687 L 257,691 L 257,693 L 262,698 L 266,700 L 276,701 L 283,699 L 287,696 L 289,693 L 290,685 L 289,681 L 284,676 L 272,672 L 267,668 L 267,666 L 271,662 L 276,662 L 281,667 L 288,662 L 284,657 L 280,655 Z M 1005,378 L 1004,379 L 988,380 L 972,385 L 958,393 L 947,404 L 940,416 L 937,426 L 937,432 L 936,433 L 937,450 L 939,457 L 944,467 L 956,480 L 965,486 L 983,494 L 1006,500 L 1022,506 L 1028,512 L 1029,519 L 1027,523 L 1020,528 L 1012,530 L 1002,530 L 983,525 L 960,512 L 934,548 L 949,559 L 963,566 L 975,570 L 991,573 L 1015,574 L 1016,573 L 1026,573 L 1027,572 L 1037,571 L 1049,567 L 1065,558 L 1074,549 L 1081,537 L 1085,523 L 1085,504 L 1083,495 L 1079,486 L 1075,480 L 1066,471 L 1041,458 L 1002,447 L 994,440 L 993,437 L 994,432 L 999,427 L 1009,424 L 1017,424 L 1033,428 L 1043,433 L 1053,440 L 1075,411 L 1079,404 L 1061,391 L 1045,384 L 1023,379 Z M 783,395 L 771,407 L 763,420 L 764,423 L 805,447 L 807,447 L 810,442 L 822,430 L 834,425 L 848,425 L 857,429 L 864,437 L 866,443 L 866,453 L 861,455 L 831,457 L 805,462 L 787,469 L 775,477 L 768,484 L 760,498 L 757,509 L 757,530 L 760,541 L 768,555 L 774,561 L 788,569 L 798,572 L 812,573 L 813,574 L 829,573 L 844,569 L 854,564 L 865,555 L 867,556 L 868,569 L 929,569 L 928,554 L 927,553 L 927,541 L 926,540 L 926,445 L 921,423 L 918,416 L 910,404 L 901,395 L 888,387 L 875,382 L 861,379 L 853,379 L 852,378 L 833,378 L 832,379 L 818,380 L 801,385 Z M 866,492 L 866,512 L 863,518 L 854,527 L 841,532 L 830,532 L 824,530 L 817,524 L 815,520 L 815,511 L 817,507 L 825,500 L 835,496 L 845,494 L 850,494 L 863,491 Z M 1510,331 L 1451,345 L 1451,383 L 1450,384 L 1430,384 L 1430,429 L 1429,430 L 1427,429 L 1423,420 L 1416,410 L 1405,399 L 1397,393 L 1383,386 L 1370,382 L 1359,381 L 1358,380 L 1338,380 L 1337,381 L 1326,382 L 1308,388 L 1298,393 L 1288,400 L 1275,413 L 1266,427 L 1258,448 L 1255,464 L 1255,491 L 1259,511 L 1267,529 L 1276,542 L 1287,553 L 1300,562 L 1322,571 L 1338,574 L 1352,574 L 1355,575 L 1356,574 L 1372,574 L 1373,573 L 1385,572 L 1405,566 L 1418,559 L 1432,547 L 1402,514 L 1393,520 L 1377,527 L 1368,529 L 1351,529 L 1343,527 L 1333,522 L 1321,509 L 1317,497 L 1318,496 L 1436,496 L 1437,466 L 1436,465 L 1435,451 L 1429,431 L 1430,430 L 1450,430 L 1451,431 L 1451,520 L 1455,537 L 1462,551 L 1470,560 L 1477,565 L 1485,569 L 1499,573 L 1508,573 L 1509,574 L 1527,573 L 1548,568 L 1547,523 L 1534,526 L 1524,525 L 1518,522 L 1513,517 L 1510,509 L 1510,431 L 1511,430 L 1547,430 L 1547,384 L 1511,384 L 1510,383 Z M 1317,454 L 1322,441 L 1329,433 L 1340,427 L 1354,426 L 1365,430 L 1372,436 L 1377,444 L 1380,457 L 1379,458 L 1318,458 Z M 1092,310 L 1092,570 L 1151,570 L 1151,514 L 1163,501 L 1167,504 L 1209,570 L 1281,570 L 1207,463 L 1209,458 L 1267,397 L 1278,384 L 1206,384 L 1156,446 L 1152,449 L 1151,448 L 1151,311 L 1150,310 Z M 542,305 L 542,568 L 674,568 L 693,564 L 707,559 L 715,555 L 728,546 L 736,538 L 744,527 L 748,519 L 753,501 L 752,475 L 749,465 L 745,457 L 738,447 L 732,441 L 725,436 L 712,430 L 713,427 L 722,422 L 733,412 L 740,402 L 746,386 L 747,381 L 746,356 L 744,349 L 735,333 L 723,321 L 715,316 L 698,309 L 684,306 L 678,306 L 677,305 Z M 604,460 L 605,459 L 661,459 L 669,461 L 676,465 L 681,470 L 685,477 L 686,481 L 685,497 L 677,508 L 673,511 L 663,515 L 658,515 L 657,516 L 605,516 L 604,515 Z M 604,358 L 605,357 L 660,357 L 670,361 L 678,370 L 680,376 L 680,387 L 678,393 L 674,399 L 669,403 L 659,407 L 605,407 L 604,406 Z M 135,217 L 131,222 L 131,613 L 133,618 L 140,622 L 148,622 L 149,621 L 154,622 L 343,622 L 344,621 L 358,621 L 359,620 L 365,620 L 381,617 L 406,609 L 432,596 L 455,579 L 471,563 L 481,550 L 490,536 L 500,516 L 509,491 L 513,475 L 515,458 L 516,457 L 516,450 L 517,449 L 517,437 L 518,436 L 517,391 L 516,390 L 516,383 L 515,382 L 513,365 L 508,346 L 501,327 L 493,310 L 480,289 L 467,273 L 449,256 L 426,240 L 396,226 L 370,219 L 358,218 L 357,217 L 347,217 L 346,216 L 137,216 Z M 155,579 L 177,569 L 196,564 L 209,563 L 210,562 L 234,562 L 264,568 L 326,589 L 341,592 L 365,593 L 366,595 L 351,598 L 156,598 L 155,597 Z M 213,345 L 215,343 L 237,343 L 239,345 L 239,355 L 238,356 L 214,356 L 213,355 Z M 222,305 L 230,305 L 231,306 L 231,321 L 230,322 L 222,322 L 221,321 L 221,306 Z M 156,240 L 341,240 L 342,241 L 361,243 L 388,251 L 406,259 L 433,277 L 452,295 L 467,315 L 476,332 L 485,357 L 492,391 L 492,399 L 493,400 L 493,441 L 492,442 L 492,451 L 486,482 L 478,505 L 468,525 L 455,543 L 447,536 L 440,533 L 431,533 L 425,536 L 422,536 L 417,527 L 409,519 L 402,515 L 395,513 L 380,513 L 374,515 L 364,521 L 357,530 L 355,538 L 353,540 L 344,540 L 336,544 L 330,551 L 328,560 L 336,563 L 356,567 L 369,567 L 370,568 L 390,567 L 414,562 L 446,549 L 447,551 L 440,558 L 430,566 L 401,575 L 391,576 L 390,577 L 359,577 L 329,571 L 265,548 L 239,544 L 238,543 L 198,544 L 180,548 L 165,553 L 158,557 L 155,556 L 155,548 L 168,542 L 188,536 L 205,534 L 206,533 L 213,533 L 217,472 L 218,471 L 218,460 L 219,459 L 219,446 L 220,445 L 220,433 L 221,432 L 221,419 L 222,418 L 224,371 L 226,365 L 228,366 L 228,371 L 229,372 L 229,390 L 230,391 L 230,403 L 231,404 L 231,418 L 232,419 L 234,460 L 235,461 L 235,472 L 236,473 L 240,534 L 252,535 L 273,540 L 291,546 L 315,556 L 318,555 L 319,551 L 319,545 L 315,536 L 311,532 L 305,529 L 296,528 L 294,522 L 290,516 L 283,510 L 275,507 L 265,507 L 259,509 L 253,513 L 251,512 L 245,436 L 244,435 L 243,415 L 242,414 L 242,405 L 241,404 L 241,395 L 240,394 L 240,385 L 239,384 L 239,375 L 238,374 L 238,366 L 239,365 L 245,365 L 248,362 L 248,338 L 245,335 L 239,335 L 231,333 L 232,330 L 238,330 L 241,326 L 241,301 L 238,297 L 231,295 L 231,255 L 229,252 L 224,252 L 222,255 L 222,295 L 221,296 L 216,296 L 212,299 L 212,327 L 214,330 L 220,330 L 222,333 L 220,335 L 207,335 L 204,339 L 204,362 L 207,365 L 213,365 L 215,367 L 214,380 L 213,381 L 213,391 L 212,392 L 212,402 L 211,403 L 211,413 L 210,414 L 210,424 L 209,425 L 209,435 L 208,436 L 207,454 L 206,455 L 205,475 L 204,476 L 204,486 L 202,487 L 195,483 L 181,484 L 177,486 L 171,492 L 167,505 L 160,506 L 157,508 L 155,507 L 155,241 Z M 225,452 L 222,455 L 222,533 L 231,533 L 230,454 L 228,452 Z M 366,298 L 365,299 L 349,300 L 327,307 L 312,315 L 293,331 L 278,352 L 273,362 L 268,377 L 267,387 L 266,388 L 266,414 L 269,428 L 278,450 L 289,466 L 306,482 L 320,491 L 340,499 L 356,502 L 378,502 L 379,501 L 390,500 L 406,495 L 424,486 L 437,476 L 446,467 L 458,450 L 464,437 L 469,420 L 470,407 L 471,406 L 471,395 L 470,394 L 469,380 L 462,359 L 452,342 L 437,325 L 421,313 L 407,306 L 387,300 Z M 358,307 L 379,307 L 397,311 L 415,319 L 427,327 L 443,343 L 451,355 L 458,370 L 463,391 L 463,408 L 460,424 L 451,446 L 442,459 L 428,473 L 413,483 L 393,491 L 377,494 L 357,494 L 342,491 L 333,488 L 319,481 L 309,474 L 293,458 L 285,446 L 279,433 L 274,413 L 274,390 L 275,389 L 276,379 L 285,356 L 296,340 L 307,329 L 323,318 L 339,311 Z" fill="currentColor" fill-rule="evenodd"/><path d="M 449,622 L 1537,623 L 1542,621 L 1547,616 L 1549,608 L 1547,602 L 1540,596 L 973,596 L 972,595 L 971,596 L 968,595 L 964,596 L 960,595 L 951,595 L 950,596 L 797,596 L 796,595 L 792,596 L 772,596 L 771,595 L 768,596 L 766,595 L 763,596 L 516,596 L 515,595 L 511,596 L 485,596 L 484,595 L 465,611 Z M 363,308 L 362,309 L 354,309 L 344,311 L 332,315 L 322,320 L 310,328 L 295,343 L 287,355 L 278,377 L 276,386 L 276,393 L 275,394 L 275,409 L 278,425 L 286,445 L 293,456 L 306,470 L 318,479 L 334,487 L 347,491 L 352,491 L 359,493 L 373,493 L 374,492 L 388,491 L 404,486 L 422,476 L 438,462 L 446,452 L 456,432 L 460,419 L 461,398 L 462,397 L 461,396 L 460,382 L 456,368 L 444,346 L 429,330 L 416,321 L 401,314 L 382,309 Z M 385,409 L 385,413 L 382,423 L 377,433 L 370,443 L 356,457 L 345,465 L 334,471 L 328,472 L 316,464 L 304,452 L 296,440 L 297,436 L 305,436 L 322,431 L 360,414 L 383,408 Z M 405,406 L 406,407 L 406,423 L 402,443 L 397,457 L 385,479 L 381,481 L 374,481 L 373,482 L 362,482 L 361,481 L 353,481 L 345,479 L 343,476 L 352,471 L 366,460 L 381,443 L 385,437 L 392,421 L 394,408 L 397,406 Z M 433,405 L 436,406 L 450,406 L 451,407 L 447,427 L 443,434 L 440,432 L 436,423 L 432,408 Z M 422,405 L 424,407 L 424,413 L 429,429 L 437,444 L 437,446 L 417,466 L 400,475 L 399,472 L 407,456 L 412,440 L 414,430 L 414,422 L 415,421 L 415,406 L 416,405 Z M 439,363 L 441,363 L 443,365 L 449,381 L 450,392 L 451,393 L 450,397 L 447,396 L 433,396 L 432,395 L 433,380 L 436,369 Z M 286,410 L 286,391 L 288,381 L 293,367 L 296,364 L 308,361 L 327,361 L 350,368 L 368,379 L 378,389 L 382,395 L 381,400 L 372,401 L 356,406 L 324,421 L 301,428 L 292,428 L 290,426 Z M 380,320 L 391,322 L 408,329 L 421,338 L 433,350 L 434,354 L 431,359 L 426,373 L 423,387 L 423,395 L 422,396 L 415,396 L 414,395 L 412,379 L 406,360 L 395,340 L 389,332 L 379,322 Z M 302,352 L 314,339 L 332,327 L 349,321 L 363,320 L 380,335 L 393,353 L 403,378 L 405,388 L 405,396 L 404,397 L 395,397 L 393,398 L 388,388 L 381,379 L 372,371 L 356,361 L 343,356 L 330,353 L 316,352 L 315,353 L 305,353 L 303,354 Z" style="fill:var(--accent)" fill-rule="evenodd"/></g>
+
+    <symbol id="i-pfeil" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-kalender" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></g></symbol>
+    <symbol id="i-pokal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M12 14v4M8 21h8"/></g></symbol>
+    <symbol id="i-pfeife" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="14" r="5"/><path d="M13 11l8-3v4l-6 2M3 6l2 2M8 3v3"/></g></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></g></symbol>
+    <symbol id="i-stimme" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h3l5-5v12l-5-5H4z"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/></g></symbol>
+    <symbol id="i-euro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6.5A7 7 0 1 0 18 17.5"/><path d="M4 10h9M4 14h9"/></g></symbol>
+    <symbol id="i-ball" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.6 5.6c3 2.6 3 10.2 0 12.8M18.4 5.6c-3 2.6-3 10.2 0 12.8"/></g></symbol>
+    <symbol id="i-plan" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><rect x="9" y="2.5" width="6" height="4" rx="1.2"/><path d="M8 12h8M8 16h5"/></g></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></g></symbol>
+    <symbol id="i-laden" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mond" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sonne" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></symbol>
+    <symbol id="i-menue" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-zu" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-uhr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+    <symbol id="i-blatt" viewBox="0 0 40 48"><path d="M4 4a3 3 0 0 1 3-3h19l11 11v32a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><path d="M26 1v8a3 3 0 0 0 3 3h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+
+    <!-- Markenmuster: D-Rahmen, Ball, Welle, Wolke (Moodboard 05) -->
+    <pattern id="muster" style="color:var(--line-2)" width="150" height="150" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)">
+      <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 14h16a22 22 0 0 1 0 44H14Z"/>
+        <path d="M84 100c10-10 22-10 32 0s22 10 32 0"/>
+        <path d="M-66 100c10-10 22-10 32 0s22 10 32 0" transform="translate(0 0)"/>
+      </g>
+      <g fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round">
+        <circle cx="108" cy="36" r="20"/><path d="M88 36h40M108 16v40M94 22c6 6 6 22 0 28M122 22c-6 6-6 22 0 28"/>
+      </g>
+      <path d="M18 128a10 10 0 0 1 14-12 13 13 0 0 1 24 3 9 9 0 0 1 8 9Z" fill="currentColor"/>
+    </pattern>
+      </defs>
+</svg>
+
+<!-- ======= Navigation ======= -->
+<header class="nav" id="nav">
+  <div class="inhalt nav-innen">
+    <div class="marke">
+      <a class="marke-link" href="#top" aria-label="dobasket – Basketballkreis Dortmund, zum Seitenanfang">
+        <svg viewBox="116 201 1448 430" role="img" aria-hidden="true"><use href="#wortmarke"/></svg>
+      </a>
+      <button class="ball-knopf" type="button" id="ball-knopf" aria-label="Ball"></button>
+    </div>
+    <nav class="nav-links" aria-label="Hauptnavigation">
+      <a href="#spieltag">Spieltag</a>
+      <a href="#news">News</a>
+      <a href="vereine-vorschau.html" class="unterseite">Vereine</a>
+      <a href="kalender-vorschau.html" class="unterseite">Kalender</a>
+      <a href="#vorstand">Vorstand</a>
+      <a href="#dokumente">Dokumente</a>
+    </nav>
+    <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
+    <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
+  </div>
+</header>
+
+<div class="menue" id="menue" role="dialog" aria-modal="true" aria-label="Menü">
+  <div class="menue-kopf">
+    <span class="eyebrow">Menü</span>
+    <button class="rund-knopf" type="button" id="menue-zu" aria-label="Menü schließen"><svg><use href="#i-zu"/></svg></button>
+  </div>
+  <a href="#spieltag">Spieltag</a>
+  <a href="#news">News</a>
+  <a href="vereine-vorschau.html">Vereine ↗</a>
+  <a href="kalender-vorschau.html">Kalender ↗</a>
+  <a href="#vorstand">Vorstand</a>
+  <a href="#dokumente">Dokumente</a>
+</div>
+
+<main id="top">
+
+<!-- ======= Hero ======= -->
+<section class="hero" id="hero">
+  <svg class="hallenlinien" viewBox="0 0 1440 820" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="1080" cy="410" r="150"/>
+      <path d="M1080 -10v840"/>
+      <path d="M-40 250h250v320H-40"/>
+      <path d="M210 290a120 120 0 0 1 0 240"/>
+      <path d="M-40 60h140a360 360 0 0 1 0 700H-40"/>
+    </g>
+  </svg>
+  <div class="inhalt hero-raster">
+    <div class="hero-text">
+      <span class="eyebrow einblenden" style="--d:.1s"><span>Basketballkreis Dortmund · Saison <span data-saison>2026/27</span></span></span>
+      <h1 class="h1">
+        <span class="maske"><span>Dortmund</span></span>
+        <span class="maske"><span>spielt</span></span>
+        <span class="maske"><span>Basketball<span class="punkt">.</span></span></span>
+      </h1>
+      <p class="lead einblenden" style="--d:.55s">Spiele, Ergebnisse und alles rund um den Kreis – von der Jugend bis zur Oberliga, von Huckarde bis Wickede.</p>
+      <div class="hero-knoepfe einblenden" style="--d:.7s">
+        <a class="btn btn-primaer magnet" href="kalender-vorschau.html">Zum Spielkalender <svg><use href="#i-pfeil"/></svg></a>
+        <a class="btn btn-sekundaer magnet" href="vereine-vorschau.html">Vereine &amp; Teams</a>
+      </div>
+    </div>
+
+    <div class="hero-bild">
+      <svg class="skyline" viewBox="0 0 640 560" role="img" aria-label="Dortmunder Skyline mit Fernsehturm, U-Turm und Stadion, dahinter geht ein Basketball wie die Sonne auf">
+        <!-- Ball als Sonne -->
+        <g class="sonne" id="sonne">
+          <circle cx="410" cy="220" r="118" class="flaeche"/>
+          <g class="ball-strich" fill="none" stroke-width="8" stroke-linecap="round">
+            <circle cx="410" cy="220" r="118" stroke="var(--accent)"/>
+            <path d="M292 220h236M410 102v236M330 135c38 34 38 136 0 170M490 135c-38 34-38 136 0 170" stroke="var(--accent)"/>
+          </g>
+        </g>
+        <!-- Stadion -->
+        <g>
+          <path class="flaeche" d="M430 470 L448 402 H610 L628 470Z"/>
+          <path class="strich" style="--d:.9s" pathLength="1" d="M430 470 L448 402 H610 L628 470"/>
+          <path class="strich" style="--d:1.1s" pathLength="1" d="M462 402V352M596 402V352M462 368h-18M596 368h18M470 432h118"/>
+        </g>
+        <!-- Haeuser -->
+        <g>
+          <rect class="flaeche" x="292" y="336" width="44" height="140"/>
+          <rect class="flaeche" x="342" y="292" width="36" height="184"/>
+          <rect class="flaeche" x="384" y="360" width="38" height="116"/>
+          <path class="strich" style="--d:.7s" pathLength="1" d="M292 476V336h44v140M342 476V292h36v184M384 476V360h38v116"/>
+        </g>
+        <!-- U-Turm -->
+        <g>
+          <rect class="flaeche" x="222" y="236" width="60" height="240"/>
+          <path class="strich" style="--d:.55s" pathLength="1" d="M222 476V236h60v240"/>
+          <path class="strich" style="--d:1.2s" pathLength="1" d="M238 252v16a14 14 0 0 0 28 0v-16"/>
+        </g>
+        <!-- Fernsehturm (Florianturm) -->
+        <g>
+          <path class="flaeche" d="M140 476 152 150h28l12 326Z"/>
+          <path class="strich" style="--d:.3s" pathLength="1" d="M166 30v70"/>
+          <rect class="flaeche" x="154" y="98" width="24" height="26" rx="5"/>
+          <rect class="strich" style="--d:.45s" pathLength="1" x="154" y="98" width="24" height="26" rx="5"/>
+          <rect class="flaeche" x="140" y="126" width="52" height="28" rx="7"/>
+          <rect class="strich" style="--d:.55s" pathLength="1" x="140" y="126" width="52" height="28" rx="7"/>
+          <path class="strich" style="--d:.65s" pathLength="1" d="M154 156 144 476M178 156 188 476M166 330v146"/>
+        </g>
+        <!-- Wolken (Parallax) -->
+        <g class="wolken" id="wolken">
+          <path class="fuell" style="--d:1.5s" d="M40 474a20 20 0 0 1 26-26 28 28 0 0 1 52 2 20 20 0 0 1 26 24Z"/>
+          <path class="fuell" style="--d:1.65s" d="M500 486a18 18 0 0 1 24-22 26 26 0 0 1 48 2 18 18 0 0 1 24 20Z"/>
+        </g>
+        <!-- Welle -->
+        <path class="flaeche" d="M0 476C110 440 220 440 330 474S540 520 640 470V560H0Z"/>
+        <path class="strich" style="--d:.1s" pathLength="1" d="M8 476C110 440 220 440 330 474S540 520 632 470"/>
+        <path class="strich" style="--d:.35s" pathLength="1" d="M8 516C120 486 230 490 330 512S540 540 632 508"/>
+      </svg>
+
+      <a class="live-karte einblenden" style="--d:1.2s" href="kalender-vorschau.html" id="live-karte">
+        <div class="live-kopf"><span class="puls" id="live-wann">Nächstes Spiel</span><span id="live-liga"></span></div>
+        <div class="live-paar" id="live-paar"><span>Spielplan wird geladen …</span></div>
+        <div class="live-meta" id="live-meta"></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======= Laufband ======= -->
+<div class="laufband" aria-hidden="true">
+  <div class="laufband-spur">
+    <span>Dortmund spielt Basketball <i></i> <em>Klar</em> <i></i> Urban <i></i> <em>Modern</em> <i></i></span>
+    <span>Dortmund spielt Basketball <i></i> <em>Klar</em> <i></i> Urban <i></i> <em>Modern</em> <i></i></span>
+    <span>Dortmund spielt Basketball <i></i> <em>Klar</em> <i></i> Urban <i></i> <em>Modern</em> <i></i></span>
+    <span>Dortmund spielt Basketball <i></i> <em>Klar</em> <i></i> Urban <i></i> <em>Modern</em> <i></i></span>
+  </div>
+</div>
+
+<!-- ======= Spieltag (Live-Daten) ======= -->
+<section class="abschnitt" id="spieltag">
+  <div class="inhalt">
+    <div class="abschnitt-kopf">
+      <div class="links">
+        <span class="eyebrow" data-reveal>Spieltag · live aus dem Spielplan</span>
+        <h2 class="h2" data-float>Was auf dem Feld los ist<span class="punkt">.</span></h2>
+      </div>
+      <a class="link" href="kalender-vorschau.html" data-reveal>Kompletter Kalender <svg><use href="#i-pfeil"/></svg></a>
+    </div>
+
+    <div class="stats" id="stats">
+      <div class="stat" data-reveal style="--i:0"><b data-zahl="spiele">0</b><span>Spiele diese Saison</span></div>
+      <div class="stat" data-reveal style="--i:1"><b data-zahl="ligen">0</b><span>Ligen &amp; Pokale</span></div>
+      <div class="stat" data-reveal style="--i:2"><b data-zahl="vereine">0</b><span>Vereine im Kreis</span></div>
+      <div class="stat" data-reveal style="--i:3"><b data-zahl="teams">0</b><span>Mannschaften</span></div>
+    </div>
+
+    <div class="widgets">
+      <div class="widget" data-reveal style="--i:0">
+        <div class="widget-kopf"><h3><svg><use href="#i-uhr"/></svg>Die nächsten Spiele</h3><span id="w-naechste-meta"></span></div>
+        <div class="widget-liste" id="w-naechste"><div class="widget-leer">Spielplan wird geladen …</div></div>
+        <div class="widget-fuss"><a class="link" href="kalender-vorschau.html">Alle Spiele im Kalender <svg><use href="#i-pfeil"/></svg></a></div>
+      </div>
+      <div class="widget" data-reveal style="--i:1">
+        <div class="widget-kopf"><h3><svg><use href="#i-pokal"/></svg>Die neuesten Ergebnisse</h3><span id="w-ergebnisse-meta"></span></div>
+        <div class="widget-liste" id="w-ergebnisse"><div class="widget-leer">Ergebnisse werden geladen …</div></div>
+        <div class="widget-fuss"><a class="link" href="kalender-vorschau.html">Alle Ergebnisse <svg><use href="#i-pfeil"/></svg></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= News (Platzhalter) ======= -->
+<section class="abschnitt" id="news" style="padding-top:0">
+  <div class="inhalt">
+    <div class="abschnitt-kopf">
+      <div class="links">
+        <span class="eyebrow" data-reveal>News</span>
+        <h2 class="h2" data-float>Neues aus dem Kreis<span class="punkt">.</span></h2>
+      </div>
+      <span class="tag tag-platzhalter" data-reveal>Platzhalter-Inhalte</span>
+    </div>
+
+    <div class="bento">
+      <a class="karte gross" href="#" data-reveal style="--i:0">
+        <div class="cover">
+          <svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster-buehne)" opacity=".45"/></svg>
+          <div class="cover-glyphe"><svg><use href="#i-ball"/></svg></div>
+        </div>
+        <div class="news-text">
+          <div class="news-meta"><span class="tag tag-akzent">Spielbetrieb</span><time datetime="2026-09-05">05.09.2026</time></div>
+          <h3>Saisonstart 2026/27: Alles, was ihr zum neuen Spieljahr wissen müsst</h3>
+          <p>Neue Staffeleinteilung, geänderte Meldefristen und der Kreispokal im neuen Modus – der Überblick für Vereine, Trainer:innen und Fans.</p>
+          <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
+        </div>
+      </a>
+      <a class="karte klein" href="#" data-reveal style="--i:1">
+        <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
+          <div class="cover-glyphe"><svg><use href="#i-pokal"/></svg></div></div>
+        <div class="news-text">
+          <div class="news-meta"><span class="tag">Pokal</span><time datetime="2026-09-14">14.09.2026</time></div>
+          <h3>Kreispokal: Die Auslosung der 2. Runde</h3>
+          <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
+        </div>
+      </a>
+      <a class="karte klein" href="#" data-reveal style="--i:2">
+        <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
+          <div class="cover-glyphe"><svg><use href="#i-pfeife"/></svg></div></div>
+        <div class="news-text">
+          <div class="news-meta"><span class="tag">Schiedsrichter</span><time datetime="2026-09-10">10.09.2026</time></div>
+          <h3>Neulingslehrgang im Oktober – jetzt anmelden</h3>
+          <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
+        </div>
+      </a>
+      <a class="karte klein" href="#" data-reveal style="--i:3">
+        <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
+          <div class="cover-glyphe"><svg><use href="#i-stimme"/></svg></div></div>
+        <div class="news-text">
+          <div class="news-meta"><span class="tag">Kreistag</span><time datetime="2026-09-02">02.09.2026</time></div>
+          <h3>Einladung zum Kreistag 2026</h3>
+          <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======= Statement (Graphit) ======= -->
+<section class="buehne abschnitt" id="kreis">
+  <svg class="buehne-welle" viewBox="0 0 760 220" aria-hidden="true"><path d="M0 220V120C140 60 260 60 380 110S620 170 760 90V220Z" fill="currentColor"/></svg>
+  <div class="inhalt buehne-inhalt">
+    <div>
+      <span class="eyebrow">Der Kreis</span>
+      <p class="statement" id="statement">Basketball verbindet Menschen in Dortmund. Auf und neben dem Feld. Wir organisieren den Spielbetrieb, bilden Schiris aus und bringen <span class="akz">Vereine zusammen.</span></p>
+      <div class="claim" id="claim">Gemeinsam mehr erreichen.
+        <svg viewBox="0 0 300 18" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M4 12C80 2 190 2 296 10" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div class="fakten">
+      <div class="fakt" data-reveal style="--i:0"><svg><use href="#i-kalender"/></svg><div><b>Spielbetrieb</b><span>Kreisligen, Jugendligen und Kreispokal – angesetzt, geleitet, gewertet.</span></div></div>
+      <div class="fakt" data-reveal style="--i:1"><svg><use href="#i-pfeife"/></svg><div><b>Schiedsrichterwesen</b><span>Ausbildung, Fortbildung und Ansetzungen für den Kreis.</span></div></div>
+      <div class="fakt" data-reveal style="--i:2"><svg><use href="#i-team"/></svg><div><b>Jugendförderung</b><span>Auswahl, Camps und Unterstützung für die Vereinsjugend.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= Entdecken ======= -->
+<section class="abschnitt" id="entdecken">
+  <div class="inhalt">
+    <div class="abschnitt-kopf">
+      <div class="links">
+        <span class="eyebrow" data-reveal>Entdecken</span>
+        <h2 class="h2" data-float>Finde dein Team<span class="punkt">.</span></h2>
+      </div>
+    </div>
+    <div class="zwei">
+      <a class="karte tuer" href="vereine-vorschau.html" data-reveal style="--i:0">
+        <div class="tuer-oben"><div class="tuer-icon"><svg><use href="#i-team"/></svg></div><div class="tuer-pfeil"><svg><use href="#i-pfeil"/></svg></div></div>
+        <div>
+          <h3>Vereine &amp; Teams<span class="punkt">.</span></h3>
+          <p>Alle Vereine des Kreises mit ihren Mannschaften, Tabellenplätzen und Ergebnissen.</p>
+          <div class="tuer-zahl"><span><b data-zahl="vereine">0</b>Vereine</span><span><b data-zahl="teams">0</b>Mannschaften</span></div>
+        </div>
+      </a>
+      <a class="karte tuer" href="kalender-vorschau.html" data-reveal style="--i:1">
+        <div class="tuer-oben"><div class="tuer-icon"><svg><use href="#i-kalender"/></svg></div><div class="tuer-pfeil"><svg><use href="#i-pfeil"/></svg></div></div>
+        <div>
+          <h3>Spielkalender<span class="punkt">.</span></h3>
+          <p>Jedes Spiel mit Halle und Uhrzeit – filterbar nach Liga, Verein und Altersklasse.</p>
+          <div class="tuer-zahl"><span><b data-zahl="spiele">0</b>Spiele</span><span><b data-zahl="ligen">0</b>Ligen</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======= Vorstand (Platzhalter) ======= -->
+<section class="abschnitt" id="vorstand" style="padding-top:0">
+  <div class="inhalt">
+    <div class="abschnitt-kopf">
+      <div class="links">
+        <span class="eyebrow" data-reveal>Vorstand</span>
+        <h2 class="h2" data-float>Die Menschen hinter dem Kreis<span class="punkt">.</span></h2>
+        <p data-reveal>Ehrenamtlich, ansprechbar und selbst oft genug an der Seitenlinie. Schreibt uns direkt.</p>
+      </div>
+      <span class="tag tag-platzhalter" data-reveal>Platzhalter-Inhalte</span>
+    </div>
+    <div class="vorstand" id="vorstand-raster"></div>
+  </div>
+</section>
+
+<!-- ======= Dokumente (Platzhalter) ======= -->
+<section class="abschnitt" id="dokumente" style="padding-top:0">
+  <div class="inhalt">
+    <div class="abschnitt-kopf">
+      <div class="links">
+        <span class="eyebrow" data-reveal>Dokumente</span>
+        <h2 class="h2" data-float>Alles zum Nachlesen<span class="punkt">.</span></h2>
+      </div>
+      <div class="filter" role="group" aria-label="Dokumente filtern" id="filter" data-reveal>
+        <button class="tag" type="button" data-kat="" aria-pressed="true">Alle</button>
+        <button class="tag" type="button" data-kat="kreistag" aria-pressed="false">Kreistag</button>
+        <button class="tag" type="button" data-kat="ordnung" aria-pressed="false">Satzung &amp; Ordnungen</button>
+        <button class="tag" type="button" data-kat="formular" aria-pressed="false">Formulare</button>
+      </div>
+    </div>
+    <div class="doku-liste" id="doku-liste" data-reveal></div>
+    <p style="margin-top:14px;font-size:13px;color:var(--muted)">Platzhalter: Die Dateien werden verlinkt, sobald die echten Dokumente vorliegen.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ======= Footer ======= -->
+<footer class="fuss">
+  <div class="inhalt">
+    <div class="fuss-raster">
+      <div>
+        <div class="marke"><svg viewBox="116 201 1448 516" role="img" aria-label="dobasket – Basketballkreis Dortmund"><use href="#wortmarke"/></svg></div>
+        <p style="margin-top:18px;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
+      </div>
+      <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-vorschau.html">Spielkalender</a></li><li><a href="vereine-vorschau.html">Vereine &amp; Teams</a></li><li><a href="#spieltag">Ergebnisse</a></li></ul></div>
+      <div><h4>Der Kreis</h4><ul><li><a href="#news">News</a></li><li><a href="#vorstand">Vorstand</a></li><li><a href="#dokumente">Dokumente</a></li></ul></div>
+      <div><h4>Rechtliches</h4><ul><li><a href="#">Impressum</a></li><li><a href="#">Datenschutz</a></li><li><a href="#vorstand">Kontakt</a></li></ul></div>
+    </div>
+    <div class="fuss-unten">
+      <span>Spieldaten: basketball-bund.net · Entwurf, Stand <span id="stand"></span></span>
+      <span class="buzzer" id="buzzer">Buzzer-Beater. Danke fürs Lesen bis zum Schluss.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="kalender/daten.js"></script>
+<script>
+(function(){
+"use strict";
+var D = window.DOBASKET_DATEN || null;
+var el = function(id){ return document.getElementById(id); };
+var ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var zeiger = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+function mk(tag, klasse, text){
+  var n = document.createElement(tag);
+  if(klasse) n.className = klasse;
+  if(text != null) n.textContent = text;
+  return n;
+}
+function svgUse(id){
+  var s = document.createElementNS("http://www.w3.org/2000/svg","svg");
+  var u = document.createElementNS("http://www.w3.org/2000/svg","use");
+  u.setAttribute("href","#" + id); s.appendChild(u); return s;
+}
+
+/* ---------------- Datum (Europe/Berlin, nie fest verdrahtet) ---------------- */
+function heuteBerlin(){
+  var w = {};
+  new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Berlin",year:"numeric",month:"2-digit",day:"2-digit"})
+    .formatToParts(new Date()).forEach(function(t){ w[t.type] = t.value; });
+  return w.year + "-" + w.month + "-" + w.day;
+}
+var HEUTE = heuteBerlin();
+var WT = ["Mo","Di","Mi","Do","Fr","Sa","So"];
+function s2d(s){ return new Date(s + "T00:00:00Z"); }
+function wtag(s){ return (s2d(s).getUTCDay()+6)%7; }
+function fmtKurz(s){ var d = s2d(s); return String(d.getUTCDate()).padStart(2,"0") + "." + String(d.getUTCMonth()+1).padStart(2,"0") + "."; }
+function tageBis(s){ return Math.round((s2d(s) - s2d(HEUTE)) / 864e5); }
+el("stand").textContent = fmtKurz(HEUTE) + HEUTE.slice(0,4);
+
+/* ---------------- Liga-Farben & -Labels (1:1 aus kalender-vorschau) ---------------- */
+var FARBEN = {"Herren":"var(--herren)","Damen":"var(--damen)","U18":"var(--u18)","U16":"var(--u16)","U14":"var(--u14)","U12":"var(--u12)"};
+function farbe(lk){
+  var l = D.ligen[lk]; if(!l) return "var(--muted)";
+  var m = /^U\d+/.exec(l.alter);
+  return FARBEN[m ? m[0] : l.alter] || "var(--muted)";
+}
+function alterLang(li){
+  if(li.alter === "?") return "";
+  var m = /^U(\d+)/.exec(li.alter);
+  if(!m) return li.alter;
+  return "U" + m[1] + (li.geschlecht ? " " + li.geschlecht : "");
+}
+function ligaLabel(li){
+  if(!li) return "";
+  var mKL = /^KL(\d+)$/.exec(li.ebene);
+  var stufe = mKL ? mKL[1] + ". Kreisliga" : li.ebene === "PK" ? (li.jugend ? "Jugendpokal" : "WBV Pokal") : li.ebene_lang;
+  var alt = alterLang(li);
+  return alt ? stufe + " " + alt : stufe;
+}
+function teamKnoten(s){
+  var w = mk("span"), hs = mk("span","tn", s.h), gs = mk("span","tn", s.g);
+  if(s.e && s.e[0] !== s.e[1]){
+    var heim = s.e[0] > s.e[1];
+    (heim ? hs : gs).classList.add("sieger");
+    (heim ? gs : hs).classList.add("verlierer");
+  }
+  w.appendChild(hs); w.appendChild(document.createTextNode(" – ")); w.appendChild(gs);
+  return w;
+}
+function zeitschluessel(s){ return s.d + "T" + (s.t || "00:00"); }
+
+/* ---------------- Spiel-Widgets + Live-Karte + Zaehler ---------------- */
+function widgetZeile(s){
+  var a = mk("a","wz"); a.href = "kalender-vorschau.html";
+  a.style.setProperty("--pk", farbe(s.lk));
+  a.appendChild(mk("span","wz-rail"));
+  var tg = mk("span","wz-tag"); tg.appendChild(mk("b",null,String(s2d(s.d).getUTCDate()))); tg.appendChild(document.createTextNode(WT[wtag(s.d)]));
+  a.appendChild(tg);
+  a.appendChild(mk("span","wz-zeit" + (s.t ? "" : " offen"), s.t || "Zeit offen"));
+  var pa = mk("span","wz-paar"); pa.appendChild(teamKnoten(s));
+  var sub = mk("small"); sub.appendChild(mk("span","wz-liga", ligaLabel(D.ligen[s.lk])));
+  sub.appendChild(document.createTextNode(" · " + (s.halle || "Halle offen")));
+  pa.appendChild(sub); a.appendChild(pa);
+  a.appendChild(mk("span","wz-erg", s.e && typeof s.e[0] === "number" && typeof s.e[1] === "number" ? s.e[0] + ":" + s.e[1] : ""));
+  return a;
+}
+function fuelle(listeId, metaId, spiele, leerText, meta){
+  var ziel = el(listeId); ziel.textContent = "";
+  el(metaId).textContent = spiele.length ? meta : "";
+  if(!spiele.length){ ziel.appendChild(mk("div","widget-leer", leerText)); return; }
+  spiele.forEach(function(s){ ziel.appendChild(widgetZeile(s)); });
+}
+var ZAHLEN = {spiele:0, ligen:0, vereine:0, teams:0};
+function datenBauen(){
+  if(!D){
+    el("w-naechste").innerHTML = ""; el("w-naechste").appendChild(mk("div","widget-leer","Spielplan gerade nicht erreichbar."));
+    el("w-ergebnisse").innerHTML = ""; el("w-ergebnisse").appendChild(mk("div","widget-leer","Ergebnisse gerade nicht erreichbar."));
+    el("live-paar").textContent = "Spielplan gerade nicht erreichbar.";
+    return;
+  }
+  if(D.saison) document.querySelectorAll("[data-saison]").forEach(function(n){ n.textContent = D.saison; });
+  // Ergebnis nur, wenn beide Werte echte Zahlen sind -- sonst stuende "null:undefined" da.
+  function hatErgebnis(s){ return !!s.e && typeof s.e[0] === "number" && typeof s.e[1] === "number"; }
+  var laufend = (D.spiele || []).filter(function(s){ return s.sa === D.saison; });
+  // Abgesagte Spiele sind keine "naechsten Spiele" -- sie finden nie statt.
+  var naechste = laufend.filter(function(s){ return s.d >= HEUTE && !hatErgebnis(s) && s.st !== "Abgesagt"; })
+    .sort(function(a,b){ return zeitschluessel(a) < zeitschluessel(b) ? -1 : 1; });
+  var ergebnisse = laufend.filter(function(s){ return hatErgebnis(s) && s.st !== "Abgesagt"; })
+    .sort(function(a,b){ return zeitschluessel(a) > zeitschluessel(b) ? -1 : 1; }).slice(0,5);
+  fuelle("w-naechste","w-naechste-meta", naechste.slice(0,5), "Kein Spiel mehr angesetzt.", naechste.length ? "ab " + fmtKurz(naechste[0].d) : "");
+  fuelle("w-ergebnisse","w-ergebnisse-meta", ergebnisse, "Noch keine Ergebnisse in dieser Saison.", ergebnisse.length ? "zuletzt " + fmtKurz(ergebnisse[0].d) : "");
+
+  // Live-Karte im Hero
+  var n = naechste[0];
+  if(n){
+    var t = tageBis(n.d);
+    el("live-wann").textContent = t === 0 ? "Heute" : t === 1 ? "Morgen" : "In " + t + " Tagen";
+    var liga = el("live-liga"); liga.textContent = ligaLabel(D.ligen[n.lk]); liga.style.color = farbe(n.lk);
+    var p = el("live-paar"); p.textContent = "";
+    p.appendChild(mk("span",null,n.h)); p.appendChild(mk("small",null,"gegen")); p.appendChild(mk("span",null,n.g));
+    var m = el("live-meta"); m.textContent = "";
+    var z = mk("span"); z.appendChild(mk("b",null, WT[wtag(n.d)] + " " + fmtKurz(n.d) + (n.t ? " · " + n.t : "")));
+    m.appendChild(z); m.appendChild(mk("span",null, n.halle || "Halle offen"));
+  } else {
+    el("live-wann").textContent = "Spielpause";
+    el("live-paar").textContent = "Gerade ist kein Spiel angesetzt.";
+  }
+
+  ZAHLEN.spiele = laufend.filter(function(s){ return s.st !== "Abgesagt"; }).length;
+  ZAHLEN.ligen = Object.keys(laufend.reduce(function(o,s){ o[s.lk] = 1; return o; }, {})).length;
+  ZAHLEN.vereine = (D.vereine || []).length;
+  ZAHLEN.teams = (D.teams || []).filter(function(x){ return x.sa === D.saison; }).length;
+}
+
+/* ---------------- Vorstand & Dokumente (Platzhalter-Daten) ---------------- */
+var VORSTAND = [
+  {amt:"Vorsitz", name:"Vorname Nachname", icon:"i-ball"},
+  {amt:"Stellv. Vorsitz", name:"Vorname Nachname", icon:"i-team"},
+  {amt:"Kassenwart:in", name:"Vorname Nachname", icon:"i-euro"},
+  {amt:"Kreisjugendwart:in", name:"Vorname Nachname", icon:"i-pokal"},
+  {amt:"Schiedsrichterwart:in", name:"Vorname Nachname", icon:"i-pfeife"},
+  {amt:"Spielleitung", name:"Vorname Nachname", icon:"i-plan"}
+];
+var DOKUMENTE = [
+  {kat:"kreistag", titel:"Protokoll Kreistag 2026", sub:"Beschlüsse und Wahlergebnisse", datum:"14.03.2026", typ:"PDF", groesse:"412 KB"},
+  {kat:"kreistag", titel:"Einladung & Tagesordnung Kreistag 2026", sub:"inkl. Anträge der Vereine", datum:"12.02.2026", typ:"PDF", groesse:"188 KB"},
+  {kat:"kreistag", titel:"Protokoll Kreistag 2025", sub:"Beschlüsse und Wahlergebnisse", datum:"22.03.2025", typ:"PDF", groesse:"396 KB"},
+  {kat:"ordnung", titel:"Satzung des Basketballkreises Dortmund", sub:"Fassung vom Kreistag 2024", datum:"16.03.2024", typ:"PDF", groesse:"254 KB"},
+  {kat:"ordnung", titel:"Jugendordnung", sub:"gültig ab Saison 2024/25", datum:"16.03.2024", typ:"PDF", groesse:"142 KB"},
+  {kat:"ordnung", titel:"Ausschreibung Kreisligen 2026/27", sub:"Spielmodus, Fristen, Gebühren", datum:"01.07.2026", typ:"PDF", groesse:"320 KB"},
+  {kat:"formular", titel:"Antrag auf Spielverlegung", sub:"ausfüllbares Formular", datum:"01.07.2026", typ:"DOCX", groesse:"48 KB"},
+  {kat:"formular", titel:"Anmeldung Schiedsrichter-Lehrgang", sub:"Neulingslehrgang Herbst 2026", datum:"10.09.2026", typ:"PDF", groesse:"96 KB"}
+];
+function vorstandBauen(){
+  var ziel = el("vorstand-raster");
+  VORSTAND.forEach(function(p, i){
+    var k = mk("div","karte person"); k.setAttribute("data-reveal",""); k.style.setProperty("--i", i);
+    var av = mk("div","d-avatar"); av.setAttribute("aria-hidden","true");
+    av.innerHTML = '<svg class="rahmen" viewBox="0 0 78 92"><path d="M5 5h26a38 41 0 0 1 0 82H5Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M8 76c12-6 24-6 34 0s16 4 22-2" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>';
+    var ic = svgUse(p.icon); ic.setAttribute("class","rolle-icon"); av.appendChild(ic);
+    k.appendChild(av);
+    var tx = mk("div","person-text");
+    tx.appendChild(mk("span","person-amt", p.amt));
+    tx.appendChild(mk("span","person-name", p.name));
+    var a = mk("a"); a.href = "#"; a.appendChild(svgUse("i-mail")); a.appendChild(document.createTextNode("E-Mail schreiben"));
+    tx.appendChild(a); k.appendChild(tx); ziel.appendChild(k);
+  });
+}
+function dokumenteBauen(){
+  var ziel = el("doku-liste");
+  DOKUMENTE.forEach(function(d){
+    var a = mk("a","doku"); a.href = "#"; a.setAttribute("data-kat", d.kat);
+    a.setAttribute("aria-label", d.titel + ", " + d.typ + ", " + d.groesse + " herunterladen");
+    var ic = document.createElementNS("http://www.w3.org/2000/svg","svg");
+    ic.setAttribute("class","doku-icon"); ic.setAttribute("viewBox","0 0 40 48");
+    ic.innerHTML = '<use href="#i-blatt"/><text x="20" y="36" text-anchor="middle" font-size="9.5" font-weight="800" font-family="Archivo Narrow, sans-serif" fill="var(--accent-ink)">' + d.typ + '</text>';
+    a.appendChild(ic);
+    var t = mk("span","doku-titel", d.titel); t.appendChild(mk("small",null, d.sub + " · " + d.datum)); a.appendChild(t);
+    a.appendChild(mk("span","doku-groesse", d.typ + " · " + d.groesse));
+    var l = mk("span","doku-laden"); l.appendChild(svgUse("i-laden")); a.appendChild(l);
+    ziel.appendChild(a);
+  });
+  var leer = mk("div","doku-leer","Keine Dokumente in dieser Kategorie."); leer.hidden = true; ziel.appendChild(leer);
+  el("filter").addEventListener("click", function(ev){
+    var b = ev.target.closest("button[data-kat]"); if(!b) return;
+    var kat = b.getAttribute("data-kat"), sichtbar = 0;
+    el("filter").querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+    ziel.querySelectorAll(".doku").forEach(function(r){
+      var an = !kat || r.getAttribute("data-kat") === kat; r.hidden = !an; if(an) sichtbar++;
+    });
+    leer.hidden = sichtbar > 0;
+  });
+}
+
+/* ---------------- Theme ---------------- */
+function themaInit(){
+  var wurzel = document.documentElement, knopf = document.querySelector(".thema");
+  function istDunkel(){
+    var g = wurzel.getAttribute("data-theme");
+    return g ? g === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  function malen(){
+    var d = istDunkel();
+    knopf.querySelector("use").setAttribute("href", d ? "#i-sonne" : "#i-mond");
+    knopf.setAttribute("aria-label", d ? "Helles Design einschalten" : "Dunkles Design einschalten");
+  }
+  knopf.addEventListener("click", function(){
+    var neu = istDunkel() ? "light" : "dark";
+    wurzel.setAttribute("data-theme", neu);
+    try{ localStorage.setItem("dobasket-thema", neu); }catch(e){}
+    malen();
+  });
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", malen);
+  malen();
+}
+
+/* ---------------- Mobil-Menue ---------------- */
+function menueInit(){
+  var m = el("menue"), b = el("burger");
+  function setze(offen){
+    m.classList.toggle("offen", offen); b.setAttribute("aria-expanded", String(offen));
+    document.body.style.overflow = offen ? "hidden" : "";
+    if(offen) el("menue-zu").focus(); else b.focus();
+  }
+  b.addEventListener("click", function(){ setze(true); });
+  el("menue-zu").addEventListener("click", function(){ setze(false); });
+  m.addEventListener("click", function(ev){ if(ev.target.closest("a")){ m.classList.remove("offen"); b.setAttribute("aria-expanded","false"); document.body.style.overflow = ""; } });
+  document.addEventListener("keydown", function(ev){
+    if(!m.classList.contains("offen")) return;
+    if(ev.key === "Escape"){ setze(false); return; }
+    if(ev.key !== "Tab") return;                       // Fokus bleibt im offenen Menue-Dialog
+    var f = m.querySelectorAll("a,button"), erst = f[0], letzt = f[f.length-1];
+    if(ev.shiftKey && document.activeElement === erst){ ev.preventDefault(); letzt.focus(); }
+    else if(!ev.shiftKey && document.activeElement === letzt){ ev.preventDefault(); erst.focus(); }
+  });
+}
+
+/* ---------------- H2-Wort-Float vorbereiten ---------------- */
+function woerterSplitten(){
+  document.querySelectorAll("[data-float]").forEach(function(h){
+    var knoten = Array.prototype.slice.call(h.childNodes), i = 0, letzte = null;
+    h.textContent = "";
+    knoten.forEach(function(n){
+      if(n.nodeType === 3){
+        n.textContent.split(/(\s+)/).forEach(function(teil){
+          if(!teil) return;
+          if(/^\s+$/.test(teil)){ h.appendChild(document.createTextNode(" ")); letzte = null; return; }
+          var w = mk("span","w"), innen = mk("span",null,teil);
+          innen.style.setProperty("--i", i++); w.appendChild(innen); h.appendChild(w); letzte = innen;
+        });
+      } else if(letzte){ letzte.appendChild(n); }       // Punkt klebt am letzten Wort
+      else { h.appendChild(n); }
+    });
+  });
+}
+
+/* ---------------- Zaehler ---------------- */
+function zaehlen(){
+  document.querySelectorAll("[data-zahl]").forEach(function(n){
+    var ziel = ZAHLEN[n.getAttribute("data-zahl")] || 0;
+    if(ruhig){ n.textContent = ziel.toLocaleString("de-DE"); return; }
+    var start = null;
+    function schritt(ts){
+      if(start === null) start = ts;
+      var p = Math.min(1, (ts - start) / 1400), e = 1 - Math.pow(1 - p, 3);
+      n.textContent = Math.round(ziel * e).toLocaleString("de-DE");
+      if(p < 1) requestAnimationFrame(schritt);
+    }
+    requestAnimationFrame(schritt);
+  });
+}
+
+/* ---------------- Scroll: Reveal, Nav, Parallax, Statement ---------------- */
+function scrollInit(){
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("sichtbar"); io.unobserve(e.target); } });
+  }, {rootMargin:"0px 0px -12% 0px"});
+  document.querySelectorAll("[data-reveal],[data-float],#claim").forEach(function(n){ io.observe(n); });
+
+  var gezaehlt = false;
+  new IntersectionObserver(function(es, o){
+    es.forEach(function(e){ if(e.isIntersecting && !gezaehlt){ gezaehlt = true; zaehlen(); o.disconnect(); } });
+  }, {threshold:.3}).observe(el("stats"));
+  // Die Zahlen in den Entdecken-Kacheln zaehlen mit, sobald sie sichtbar werden (nutzen dieselbe Animation).
+  new IntersectionObserver(function(es, o){
+    es.forEach(function(e){ if(e.isIntersecting){ if(!gezaehlt){ gezaehlt = true; zaehlen(); } o.disconnect(); } });
+  }, {threshold:.3}).observe(el("entdecken"));
+
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting) el("buzzer").classList.add("an"); });
+  }, {threshold:1}).observe(el("buzzer"));
+
+  // Statement: Woerter leuchten mit dem Scrollen auf
+  var st = el("statement"), woerter = [];
+  (function(){
+    var knoten = Array.prototype.slice.call(st.childNodes); st.textContent = "";
+    knoten.forEach(function(n){
+      var ziel = st, text = n.textContent;
+      if(n.nodeType === 1){ ziel = n.cloneNode(false); st.appendChild(ziel); }
+      text.split(/(\s+)/).forEach(function(t){
+        if(!t) return;
+        if(/^\s+$/.test(t)){ ziel.appendChild(document.createTextNode(" ")); return; }
+        var w = mk("span","wl",t); woerter.push(w); ziel.appendChild(w);
+      });
+    });
+  })();
+
+  var nav = el("nav"), wolken = el("wolken"), heroSichtbar = true, stSichtbar = false, geplant = false;
+  new IntersectionObserver(function(es){ heroSichtbar = es[0].isIntersecting; }).observe(el("hero"));
+  new IntersectionObserver(function(es){ stSichtbar = es[0].isIntersecting; }).observe(st);
+  function tick(){
+    geplant = false;
+    var y = window.scrollY, vh = window.innerHeight;
+    nav.classList.toggle("gescrollt", y > 12);
+    if(!ruhig && heroSichtbar) wolken.style.transform = "translateY(" + (y * -0.08).toFixed(1) + "px)";
+    if(!ruhig && stSichtbar){
+      var r = st.getBoundingClientRect();
+      var p = Math.max(0, Math.min(1, (vh * 0.8 - r.top) / (r.height * 0.55 + vh * 0.3)));
+      var an = Math.round(p * woerter.length * 1.15);
+      woerter.forEach(function(w, i){ w.classList.toggle("an", i < an); });
+    }
+  }
+  window.addEventListener("scroll", function(){ if(!geplant){ geplant = true; requestAnimationFrame(tick); } }, {passive:true});
+  tick();
+}
+
+/* ---------------- Zeiger: Spotlight, Hero-Licht, Magnet (rAF-gedrosselt) ---------------- */
+function zeigerInit(){
+  if(!zeiger || ruhig) return;
+  var letztes = null, geplant = false, hero = el("hero");
+  var magnete = Array.prototype.slice.call(document.querySelectorAll(".magnet"));
+  function tick(){
+    geplant = false; var e = letztes; if(!e) return;
+    var k = e.target.closest && e.target.closest(".karte");
+    if(k){ var r = k.getBoundingClientRect(); k.style.setProperty("--mx", (e.clientX - r.left) + "px"); k.style.setProperty("--my", (e.clientY - r.top) + "px"); }
+    var hr = hero.getBoundingClientRect();
+    if(e.clientY < hr.bottom){ hero.style.setProperty("--gx", (e.clientX - hr.left) + "px"); hero.style.setProperty("--gy", (e.clientY - hr.top) + "px"); }
+    magnete.forEach(function(m){
+      var b = m.getBoundingClientRect(), cx = b.left + b.width/2, cy = b.top + b.height/2;
+      var dx = e.clientX - cx, dy = e.clientY - cy, nah = Math.abs(dx) < b.width/2 + 30 && Math.abs(dy) < b.height/2 + 30;
+      m.style.transform = nah ? "translate(" + Math.max(-8, Math.min(8, dx * .18)).toFixed(1) + "px," + Math.max(-8, Math.min(8, dy * .3)).toFixed(1) + "px)" : "";
+    });
+  }
+  document.addEventListener("pointermove", function(e){ letztes = e; if(!geplant){ geplant = true; requestAnimationFrame(tick); } }, {passive:true});
+}
+
+/* ---------------- Easter Egg: 3x auf den Ball ---------------- */
+function eggInit(){
+  var klicks = 0, timer = null;
+  el("ball-knopf").addEventListener("click", function(){
+    klicks++; clearTimeout(timer); timer = setTimeout(function(){ klicks = 0; }, 1200);
+    if(klicks < 3) return;
+    klicks = 0;
+    var start = el("ball-knopf").getBoundingClientRect();
+    var sonne = el("sonne").getBoundingClientRect();
+    var zielSichtbar = sonne.bottom > 0 && sonne.top < window.innerHeight && sonne.width > 0;
+    var zx = zielSichtbar ? sonne.left + sonne.width/2 : window.innerWidth/2;
+    var zy = zielSichtbar ? sonne.top + sonne.height/2 : window.innerHeight/2;
+    function toast(){
+      var t = mk("div","toast","Swish! +3"); t.style.left = zx + "px"; t.style.top = zy + "px";
+      document.body.appendChild(t);
+      if(zielSichtbar){ var s = el("sonne"); s.classList.remove("treffer"); void s.getBoundingClientRect(); s.classList.add("treffer"); }
+      t.animate([{opacity:0, transform:"translate(-50%,-30%) scale(.6)"},{opacity:1, transform:"translate(-50%,-50%) scale(1.05)", offset:.25},{opacity:1, transform:"translate(-50%,-60%) scale(1)", offset:.75},{opacity:0, transform:"translate(-50%,-90%) scale(1)"}], {duration: ruhig ? 1200 : 1600, easing:"ease-out"}).onfinish = function(){ t.remove(); };
+    }
+    if(ruhig){ toast(); return; }
+    var ball = mk("div","flugball"); ball.appendChild(svgUse("i-ball")); ball.firstChild.style.width = "100%"; ball.firstChild.style.height = "100%";
+    document.body.appendChild(ball);
+    var sx = start.left + start.width/2 - 17, sy = start.top + start.height/2 - 17, ex = zx - 17, ey = zy - 17;
+    var hoch = Math.min(sy, ey) - 160, frames = [];
+    for(var i = 0; i <= 20; i++){
+      var p = i/20, x = sx + (ex - sx) * p, y = (1-p)*(1-p)*sy + 2*(1-p)*p*hoch + p*p*ey;
+      frames.push({transform:"translate(" + x + "px," + y + "px) rotate(" + (p * 540) + "deg)"});
+    }
+    ball.animate(frames, {duration:900, easing:"linear"}).onfinish = function(){ ball.remove(); toast(); };
+  });
+}
+
+(function(){
+  var p = el("muster"), b = p.cloneNode(true);
+  b.id = "muster-buehne"; b.style.color = "var(--on-stage-muted)";
+  b.setAttribute("patternTransform","rotate(-8) scale(1.5)");
+  p.parentNode.appendChild(b);
+})();
+datenBauen();
+vorstandBauen();
+dokumenteBauen();
+woerterSplitten();
+themaInit();
+menueInit();
+scrollInit();
+zeigerInit();
+eggInit();
+})();
+</script>
+</body>
+</html>
