@@ -109,6 +109,27 @@ button.tag:focus-visible{border-radius:999px}
 .menue-kopf{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .menue a{font:900 34px/1.15 var(--f-display);letter-spacing:-.03em;text-decoration:none;color:var(--ink);padding:8px 0;border-bottom:1px solid var(--line)}
 .menue a:hover{color:var(--accent-ink)}
+/* Vereine-Dropdown (Hover + Tastatur ueber :focus-within) */
+.drop{position:relative}
+.drop-link svg{display:inline-block;width:14px;height:14px;margin-left:4px;vertical-align:-2px;transition:transform .2s var(--ease)}
+.drop:hover .drop-link svg,.drop:focus-within .drop-link svg{transform:rotate(180deg)}
+.drop-panel{position:absolute;top:100%;left:50%;z-index:65;width:min(580px,92vw);margin-top:10px;padding:12px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--schatten-hoch);opacity:0;visibility:hidden;transform:translate(-50%,8px);
+  transition:opacity .18s,transform .18s var(--ease),visibility 0s .18s}
+.drop-panel::before{content:"";position:absolute;left:0;right:0;top:-16px;height:16px}
+.drop:hover .drop-panel,.drop:focus-within .drop-panel{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .18s,transform .18s var(--ease)}
+.drop-kopf{padding:4px 10px 10px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.drop-liste{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.drop-panel a{display:flex!important;align-items:center;gap:11px;min-height:48px;padding:7px 10px!important;border-radius:12px!important;
+  color:var(--ink)!important;font-size:14.5px!important;font-weight:600;text-decoration:none;box-shadow:none!important;background:transparent}
+.drop-panel a:hover,.drop-panel a:focus-visible{background:var(--sunken)!important}
+.drop-panel a::after{content:none!important}
+.drop-mono{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--accent-weich);color:var(--accent-ink);
+  font:900 11px/1 var(--f-display);letter-spacing:-.02em}
+.drop-name{min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.drop-name small{color:var(--muted);font-size:12px;font-weight:500}
+.drop-alle{justify-content:center;margin-top:8px;border-top:1px solid var(--line);border-radius:0 0 12px 12px!important;color:var(--accent-ink)!important;font-weight:700!important}
+.drop-alle svg{width:16px;height:16px}
 
 /* Palette aus dem dobasket-Markenmoodboard (08.09.2026):
    Graphit #1F1F1F, Emscherblau #007FA3, Westfalenparkgrün #39B54A,
@@ -555,6 +576,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 <symbol id="i-sonne" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></symbol>
 <symbol id="i-menue" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
 <symbol id="i-zu" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-runter" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>
 
 <header class="sx-nav" id="sx-nav">
@@ -563,7 +585,14 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
       <svg viewBox="116 201 1448 430" aria-hidden="true"><use href="#wortmarke"/></svg>
     </a>
     <nav class="sx-links" aria-label="Hauptnavigation">
-      <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html" aria-current="page">Kalender</a><a href="vereine-v2.html">Vereine</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+      <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html" aria-current="page">Kalender</a><div class="drop">
+        <a href="vereine-v2.html" class="drop-link">Vereine<svg aria-hidden="true"><use href="#i-runter"/></svg></a>
+        <div class="drop-panel">
+          <div class="drop-kopf">Vereine im Kreis</div>
+          <div class="drop-liste" data-vereine-liste></div>
+          <a class="drop-alle" href="vereine-v2.html">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
+        </div>
+      </div><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
     </nav>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
     <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
@@ -1634,6 +1663,29 @@ zeichne();
 /* dobasket Shell: Theme, Menue, Nav-Zustand, Reveal, Spotlight (DESIGN.md Abschnitt 7) */
 (function(){
 "use strict";
+/* VEREINSMENUE */
+function vereinsKuerzel(name){
+  var w = name.replace(/e\.?\s?V\.?/gi,"").trim().split(/[\s\-]+/).filter(Boolean);
+  if(w[0] && w[0].length <= 4 && w[0] === w[0].toUpperCase()) return w[0];
+  return w.slice(0,3).map(function(x){ return x[0]; }).join("").toUpperCase();
+}
+function vereinsMenue(){
+  var DV = window.DOBASKET_DATEN;
+  document.querySelectorAll("[data-vereine-liste]").forEach(function(ziel){
+    if(!DV || !DV.vereine || !DV.vereine.length){ ziel.parentNode.querySelector(".drop-kopf").textContent = "Vereinsliste gerade nicht verfügbar"; return; }
+    var teams = {};
+    (DV.teams || []).forEach(function(t){ if(t.sa === DV.saison) teams[t.verein] = (teams[t.verein] || 0) + 1; });
+    DV.vereine.map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
+      var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
+      var m = document.createElement("span"); m.className = "drop-mono"; m.textContent = vereinsKuerzel(n); m.setAttribute("aria-hidden","true");
+      var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
+      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z + (z === 1 ? " Mannschaft" : " Mannschaften");
+      t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
+    });
+  });
+}
+/* /VEREINSMENUE */
+vereinsMenue();
 var wurzel = document.documentElement, ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
 var knopf = document.querySelector(".thema");
 function istDunkel(){ var g = wurzel.getAttribute("data-theme"); return g ? g === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }

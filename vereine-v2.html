@@ -109,6 +109,27 @@ button.tag:focus-visible{border-radius:999px}
 .menue-kopf{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .menue a{font:900 34px/1.15 var(--f-display);letter-spacing:-.03em;text-decoration:none;color:var(--ink);padding:8px 0;border-bottom:1px solid var(--line)}
 .menue a:hover{color:var(--accent-ink)}
+/* Vereine-Dropdown (Hover + Tastatur ueber :focus-within) */
+.drop{position:relative}
+.drop-link svg{display:inline-block;width:14px;height:14px;margin-left:4px;vertical-align:-2px;transition:transform .2s var(--ease)}
+.drop:hover .drop-link svg,.drop:focus-within .drop-link svg{transform:rotate(180deg)}
+.drop-panel{position:absolute;top:100%;left:50%;z-index:65;width:min(580px,92vw);margin-top:10px;padding:12px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--schatten-hoch);opacity:0;visibility:hidden;transform:translate(-50%,8px);
+  transition:opacity .18s,transform .18s var(--ease),visibility 0s .18s}
+.drop-panel::before{content:"";position:absolute;left:0;right:0;top:-16px;height:16px}
+.drop:hover .drop-panel,.drop:focus-within .drop-panel{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .18s,transform .18s var(--ease)}
+.drop-kopf{padding:4px 10px 10px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.drop-liste{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.drop-panel a{display:flex!important;align-items:center;gap:11px;min-height:48px;padding:7px 10px!important;border-radius:12px!important;
+  color:var(--ink)!important;font-size:14.5px!important;font-weight:600;text-decoration:none;box-shadow:none!important;background:transparent}
+.drop-panel a:hover,.drop-panel a:focus-visible{background:var(--sunken)!important}
+.drop-panel a::after{content:none!important}
+.drop-mono{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--accent-weich);color:var(--accent-ink);
+  font:900 11px/1 var(--f-display);letter-spacing:-.02em}
+.drop-name{min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.drop-name small{color:var(--muted);font-size:12px;font-weight:500}
+.drop-alle{justify-content:center;margin-top:8px;border-top:1px solid var(--line);border-radius:0 0 12px 12px!important;color:var(--accent-ink)!important;font-weight:700!important}
+.drop-alle svg{width:16px;height:16px}
 
 /* Tokens 1:1 aus kalender.html (dobasket-Markenpalette). */
 *{box-sizing:border-box}
@@ -366,6 +387,25 @@ a{color:var(--accent-ink)}
 .tabelle tr:hover td{background:var(--sunken)}
 .tabelle tr.ich td{background:var(--accent-weich)}
 .pfad-runde{border-radius:14px;padding:14px 16px}
+.ohne-verein .abschnitt,.ohne-verein .widgets{display:none!important}
+.v-uebersicht{display:flex;flex-direction:column;gap:18px}
+.v-ueb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+.v-ueb-karte{position:relative;overflow:hidden;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:18px 20px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--schatten);color:var(--ink);font-weight:400;
+  text-decoration:none;transition:transform .22s var(--ease),border-color .22s,box-shadow .22s}
+.v-ueb-karte::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;
+  background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(var(--accent-rgb),.12),transparent 60%)}
+.v-ueb-karte:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--schatten-hoch)}
+.v-ueb-karte:hover::before{opacity:1}
+.v-ueb-karte:active{transform:translateY(-1px)}
+.v-ueb-karte:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.v-ueb-mono{display:grid;place-items:center;width:56px;height:56px;border-radius:14px;background:var(--accent-weich);color:var(--accent-ink);
+  font:900 15px/1 var(--f-display);letter-spacing:-.02em}
+.v-ueb-text{min-width:0}
+.v-ueb-text b{display:block;font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.v-ueb-text small{color:var(--muted);font-size:13px}
+.v-ueb-karte svg{width:20px;height:20px;color:var(--accent);transition:transform .2s var(--ease)}
+.v-ueb-karte:hover svg{transform:translateX(4px)}
 @media (max-width:760px){
   .hero-wahl{align-items:stretch;width:100%}
   .hero-wahl select{width:100%;min-width:0}
@@ -382,6 +422,7 @@ a{color:var(--accent-ink)}
 <symbol id="i-sonne" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></symbol>
 <symbol id="i-menue" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
 <symbol id="i-zu" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-runter" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>
 
 <header class="sx-nav" id="sx-nav">
@@ -390,7 +431,14 @@ a{color:var(--accent-ink)}
       <svg viewBox="116 201 1448 430" aria-hidden="true"><use href="#wortmarke"/></svg>
     </a>
     <nav class="sx-links" aria-label="Hauptnavigation">
-      <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><a href="vereine-v2.html" aria-current="page">Vereine</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+      <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><div class="drop">
+        <a href="vereine-v2.html" class="drop-link" aria-current="page">Vereine<svg aria-hidden="true"><use href="#i-runter"/></svg></a>
+        <div class="drop-panel">
+          <div class="drop-kopf">Vereine im Kreis</div>
+          <div class="drop-liste" data-vereine-liste></div>
+          <a class="drop-alle" href="vereine-v2.html">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
+        </div>
+      </div><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
     </nav>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
     <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
@@ -430,6 +478,8 @@ a{color:var(--accent-ink)}
   </div>
 </section>
 <div class="wrap">
+
+  <div id="v-uebersicht" class="v-uebersicht" hidden></div>
 
   <div class="abschnitt" data-reveal>
     <div class="abschnitt-kopf"><h2>Mannschaften</h2><span id="v-teamzahl"></span></div>
@@ -636,6 +686,8 @@ function teamsBauen(verein){
 
 function seiteBauen(verein){
   aktuellerVerein = verein;
+  document.body.classList.remove("ohne-verein"); el("v-uebersicht").hidden = true;
+  try{ history.replaceState(null, "", "?verein=" + encodeURIComponent(verein)); }catch(e){}
   var td=document.getElementById("team-detail"); if(td) td.hidden=true;   // beim Wechsel schliessen
   document.getElementById("v-name").textContent = verein;
   document.getElementById("crest").textContent = monogramm(verein);
@@ -798,15 +850,50 @@ el("td-back").addEventListener("click", function(){
   el("v-teams").scrollIntoView({behavior:"smooth", block:"start"});
 });
 
+// Uebersicht aller Vereine (Einstieg ohne ?verein=)
+function uebersichtBauen(namen){
+  aktuellerVerein = "";
+  document.body.classList.add("ohne-verein");
+  try{ history.replaceState(null, "", location.pathname); }catch(e){}
+  el("team-detail").hidden = true;
+  el("v-name").textContent = "Alle Vereine";
+  el("crest").textContent = "DO";
+  var teamsJe = {}, spieleJe = {}, teamsGesamt = 0;
+  (D.teams||[]).forEach(function(t){ if(t.sa===SA){ teamsJe[t.verein] = (teamsJe[t.verein]||0) + 1; teamsGesamt++; } });
+  D.spiele.forEach(function(s){ if(s.sa!==SA) return;
+    if(s.hv) spieleJe[s.hv] = (spieleJe[s.hv]||0) + 1;
+    if(s.gv && s.gv!==s.hv) spieleJe[s.gv] = (spieleJe[s.gv]||0) + 1; });
+  var meta = leer(el("v-meta"));
+  [[namen.length," Vereine"],[teamsGesamt," Mannschaften"]].forEach(function(p){
+    var sp = mk("span"); sp.appendChild(mk("b",null,String(p[0]))); sp.appendChild(document.createTextNode(p[1])); meta.appendChild(sp); });
+  var ziel = leer(el("v-uebersicht")); ziel.hidden = false;
+  var kopf = mk("div","abschnitt-kopf"); kopf.appendChild(mk("h2",null,"Wähle deinen Verein")); ziel.appendChild(kopf);
+  var grid = mk("div","v-ueb-grid");
+  namen.forEach(function(n){
+    var a = mk("a","v-ueb-karte"); a.href = "?verein=" + encodeURIComponent(n); a.setAttribute("data-spot","");
+    a.addEventListener("click", function(e){ e.preventDefault(); el("v-wahl").value = n; seiteBauen(n); window.scrollTo({top:0, behavior:"smooth"}); });
+    a.appendChild(mk("span","v-ueb-mono", monogramm(n)));
+    var tx = mk("span","v-ueb-text"); tx.appendChild(mk("b",null,n));
+    var tz = teamsJe[n]||0, sz = spieleJe[n]||0;
+    tx.appendChild(mk("small",null, tz + (tz===1?" Mannschaft":" Mannschaften") + " · " + sz + " Spiele " + SA));
+    a.appendChild(tx);
+    var pf = document.createElementNS("http://www.w3.org/2000/svg","svg"); pf.setAttribute("aria-hidden","true");
+    var u = document.createElementNS("http://www.w3.org/2000/svg","use"); u.setAttribute("href","#i-pfeil"); pf.appendChild(u); a.appendChild(pf);
+    grid.appendChild(a);
+  });
+  ziel.appendChild(grid);
+}
+
 // Vereins-Umschalter
 (function(){
   var sel=document.getElementById("v-wahl");
   var namen=D.vereine.map(function(v){return v.name;}).sort(function(a,b){return a.localeCompare(b,"de");});
+  var leerOpt=mk("option",null,"Alle Vereine"); leerOpt.value=""; sel.appendChild(leerOpt);
   namen.forEach(function(n){ var o=mk("option",null,n); o.value=n; sel.appendChild(o); });
-  var start = namen.indexOf("TSG Dortmund-Schüren")>=0 ? "TSG Dortmund-Schüren" : namen[0];
-  sel.value=start;
-  sel.addEventListener("change",function(){ seiteBauen(sel.value); });
-  seiteBauen(start);
+  var wunsch=null; try{ wunsch=new URLSearchParams(location.search).get("verein"); }catch(e){}
+  sel.addEventListener("change",function(){ if(sel.value) seiteBauen(sel.value); else uebersichtBauen(namen); });
+  if(wunsch && namen.indexOf(wunsch)>=0){ sel.value=wunsch; seiteBauen(wunsch); }
+  else { sel.value=""; uebersichtBauen(namen); }
 })();
 
 document.getElementById("fuss").textContent =
@@ -816,6 +903,29 @@ document.getElementById("fuss").textContent =
 /* dobasket Shell: Theme, Menue, Nav-Zustand, Reveal, Spotlight (DESIGN.md Abschnitt 7) */
 (function(){
 "use strict";
+/* VEREINSMENUE */
+function vereinsKuerzel(name){
+  var w = name.replace(/e\.?\s?V\.?/gi,"").trim().split(/[\s\-]+/).filter(Boolean);
+  if(w[0] && w[0].length <= 4 && w[0] === w[0].toUpperCase()) return w[0];
+  return w.slice(0,3).map(function(x){ return x[0]; }).join("").toUpperCase();
+}
+function vereinsMenue(){
+  var DV = window.DOBASKET_DATEN;
+  document.querySelectorAll("[data-vereine-liste]").forEach(function(ziel){
+    if(!DV || !DV.vereine || !DV.vereine.length){ ziel.parentNode.querySelector(".drop-kopf").textContent = "Vereinsliste gerade nicht verfügbar"; return; }
+    var teams = {};
+    (DV.teams || []).forEach(function(t){ if(t.sa === DV.saison) teams[t.verein] = (teams[t.verein] || 0) + 1; });
+    DV.vereine.map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
+      var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
+      var m = document.createElement("span"); m.className = "drop-mono"; m.textContent = vereinsKuerzel(n); m.setAttribute("aria-hidden","true");
+      var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
+      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z + (z === 1 ? " Mannschaft" : " Mannschaften");
+      t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
+    });
+  });
+}
+/* /VEREINSMENUE */
+vereinsMenue();
 var wurzel = document.documentElement, ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
 var knopf = document.querySelector(".thema");
 function istDunkel(){ var g = wurzel.getAttribute("data-theme"); return g ? g === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }

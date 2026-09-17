@@ -148,6 +148,27 @@ button.tag:focus-visible{border-radius:999px}
 .menue-kopf{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .menue a{font:900 34px/1.15 var(--f-display);letter-spacing:-.03em;text-decoration:none;color:var(--ink);padding:8px 0;border-bottom:1px solid var(--line)}
 .menue a:hover{color:var(--accent-ink)}
+/* Vereine-Dropdown (Hover + Tastatur ueber :focus-within) */
+.drop{position:relative}
+.drop-link svg{display:inline-block;width:14px;height:14px;margin-left:4px;vertical-align:-2px;transition:transform .2s var(--ease)}
+.drop:hover .drop-link svg,.drop:focus-within .drop-link svg{transform:rotate(180deg)}
+.drop-panel{position:absolute;top:100%;left:50%;z-index:65;width:min(580px,92vw);margin-top:10px;padding:12px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--schatten-hoch);opacity:0;visibility:hidden;transform:translate(-50%,8px);
+  transition:opacity .18s,transform .18s var(--ease),visibility 0s .18s}
+.drop-panel::before{content:"";position:absolute;left:0;right:0;top:-16px;height:16px}
+.drop:hover .drop-panel,.drop:focus-within .drop-panel{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .18s,transform .18s var(--ease)}
+.drop-kopf{padding:4px 10px 10px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.drop-liste{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.drop-panel a{display:flex!important;align-items:center;gap:11px;min-height:48px;padding:7px 10px!important;border-radius:12px!important;
+  color:var(--ink)!important;font-size:14.5px!important;font-weight:600;text-decoration:none;box-shadow:none!important;background:transparent}
+.drop-panel a:hover,.drop-panel a:focus-visible{background:var(--sunken)!important}
+.drop-panel a::after{content:none!important}
+.drop-mono{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--accent-weich);color:var(--accent-ink);
+  font:900 11px/1 var(--f-display);letter-spacing:-.02em}
+.drop-name{min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.drop-name small{color:var(--muted);font-size:12px;font-weight:500}
+.drop-alle{justify-content:center;margin-top:8px;border-top:1px solid var(--line);border-radius:0 0 12px 12px!important;color:var(--accent-ink)!important;font-weight:700!important}
+.drop-alle svg{width:16px;height:16px}
 
 /* ---------- Hero ---------- */
 .hero{position:relative;overflow:hidden;padding:clamp(28px,5vw,64px) 0 clamp(64px,8vw,104px);isolation:isolate}
@@ -168,18 +189,16 @@ button.tag:focus-visible{border-radius:999px}
 @keyframes ein{to{opacity:1;transform:none}}
 .hero-knoepfe{display:flex;flex-wrap:wrap;gap:12px}
 .hero-bild{position:relative;padding-bottom:110px}
-.skyline{width:100%;height:auto;overflow:visible}
-.skyline .strich{fill:none;stroke:var(--ink);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
-  stroke-dasharray:1;stroke-dashoffset:1;animation:zeichnen 1.6s var(--ease) forwards;animation-delay:var(--d,.3s)}
-.skyline .ball-strich{stroke:var(--accent)}
-.skyline .flaeche{fill:var(--ground)}
-.skyline .fuell{fill:var(--ink);opacity:0;animation:ein .6s var(--d,1.4s) forwards}
-.skyline .sonne{transform-box:fill-box;transform-origin:center;transform:translateY(60px);opacity:0;animation:aufgang 1.3s .5s var(--ease) forwards}
-.skyline .sonne.treffer{animation:treffer .6s var(--ease)}
-@keyframes zeichnen{to{stroke-dashoffset:0}}
-@keyframes aufgang{to{transform:none;opacity:1}}
-@keyframes treffer{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
-.wolken{will-change:transform}
+.hero-logo{display:block;width:100%;max-width:500px;height:auto;margin:0 auto;overflow:visible;color:var(--ink);will-change:transform}
+.hero-logo .logo-d{clip-path:inset(100% 0 0 0);animation:logo-auf 1.2s .25s var(--ease) forwards}
+@keyframes logo-auf{to{clip-path:inset(0 0 0 0)}}
+.hero-logo .ball{transform-box:fill-box;transform-origin:center;animation:aufgang 1.1s .95s cubic-bezier(.3,1.35,.5,1) backwards}
+@keyframes aufgang{from{opacity:0;transform:translateY(140px) scale(.85)}to{opacity:1;transform:none}}
+.hero-logo .dribbel,.hero-logo .treffer-ziel{transform-box:fill-box;transform-origin:center}
+.hero-bild:hover .dribbel{animation:dribbeln .9s var(--ease)}
+@keyframes dribbeln{0%,100%{transform:none}25%{transform:translateY(46px) scaleY(.94)}50%{transform:translateY(-6px)}75%{transform:translateY(20px)}}
+.hero-logo .treffer-ziel.treffer{animation:treffer .6s var(--ease)}
+@keyframes treffer{0%{transform:scale(1)}40%{transform:scale(1.14)}100%{transform:scale(1)}}
 .live-karte{position:absolute;left:-4%;bottom:0;width:min(360px,86%);background:var(--surface);border:1px solid var(--line);
   border-radius:var(--r);box-shadow:var(--schatten-hoch);padding:18px 20px;display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;
   transition:transform .22s var(--ease),border-color .22s}
@@ -306,16 +325,30 @@ button.tag:focus-visible{border-radius:999px}
 
 /* ---------- Vorstand ---------- */
 .vorstand{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.person{padding:26px;flex-direction:row;gap:20px;align-items:center}
-.d-avatar{position:relative;width:78px;height:92px;flex:none;color:var(--ink)}
+.vorstand{grid-template-columns:repeat(4,1fr)}
+.person{padding:0}
+.person-foto{position:relative;aspect-ratio:4/5;background:var(--sunken);overflow:hidden}
+.person-foto img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);transition:filter .45s,transform .6s var(--ease)}
+.person:hover .person-foto img{filter:none;transform:scale(1.04)}
+.person-foto::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.person:hover .person-foto::after{transform:scaleX(1)}
+.person-ohne{display:grid;place-items:center}
+.d-avatar{position:relative;width:96px;height:114px;color:var(--ink)}
 .d-avatar svg.rahmen{position:absolute;inset:0;width:100%;height:100%}
-.d-avatar .rolle-icon{position:absolute;left:18px;top:30px;width:32px;height:32px;color:var(--accent)}
-.person-text{min-width:0;display:flex;flex-direction:column;gap:3px}
-.person-amt{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
-.person-name{font-size:19px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
-.person-text a{font-size:14px;color:var(--ink-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-bottom:-10px}
+.d-avatar .rolle-icon{position:absolute;left:22px;top:36px;width:40px;height:40px;color:var(--accent)}
+.person-text{padding:18px 20px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.person-amt{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);overflow-wrap:anywhere;hyphens:auto;-webkit-hyphens:auto}
+.person-name{font-size:20px;font-weight:800;letter-spacing:-.015em;line-height:1.2}
+.person-aufgabe{font-size:14px;color:var(--muted);line-height:1.4}
+.person-text a{position:relative;z-index:3;margin-top:auto;padding-top:8px;font-size:13.5px;font-weight:600;color:var(--ink-2);text-decoration:none;
+  display:inline-flex;align-items:center;gap:7px;min-height:44px;overflow-wrap:anywhere}
 .person-text a:hover{color:var(--accent-ink)}
-.person-text a svg{width:15px;height:15px}
+.person-text a svg{width:15px;height:15px;flex:none}
+.person-gesucht{background:var(--stage);color:var(--on-stage);border-color:var(--stage-2);padding:26px 24px;justify-content:space-between;gap:18px}
+.person-gesucht .person-amt{color:var(--accent)}
+.person-gesucht h3{font:900 clamp(26px,2.4vw,32px)/1.05 var(--f-display);letter-spacing:-.03em;margin:8px 0 10px}
+.person-gesucht p{color:var(--on-stage-muted);font-size:14.5px}
+.person-gesucht .btn{align-self:flex-start;min-height:48px;font-size:15px}
 
 /* ---------- Dokumente ---------- */
 .filter{display:flex;flex-wrap:wrap;gap:8px}
@@ -398,6 +431,10 @@ button.tag:focus-visible{border-radius:999px}
   .gross .cover{min-height:200px}
 }
 
+@media (max-width:1024px){ .vorstand{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:760px){ .vorstand{grid-template-columns:repeat(2,1fr)} .person-name{font-size:17px} .person-text{padding:14px 14px 10px} }
+@media (max-width:480px){ .vorstand{grid-template-columns:1fr} .person-foto{aspect-ratio:4/3} .person-foto img{object-position:50% 18%} }
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
@@ -429,6 +466,7 @@ button.tag:focus-visible{border-radius:999px}
     <symbol id="i-sonne" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></symbol>
     <symbol id="i-menue" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-zu" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-runter" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-uhr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
     <symbol id="i-blatt" viewBox="0 0 40 48"><path d="M4 4a3 3 0 0 1 3-3h19l11 11v32a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><path d="M26 1v8a3 3 0 0 0 3 3h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
 
@@ -459,7 +497,14 @@ button.tag:focus-visible{border-radius:999px}
     <nav class="nav-links" aria-label="Hauptnavigation">
       <a href="#spieltag">Spieltag</a>
       <a href="#news">News</a>
-      <a href="vereine-v2.html" class="unterseite">Vereine</a>
+      <div class="drop">
+        <a href="vereine-v2.html" class="drop-link">Vereine<svg aria-hidden="true"><use href="#i-runter"/></svg></a>
+        <div class="drop-panel">
+          <div class="drop-kopf">Vereine im Kreis</div>
+          <div class="drop-liste" data-vereine-liste></div>
+          <a class="drop-alle" href="vereine-v2.html">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
+        </div>
+      </div>
       <a href="kalender-v2.html" class="unterseite">Kalender</a>
       <a href="#vorstand">Vorstand</a>
       <a href="#dokumente">Dokumente</a>
@@ -511,53 +556,11 @@ button.tag:focus-visible{border-radius:999px}
     </div>
 
     <div class="hero-bild">
-      <svg class="skyline" viewBox="0 0 640 560" role="img" aria-label="Dortmunder Skyline mit Fernsehturm, U-Turm und Stadion, dahinter geht ein Basketball wie die Sonne auf">
-        <!-- Ball als Sonne -->
-        <g class="sonne" id="sonne">
-          <circle cx="410" cy="220" r="118" class="flaeche"/>
-          <g class="ball-strich" fill="none" stroke-width="8" stroke-linecap="round">
-            <circle cx="410" cy="220" r="118" stroke="var(--accent)"/>
-            <path d="M292 220h236M410 102v236M330 135c38 34 38 136 0 170M490 135c-38 34-38 136 0 170" stroke="var(--accent)"/>
-          </g>
-        </g>
-        <!-- Stadion -->
-        <g>
-          <path class="flaeche" d="M430 470 L448 402 H610 L628 470Z"/>
-          <path class="strich" style="--d:.9s" pathLength="1" d="M430 470 L448 402 H610 L628 470"/>
-          <path class="strich" style="--d:1.1s" pathLength="1" d="M462 402V352M596 402V352M462 368h-18M596 368h18M470 432h118"/>
-        </g>
-        <!-- Haeuser -->
-        <g>
-          <rect class="flaeche" x="292" y="336" width="44" height="140"/>
-          <rect class="flaeche" x="342" y="292" width="36" height="184"/>
-          <rect class="flaeche" x="384" y="360" width="38" height="116"/>
-          <path class="strich" style="--d:.7s" pathLength="1" d="M292 476V336h44v140M342 476V292h36v184M384 476V360h38v116"/>
-        </g>
-        <!-- U-Turm -->
-        <g>
-          <rect class="flaeche" x="222" y="236" width="60" height="240"/>
-          <path class="strich" style="--d:.55s" pathLength="1" d="M222 476V236h60v240"/>
-          <path class="strich" style="--d:1.2s" pathLength="1" d="M238 252v16a14 14 0 0 0 28 0v-16"/>
-        </g>
-        <!-- Fernsehturm (Florianturm) -->
-        <g>
-          <path class="flaeche" d="M140 476 152 150h28l12 326Z"/>
-          <path class="strich" style="--d:.3s" pathLength="1" d="M166 30v70"/>
-          <rect class="flaeche" x="154" y="98" width="24" height="26" rx="5"/>
-          <rect class="strich" style="--d:.45s" pathLength="1" x="154" y="98" width="24" height="26" rx="5"/>
-          <rect class="flaeche" x="140" y="126" width="52" height="28" rx="7"/>
-          <rect class="strich" style="--d:.55s" pathLength="1" x="140" y="126" width="52" height="28" rx="7"/>
-          <path class="strich" style="--d:.65s" pathLength="1" d="M154 156 144 476M178 156 188 476M166 330v146"/>
-        </g>
-        <!-- Wolken (Parallax) -->
-        <g class="wolken" id="wolken">
-          <path class="fuell" style="--d:1.5s" d="M40 474a20 20 0 0 1 26-26 28 28 0 0 1 52 2 20 20 0 0 1 26 24Z"/>
-          <path class="fuell" style="--d:1.65s" d="M500 486a18 18 0 0 1 24-22 26 26 0 0 1 48 2 18 18 0 0 1 24 20Z"/>
-        </g>
-        <!-- Welle -->
-        <path class="flaeche" d="M0 476C110 440 220 440 330 474S540 520 640 470V560H0Z"/>
-        <path class="strich" style="--d:.1s" pathLength="1" d="M8 476C110 440 220 440 330 474S540 520 632 470"/>
-        <path class="strich" style="--d:.35s" pathLength="1" d="M8 516C120 486 230 490 330 512S540 540 632 508"/>
+      <svg class="hero-logo" id="hero-logo" viewBox="215 200 830 870" role="img" aria-label="dobasket-Logo: das D mit Dortmunder Fernsehturm und Basketball">
+        <path class="logo-d" fill="currentColor" fill-rule="evenodd" d="M 246.0,230.0 L 243.0,235.0 L 243.0,1044.0 L 244.0,1046.0 L 248.0,1049.0 L 651.0,1049.0 L 652.0,1048.0 L 660.0,1049.0 L 661.0,1048.0 L 683.0,1048.0 L 684.0,1047.0 L 696.0,1047.0 L 697.0,1046.0 L 704.0,1046.0 L 705.0,1045.0 L 713.0,1045.0 L 714.0,1044.0 L 720.0,1044.0 L 721.0,1043.0 L 726.0,1043.0 L 727.0,1042.0 L 746.0,1039.0 L 762.0,1035.0 L 766.0,1033.0 L 769.0,1033.0 L 773.0,1031.0 L 776.0,1031.0 L 822.0,1013.0 L 852.0,997.0 L 872.0,984.0 L 888.0,972.0 L 910.0,953.0 L 939.0,921.0 L 963.0,886.0 L 980.0,854.0 L 980.0,852.0 L 986.0,841.0 L 993.0,821.0 L 995.0,818.0 L 1001.0,800.0 L 1002.0,793.0 L 1004.0,789.0 L 1010.0,765.0 L 1010.0,761.0 L 1014.0,745.0 L 1014.0,740.0 L 1015.0,739.0 L 1015.0,734.0 L 1016.0,733.0 L 1016.0,726.0 L 1017.0,725.0 L 1018.0,710.0 L 1019.0,709.0 L 1019.0,698.0 L 1020.0,697.0 L 1020.0,640.0 L 1019.0,639.0 L 1019.0,628.0 L 1018.0,627.0 L 1018.0,618.0 L 1017.0,617.0 L 1015.0,594.0 L 1014.0,593.0 L 1013.0,580.0 L 1012.0,579.0 L 1012.0,574.0 L 1011.0,573.0 L 1011.0,568.0 L 1010.0,567.0 L 1010.0,562.0 L 1009.0,561.0 L 1006.0,542.0 L 1004.0,537.0 L 1004.0,533.0 L 997.0,505.0 L 985.0,467.0 L 971.0,432.0 L 954.0,398.0 L 934.0,367.0 L 908.0,335.0 L 890.0,317.0 L 871.0,301.0 L 850.0,286.0 L 830.0,274.0 L 802.0,260.0 L 800.0,260.0 L 785.0,253.0 L 777.0,251.0 L 774.0,249.0 L 765.0,247.0 L 758.0,244.0 L 751.0,243.0 L 747.0,241.0 L 725.0,237.0 L 724.0,236.0 L 719.0,236.0 L 718.0,235.0 L 696.0,233.0 L 695.0,232.0 L 686.0,232.0 L 685.0,231.0 L 671.0,231.0 L 670.0,230.0 Z M 292.0,959.0 L 323.0,944.0 L 358.0,932.0 L 384.0,926.0 L 389.0,926.0 L 390.0,925.0 L 426.0,923.0 L 427.0,924.0 L 442.0,924.0 L 443.0,925.0 L 459.0,926.0 L 460.0,927.0 L 470.0,928.0 L 490.0,933.0 L 534.0,948.0 L 590.0,971.0 L 621.0,981.0 L 642.0,985.0 L 643.0,986.0 L 655.0,987.0 L 656.0,988.0 L 664.0,988.0 L 665.0,989.0 L 704.0,990.0 L 705.0,989.0 L 731.0,988.0 L 732.0,987.0 L 751.0,985.0 L 756.0,983.0 L 758.0,983.0 L 759.0,985.0 L 749.0,989.0 L 746.0,989.0 L 739.0,992.0 L 736.0,992.0 L 732.0,994.0 L 716.0,998.0 L 701.0,1000.0 L 700.0,1001.0 L 694.0,1001.0 L 693.0,1002.0 L 687.0,1002.0 L 686.0,1003.0 L 668.0,1004.0 L 667.0,1005.0 L 293.0,1005.0 L 292.0,1004.0 Z M 293.0,275.0 L 667.0,275.0 L 668.0,276.0 L 678.0,276.0 L 679.0,277.0 L 686.0,277.0 L 687.0,278.0 L 706.0,280.0 L 732.0,286.0 L 757.0,294.0 L 772.0,300.0 L 783.0,306.0 L 785.0,306.0 L 802.0,315.0 L 818.0,325.0 L 842.0,343.0 L 873.0,373.0 L 898.0,405.0 L 913.0,430.0 L 932.0,470.0 L 945.0,507.0 L 945.0,510.0 L 948.0,517.0 L 956.0,549.0 L 956.0,553.0 L 960.0,569.0 L 960.0,574.0 L 961.0,575.0 L 961.0,580.0 L 962.0,581.0 L 962.0,586.0 L 963.0,587.0 L 963.0,593.0 L 964.0,594.0 L 965.0,610.0 L 966.0,611.0 L 966.0,622.0 L 967.0,623.0 L 967.0,640.0 L 968.0,641.0 L 968.0,674.0 L 967.0,675.0 L 967.0,693.0 L 966.0,694.0 L 965.0,714.0 L 964.0,715.0 L 961.0,739.0 L 952.0,776.0 L 941.0,809.0 L 922.0,849.0 L 913.0,864.0 L 893.0,892.0 L 882.0,905.0 L 868.0,919.0 L 840.0,935.0 L 838.0,935.0 L 821.0,943.0 L 800.0,950.0 L 774.0,956.0 L 762.0,957.0 L 761.0,958.0 L 753.0,958.0 L 752.0,959.0 L 709.0,959.0 L 708.0,958.0 L 698.0,958.0 L 697.0,957.0 L 683.0,956.0 L 682.0,955.0 L 667.0,953.0 L 647.0,948.0 L 604.0,933.0 L 575.0,920.0 L 530.0,902.0 L 509.0,895.0 L 506.0,895.0 L 502.0,893.0 L 482.0,888.0 L 472.0,887.0 L 466.0,885.0 L 460.0,885.0 L 459.0,884.0 L 453.0,884.0 L 452.0,883.0 L 444.0,883.0 L 443.0,882.0 L 397.0,882.0 L 396.0,883.0 L 387.0,883.0 L 386.0,884.0 L 367.0,886.0 L 339.0,893.0 L 319.0,900.0 L 294.0,912.0 L 292.0,911.0 L 292.0,276.0 Z M 635.0,924.0 L 657.0,931.0 L 678.0,935.0 L 679.0,936.0 L 683.0,936.0 L 684.0,937.0 L 690.0,937.0 L 691.0,938.0 L 713.0,939.0 L 714.0,940.0 L 737.0,940.0 L 738.0,939.0 L 757.0,938.0 L 758.0,937.0 L 770.0,936.0 L 796.0,930.0 L 823.0,921.0 L 838.0,914.0 L 840.0,914.0 L 868.0,900.0 L 879.0,892.0 L 875.0,886.0 L 869.0,880.0 L 858.0,874.0 L 850.0,872.0 L 835.0,873.0 L 829.0,875.0 L 819.0,881.0 L 811.0,864.0 L 804.0,855.0 L 793.0,845.0 L 787.0,841.0 L 772.0,834.0 L 764.0,832.0 L 759.0,832.0 L 758.0,831.0 L 744.0,831.0 L 725.0,836.0 L 717.0,840.0 L 707.0,847.0 L 699.0,855.0 L 694.0,862.0 L 689.0,872.0 L 687.0,881.0 L 685.0,884.0 L 671.0,884.0 L 659.0,888.0 L 650.0,894.0 L 642.0,903.0 L 637.0,913.0 Z M 423.0,710.0 L 418.0,716.0 L 418.0,863.0 L 436.0,863.0 L 436.0,716.0 L 431.0,710.0 Z M 714.0,422.0 L 713.0,423.0 L 698.0,424.0 L 673.0,430.0 L 640.0,444.0 L 615.0,460.0 L 605.0,468.0 L 587.0,486.0 L 567.0,513.0 L 551.0,546.0 L 546.0,561.0 L 542.0,582.0 L 541.0,583.0 L 540.0,599.0 L 539.0,600.0 L 539.0,625.0 L 540.0,626.0 L 541.0,643.0 L 542.0,644.0 L 542.0,649.0 L 545.0,662.0 L 550.0,678.0 L 557.0,693.0 L 557.0,695.0 L 566.0,712.0 L 575.0,726.0 L 586.0,740.0 L 605.0,759.0 L 619.0,770.0 L 638.0,782.0 L 652.0,789.0 L 673.0,797.0 L 698.0,803.0 L 704.0,803.0 L 705.0,804.0 L 744.0,805.0 L 745.0,804.0 L 754.0,804.0 L 755.0,803.0 L 760.0,803.0 L 761.0,802.0 L 766.0,802.0 L 771.0,800.0 L 779.0,799.0 L 802.0,791.0 L 821.0,782.0 L 847.0,765.0 L 865.0,749.0 L 875.0,738.0 L 888.0,721.0 L 896.0,708.0 L 906.0,687.0 L 913.0,667.0 L 917.0,646.0 L 918.0,645.0 L 918.0,639.0 L 919.0,638.0 L 920.0,601.0 L 919.0,600.0 L 918.0,584.0 L 917.0,583.0 L 913.0,561.0 L 903.0,534.0 L 891.0,511.0 L 874.0,488.0 L 854.0,468.0 L 836.0,454.0 L 821.0,445.0 L 805.0,437.0 L 783.0,429.0 L 762.0,424.0 L 748.0,423.0 L 747.0,422.0 Z M 722.0,432.0 L 738.0,432.0 L 739.0,433.0 L 757.0,434.0 L 758.0,435.0 L 779.0,439.0 L 794.0,444.0 L 824.0,459.0 L 847.0,476.0 L 870.0,500.0 L 884.0,520.0 L 893.0,537.0 L 899.0,552.0 L 906.0,576.0 L 907.0,587.0 L 909.0,594.0 L 909.0,605.0 L 910.0,606.0 L 910.0,620.0 L 909.0,621.0 L 908.0,642.0 L 899.0,676.0 L 887.0,702.0 L 877.0,718.0 L 865.0,733.0 L 842.0,755.0 L 815.0,773.0 L 798.0,781.0 L 778.0,788.0 L 761.0,791.0 L 760.0,792.0 L 744.0,793.0 L 743.0,794.0 L 715.0,794.0 L 714.0,793.0 L 706.0,793.0 L 705.0,792.0 L 693.0,791.0 L 671.0,785.0 L 656.0,779.0 L 639.0,770.0 L 625.0,761.0 L 610.0,749.0 L 596.0,735.0 L 581.0,716.0 L 573.0,703.0 L 563.0,683.0 L 554.0,656.0 L 552.0,640.0 L 551.0,639.0 L 551.0,632.0 L 550.0,631.0 L 550.0,622.0 L 549.0,621.0 L 549.0,608.0 L 550.0,607.0 L 551.0,587.0 L 552.0,586.0 L 554.0,571.0 L 561.0,549.0 L 574.0,522.0 L 583.0,508.0 L 595.0,493.0 L 610.0,478.0 L 621.0,469.0 L 639.0,457.0 L 652.0,450.0 L 654.0,450.0 L 669.0,443.0 L 685.0,438.0 L 702.0,435.0 L 703.0,434.0 L 721.0,433.0 Z M 423.0,304.0 L 420.0,306.0 L 418.0,310.0 L 418.0,398.0 L 417.0,399.0 L 405.0,399.0 L 400.0,402.0 L 397.0,407.0 L 397.0,463.0 L 399.0,467.0 L 404.0,471.0 L 417.0,471.0 L 418.0,472.0 L 418.0,479.0 L 417.0,480.0 L 392.0,480.0 L 388.0,482.0 L 384.0,488.0 L 384.0,534.0 L 386.0,538.0 L 390.0,541.0 L 393.0,542.0 L 403.0,542.0 L 404.0,543.0 L 403.0,569.0 L 402.0,570.0 L 402.0,582.0 L 401.0,583.0 L 401.0,594.0 L 400.0,595.0 L 400.0,605.0 L 399.0,606.0 L 399.0,617.0 L 398.0,618.0 L 398.0,630.0 L 397.0,631.0 L 394.0,678.0 L 393.0,679.0 L 393.0,689.0 L 392.0,690.0 L 392.0,701.0 L 391.0,702.0 L 391.0,712.0 L 390.0,713.0 L 386.0,777.0 L 383.0,778.0 L 380.0,775.0 L 367.0,770.0 L 350.0,770.0 L 344.0,772.0 L 334.0,778.0 L 324.0,791.0 L 321.0,801.0 L 321.0,812.0 L 320.0,813.0 L 308.0,814.0 L 300.0,819.0 L 298.0,823.0 L 298.0,887.0 L 299.0,888.0 L 317.0,880.0 L 355.0,869.0 L 376.0,866.0 L 377.0,865.0 L 399.0,863.0 L 400.0,860.0 L 400.0,847.0 L 401.0,846.0 L 401.0,833.0 L 402.0,832.0 L 402.0,820.0 L 403.0,819.0 L 403.0,808.0 L 404.0,807.0 L 404.0,795.0 L 405.0,794.0 L 405.0,782.0 L 406.0,781.0 L 406.0,770.0 L 407.0,769.0 L 407.0,756.0 L 408.0,755.0 L 408.0,743.0 L 409.0,742.0 L 412.0,690.0 L 413.0,689.0 L 413.0,678.0 L 414.0,677.0 L 414.0,665.0 L 415.0,664.0 L 415.0,650.0 L 416.0,649.0 L 417.0,620.0 L 418.0,619.0 L 418.0,605.0 L 419.0,604.0 L 420.0,580.0 L 421.0,579.0 L 421.0,568.0 L 422.0,567.0 L 422.0,556.0 L 423.0,555.0 L 423.0,543.0 L 424.0,542.0 L 429.0,542.0 L 431.0,544.0 L 431.0,557.0 L 432.0,558.0 L 434.0,597.0 L 435.0,598.0 L 435.0,612.0 L 436.0,613.0 L 437.0,639.0 L 438.0,640.0 L 438.0,654.0 L 439.0,655.0 L 439.0,668.0 L 440.0,669.0 L 440.0,683.0 L 441.0,684.0 L 441.0,694.0 L 442.0,695.0 L 444.0,734.0 L 445.0,735.0 L 447.0,771.0 L 448.0,772.0 L 448.0,783.0 L 449.0,784.0 L 449.0,795.0 L 450.0,796.0 L 450.0,809.0 L 451.0,810.0 L 451.0,822.0 L 452.0,823.0 L 452.0,835.0 L 453.0,836.0 L 453.0,848.0 L 454.0,849.0 L 454.0,863.0 L 455.0,864.0 L 468.0,865.0 L 469.0,866.0 L 488.0,869.0 L 504.0,873.0 L 508.0,875.0 L 511.0,875.0 L 524.0,880.0 L 527.0,880.0 L 530.0,882.0 L 559.0,892.0 L 564.0,895.0 L 566.0,895.0 L 571.0,898.0 L 573.0,898.0 L 578.0,901.0 L 608.0,913.0 L 612.0,904.0 L 612.0,889.0 L 611.0,885.0 L 605.0,874.0 L 597.0,866.0 L 588.0,861.0 L 576.0,858.0 L 568.0,858.0 L 565.0,847.0 L 559.0,836.0 L 548.0,825.0 L 542.0,821.0 L 526.0,815.0 L 519.0,815.0 L 518.0,814.0 L 505.0,815.0 L 486.0,823.0 L 475.0,833.0 L 472.0,831.0 L 472.0,817.0 L 471.0,816.0 L 471.0,804.0 L 470.0,803.0 L 470.0,792.0 L 469.0,791.0 L 469.0,780.0 L 468.0,779.0 L 468.0,768.0 L 467.0,767.0 L 467.0,756.0 L 466.0,755.0 L 464.0,716.0 L 463.0,715.0 L 460.0,668.0 L 459.0,667.0 L 456.0,622.0 L 455.0,621.0 L 455.0,610.0 L 454.0,609.0 L 454.0,598.0 L 453.0,597.0 L 453.0,586.0 L 452.0,585.0 L 450.0,551.0 L 449.0,550.0 L 449.0,543.0 L 450.0,542.0 L 460.0,542.0 L 463.0,541.0 L 469.0,535.0 L 470.0,532.0 L 470.0,490.0 L 468.0,485.0 L 462.0,480.0 L 437.0,480.0 L 436.0,479.0 L 436.0,472.0 L 437.0,471.0 L 448.0,471.0 L 452.0,469.0 L 456.0,464.0 L 456.0,406.0 L 452.0,401.0 L 448.0,399.0 L 437.0,399.0 L 436.0,398.0 L 436.0,310.0 L 431.0,304.0 Z M 402.0,499.0 L 403.0,498.0 L 450.0,498.0 L 451.0,499.0 L 451.0,523.0 L 450.0,524.0 L 403.0,524.0 L 402.0,523.0 Z M 418.0,417.0 L 435.0,417.0 L 437.0,419.0 L 437.0,452.0 L 435.0,454.0 L 418.0,454.0 L 417.0,453.0 L 417.0,418.0 Z"/>
+        <g class="treffer-ziel" id="sonne"><g class="dribbel">
+          <path class="ball" style="fill:var(--accent)" fill-rule="evenodd" d="M 715.0,434.0 L 714.0,435.0 L 695.0,437.0 L 679.0,442.0 L 676.0,442.0 L 647.0,454.0 L 619.0,472.0 L 594.0,496.0 L 586.0,506.0 L 575.0,523.0 L 565.0,543.0 L 558.0,563.0 L 553.0,584.0 L 553.0,591.0 L 552.0,592.0 L 551.0,626.0 L 552.0,627.0 L 553.0,642.0 L 554.0,643.0 L 558.0,664.0 L 566.0,686.0 L 574.0,702.0 L 584.0,718.0 L 595.0,732.0 L 614.0,751.0 L 626.0,760.0 L 647.0,773.0 L 662.0,780.0 L 679.0,786.0 L 695.0,790.0 L 709.0,791.0 L 710.0,792.0 L 722.0,792.0 L 723.0,793.0 L 749.0,792.0 L 750.0,791.0 L 757.0,791.0 L 758.0,790.0 L 763.0,790.0 L 780.0,786.0 L 797.0,780.0 L 816.0,771.0 L 840.0,755.0 L 866.0,730.0 L 885.0,703.0 L 894.0,685.0 L 901.0,665.0 L 906.0,644.0 L 906.0,639.0 L 907.0,638.0 L 908.0,599.0 L 907.0,598.0 L 905.0,579.0 L 901.0,563.0 L 890.0,534.0 L 888.0,532.0 L 882.0,519.0 L 870.0,502.0 L 859.0,489.0 L 844.0,475.0 L 820.0,458.0 L 798.0,447.0 L 781.0,441.0 L 760.0,436.0 L 746.0,435.0 L 745.0,434.0 Z M 760.0,632.0 L 760.0,639.0 L 753.0,660.0 L 741.0,681.0 L 728.0,697.0 L 715.0,710.0 L 694.0,727.0 L 677.0,738.0 L 656.0,749.0 L 653.0,749.0 L 642.0,743.0 L 622.0,727.0 L 603.0,705.0 L 592.0,686.0 L 593.0,684.0 L 596.0,683.0 L 612.0,682.0 L 638.0,675.0 L 658.0,667.0 L 691.0,651.0 L 720.0,640.0 L 723.0,640.0 L 738.0,635.0 L 742.0,635.0 L 758.0,631.0 Z M 800.0,627.0 L 801.0,628.0 L 801.0,637.0 L 800.0,638.0 L 799.0,657.0 L 798.0,658.0 L 795.0,678.0 L 791.0,689.0 L 791.0,692.0 L 781.0,719.0 L 770.0,741.0 L 755.0,764.0 L 752.0,767.0 L 748.0,768.0 L 727.0,769.0 L 726.0,768.0 L 713.0,768.0 L 712.0,767.0 L 699.0,766.0 L 674.0,759.0 L 673.0,758.0 L 674.0,756.0 L 695.0,744.0 L 713.0,731.0 L 743.0,702.0 L 753.0,689.0 L 766.0,666.0 L 772.0,649.0 L 775.0,630.0 L 780.0,628.0 Z M 848.0,626.0 L 877.0,627.0 L 878.0,628.0 L 885.0,628.0 L 886.0,629.0 L 884.0,644.0 L 881.0,656.0 L 871.0,682.0 L 868.0,685.0 L 865.0,683.0 L 862.0,676.0 L 860.0,674.0 L 860.0,672.0 L 853.0,657.0 L 853.0,654.0 L 849.0,642.0 L 848.0,631.0 L 847.0,630.0 Z M 832.0,626.0 L 833.0,627.0 L 833.0,634.0 L 834.0,635.0 L 835.0,645.0 L 842.0,668.0 L 853.0,691.0 L 859.0,701.0 L 851.0,712.0 L 832.0,731.0 L 823.0,738.0 L 794.0,755.0 L 779.0,761.0 L 776.0,761.0 L 775.0,759.0 L 783.0,747.0 L 792.0,729.0 L 792.0,727.0 L 801.0,707.0 L 803.0,698.0 L 806.0,691.0 L 811.0,671.0 L 813.0,653.0 L 814.0,652.0 L 815.0,627.0 L 816.0,626.0 Z M 866.0,540.0 L 869.0,542.0 L 874.0,552.0 L 880.0,569.0 L 884.0,586.0 L 885.0,599.0 L 886.0,600.0 L 886.0,613.0 L 885.0,614.0 L 848.0,613.0 L 847.0,612.0 L 847.0,600.0 L 848.0,599.0 L 848.0,592.0 L 849.0,591.0 L 851.0,577.0 L 859.0,553.0 Z M 575.0,603.0 L 576.0,602.0 L 576.0,594.0 L 577.0,593.0 L 579.0,577.0 L 589.0,547.0 L 591.0,545.0 L 607.0,541.0 L 631.0,539.0 L 632.0,540.0 L 644.0,540.0 L 645.0,541.0 L 656.0,542.0 L 672.0,546.0 L 693.0,554.0 L 711.0,564.0 L 731.0,579.0 L 742.0,590.0 L 754.0,606.0 L 758.0,616.0 L 755.0,618.0 L 750.0,618.0 L 740.0,621.0 L 736.0,621.0 L 702.0,631.0 L 642.0,658.0 L 622.0,665.0 L 609.0,668.0 L 602.0,668.0 L 601.0,669.0 L 586.0,669.0 L 584.0,667.0 L 577.0,640.0 L 576.0,624.0 L 575.0,623.0 Z M 747.0,458.0 L 771.0,462.0 L 789.0,468.0 L 811.0,479.0 L 834.0,496.0 L 847.0,509.0 L 857.0,522.0 L 858.0,526.0 L 856.0,528.0 L 846.0,548.0 L 838.0,571.0 L 835.0,588.0 L 834.0,589.0 L 833.0,604.0 L 831.0,612.0 L 816.0,612.0 L 815.0,611.0 L 814.0,598.0 L 813.0,597.0 L 813.0,591.0 L 812.0,590.0 L 810.0,575.0 L 806.0,559.0 L 798.0,536.0 L 780.0,501.0 L 764.0,479.0 L 746.0,460.0 Z M 602.0,525.0 L 614.0,509.0 L 627.0,496.0 L 641.0,485.0 L 657.0,475.0 L 687.0,463.0 L 704.0,460.0 L 705.0,459.0 L 722.0,458.0 L 752.0,487.0 L 763.0,501.0 L 776.0,522.0 L 786.0,543.0 L 793.0,564.0 L 797.0,585.0 L 798.0,586.0 L 799.0,600.0 L 800.0,601.0 L 800.0,612.0 L 799.0,613.0 L 774.0,615.0 L 772.0,613.0 L 771.0,609.0 L 763.0,594.0 L 754.0,582.0 L 738.0,566.0 L 716.0,550.0 L 691.0,537.0 L 666.0,529.0 L 651.0,527.0 L 650.0,526.0 L 643.0,526.0 L 642.0,525.0 L 615.0,525.0 L 614.0,526.0 L 603.0,527.0 Z"/>
+        </g></g>
       </svg>
 
       <a class="live-karte einblenden" style="--d:1.2s" href="kalender-v2.html" id="live-karte">
@@ -723,9 +726,8 @@ button.tag:focus-visible{border-radius:999px}
       <div class="links">
         <span class="eyebrow" data-reveal>Vorstand</span>
         <h2 class="h2" data-float>Die Menschen hinter dem Kreis<span class="punkt">.</span></h2>
-        <p data-reveal>Ehrenamtlich, ansprechbar und selbst oft genug an der Seitenlinie. Schreibt uns direkt.</p>
+        <p data-reveal>Ehrenamtlich, ansprechbar und selbst oft genug an der Seitenlinie. Schreibt uns direkt – jede Adresse landet bei der richtigen Person.</p>
       </div>
-      <span class="tag tag-platzhalter" data-reveal>Platzhalter-Inhalte</span>
     </div>
     <div class="vorstand" id="vorstand-raster"></div>
   </div>
@@ -904,12 +906,13 @@ function datenBauen(){
 
 /* ---------------- Vorstand & Dokumente (Platzhalter-Daten) ---------------- */
 var VORSTAND = [
-  {amt:"Vorsitz", name:"Vorname Nachname", icon:"i-ball"},
-  {amt:"Stellv. Vorsitz", name:"Vorname Nachname", icon:"i-team"},
-  {amt:"Kassenwart:in", name:"Vorname Nachname", icon:"i-euro"},
-  {amt:"Kreisjugendwart:in", name:"Vorname Nachname", icon:"i-pokal"},
-  {amt:"Schiedsrichterwart:in", name:"Vorname Nachname", icon:"i-pfeife"},
-  {amt:"Spielleitung", name:"Vorname Nachname", icon:"i-plan"}
+  {amt:"1. Vorsitzender", name:"Dirk Weber", aufgabe:"Satzungsänderungen", mail:"vorsitz1@dobasket.de", foto:"img/vorstand/weber.jpg"},
+  {amt:"2. Vorsitzender", name:"Michael Mazur", aufgabe:"Hallenausschuss, Website", mail:"vorsitz2@dobasket.de", foto:"img/vorstand/mazur.jpg"},
+  {amt:"Jugendwart", name:"Christian Podszuk", aufgabe:"Spielleitung Junioren, Talentstützpunkt und Entwicklung", mail:"jugendwart@dobasket.de", foto:"img/vorstand/podszuk.jpg"},
+  {amt:"Schiedsrichterwart", name:"Milenko Aleksic", aufgabe:"Aus- und Weiterbildung, Be- und Umbesetzung, Betreuung", mail:"schiedsrichter@dobasket.de", foto:null, icon:"i-pfeife"},
+  {amt:"Sportwart", name:"Martin Schmitz", aufgabe:"Spielleitung Senioren, Liga-Koop", mail:"sportwart@dobasket.de", foto:"img/vorstand/schmitz.jpg"},
+  {amt:"Kassierer", name:"Achim Wirth", aufgabe:"Finanzen", mail:"schatzmeister@dobasket.de", foto:"img/vorstand/wirth.jpg"},
+  {amt:"Rechtsausschussvorsitzender", name:"Thomas Grossmann", aufgabe:"Datenschutz", mail:"rechtsausschuss@dobasket.de", foto:"img/vorstand/grossmann.jpg"}
 ];
 var DOKUMENTE = [
   {kat:"kreistag", titel:"Protokoll Kreistag 2026", sub:"Beschlüsse und Wahlergebnisse", datum:"14.03.2026", typ:"PDF", groesse:"412 KB"},
@@ -921,20 +924,60 @@ var DOKUMENTE = [
   {kat:"formular", titel:"Antrag auf Spielverlegung", sub:"ausfüllbares Formular", datum:"01.07.2026", typ:"DOCX", groesse:"48 KB"},
   {kat:"formular", titel:"Anmeldung Schiedsrichter-Lehrgang", sub:"Neulingslehrgang Herbst 2026", datum:"10.09.2026", typ:"PDF", groesse:"96 KB"}
 ];
+/* VEREINSMENUE */
+function vereinsKuerzel(name){
+  var w = name.replace(/e\.?\s?V\.?/gi,"").trim().split(/[\s\-]+/).filter(Boolean);
+  if(w[0] && w[0].length <= 4 && w[0] === w[0].toUpperCase()) return w[0];
+  return w.slice(0,3).map(function(x){ return x[0]; }).join("").toUpperCase();
+}
+function vereinsMenue(){
+  var DV = window.DOBASKET_DATEN;
+  document.querySelectorAll("[data-vereine-liste]").forEach(function(ziel){
+    if(!DV || !DV.vereine || !DV.vereine.length){ ziel.parentNode.querySelector(".drop-kopf").textContent = "Vereinsliste gerade nicht verfügbar"; return; }
+    var teams = {};
+    (DV.teams || []).forEach(function(t){ if(t.sa === DV.saison) teams[t.verein] = (teams[t.verein] || 0) + 1; });
+    DV.vereine.map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
+      var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
+      var m = document.createElement("span"); m.className = "drop-mono"; m.textContent = vereinsKuerzel(n); m.setAttribute("aria-hidden","true");
+      var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
+      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z + (z === 1 ? " Mannschaft" : " Mannschaften");
+      t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
+    });
+  });
+}
+/* /VEREINSMENUE */
 function vorstandBauen(){
   var ziel = el("vorstand-raster");
   VORSTAND.forEach(function(p, i){
     var k = mk("div","karte person"); k.setAttribute("data-reveal",""); k.style.setProperty("--i", i);
-    var av = mk("div","d-avatar"); av.setAttribute("aria-hidden","true");
-    av.innerHTML = '<svg class="rahmen" viewBox="0 0 78 92"><path d="M5 5h26a38 41 0 0 1 0 82H5Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M8 76c12-6 24-6 34 0s16 4 22-2" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>';
-    var ic = svgUse(p.icon); ic.setAttribute("class","rolle-icon"); av.appendChild(ic);
-    k.appendChild(av);
+    var bild = mk("div","person-foto" + (p.foto ? "" : " person-ohne"));
+    if(p.foto){
+      var img = mk("img"); img.src = p.foto; img.alt = "Porträt " + p.name; img.loading = "lazy"; img.width = 480; img.height = 600;
+      bild.appendChild(img);
+    } else {
+      var av = mk("div","d-avatar"); av.setAttribute("aria-hidden","true");
+      av.innerHTML = '<svg class="rahmen" viewBox="0 0 78 92"><path d="M5 5h26a38 41 0 0 1 0 82H5Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M8 76c12-6 24-6 34 0s16 4 22-2" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>';
+      var ic = svgUse(p.icon); ic.setAttribute("class","rolle-icon"); av.appendChild(ic);
+      bild.appendChild(av);
+    }
+    k.appendChild(bild);
     var tx = mk("div","person-text");
     tx.appendChild(mk("span","person-amt", p.amt));
-    tx.appendChild(mk("span","person-name", p.name));
-    var a = mk("a"); a.href = "#"; a.appendChild(svgUse("i-mail")); a.appendChild(document.createTextNode("E-Mail schreiben"));
+    tx.appendChild(mk("h3","person-name", p.name));
+    tx.appendChild(mk("span","person-aufgabe", p.aufgabe));
+    var a = mk("a"); a.href = "mailto:" + p.mail; a.appendChild(svgUse("i-mail")); a.appendChild(document.createTextNode(p.mail));
     tx.appendChild(a); k.appendChild(tx); ziel.appendChild(k);
   });
+  // Wie auf der alten Seite: der freie Platz wirbt fuers Ehrenamt.
+  var g = mk("div","karte person person-gesucht"); g.setAttribute("data-reveal",""); g.style.setProperty("--i", VORSTAND.length);
+  var gt = mk("div");
+  gt.appendChild(mk("span","person-amt","Ehrenamt gesucht"));
+  gt.appendChild(mk("h3",null,"Hier könnte dein Name stehen."));
+  gt.appendChild(mk("p",null,"Wir suchen tatkräftige Unterstützung bei der Vorstandsarbeit. Schreib uns oder sprich eines der Vorstandsmitglieder ganz unverbindlich an."));
+  g.appendChild(gt);
+  var gb = mk("a","btn btn-primaer","info@dobasket.de"); gb.href = "mailto:info@dobasket.de"; gb.appendChild(svgUse("i-pfeil"));
+  g.appendChild(gb);
+  ziel.appendChild(g);
 }
 function dokumenteBauen(){
   var ziel = el("doku-liste");
@@ -1075,14 +1118,14 @@ function scrollInit(){
     });
   })();
 
-  var nav = el("nav"), wolken = el("wolken"), heroSichtbar = true, stSichtbar = false, geplant = false;
+  var nav = el("nav"), wolken = el("hero-logo"), heroSichtbar = true, stSichtbar = false, geplant = false;
   new IntersectionObserver(function(es){ heroSichtbar = es[0].isIntersecting; }).observe(el("hero"));
   new IntersectionObserver(function(es){ stSichtbar = es[0].isIntersecting; }).observe(st);
   function tick(){
     geplant = false;
     var y = window.scrollY, vh = window.innerHeight;
     nav.classList.toggle("gescrollt", y > 12);
-    if(!ruhig && heroSichtbar) wolken.style.transform = "translateY(" + (y * -0.08).toFixed(1) + "px)";
+    if(!ruhig && heroSichtbar) wolken.style.transform = "translateY(" + (y * -0.06).toFixed(1) + "px)";
     if(!ruhig && stSichtbar){
       var r = st.getBoundingClientRect();
       var p = Math.max(0, Math.min(1, (vh * 0.8 - r.top) / (r.height * 0.55 + vh * 0.3)));
@@ -1152,6 +1195,7 @@ function eggInit(){
   p.parentNode.appendChild(b);
 })();
 datenBauen();
+vereinsMenue();
 vorstandBauen();
 dokumenteBauen();
 woerterSplitten();
