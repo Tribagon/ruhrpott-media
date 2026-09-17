@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>dobasket Vereine</title>
+<meta name="description" content="Vereine im Basketballkreis Dortmund: Mannschaften, Tabellen, Spiele und Ergebnisse.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23ef5a00'/%3E%3C/svg%3E">
+<script>try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")document.documentElement.setAttribute("data-theme",g);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#f8f8f6; --surface:#ffffff; --sunken:#eef1ef;
+  --stage:#151616; --stage-2:#202324;
+  --line:#e4e7e4; --line-2:#d2d7d3;
+  --ink:#1f1f1f; --ink-2:#3a4650; --muted:#6a7480;
+  --on-stage:#f4f2ee; --on-stage-muted:#a3a9ad;
+  --accent:#ef5a00; --accent-hover:#d94f00; --accent-weich:#ffe7db; --accent-ink:#b8420a;
+  --accent-cta:#cc4d00; --accent-cta-hover:#b84400; --on-accent:#ffffff;
+  --ink-rgb:31,31,31; --accent-rgb:239,90,0; --ground-rgb:248,248,246;
+  --herren:#2b3a44; --damen:#007fa3;
+  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200;
+  --schatten:0 1px 2px rgba(var(--ink-rgb),.06), 0 8px 24px -12px rgba(var(--ink-rgb),.18);
+  --schatten-hoch:0 2px 4px rgba(var(--ink-rgb),.06), 0 24px 48px -20px rgba(var(--ink-rgb),.28);
+  --f-display:"Archivo","Segoe UI",system-ui,sans-serif;
+  --f-ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-eng:"Archivo Narrow","Archivo",system-ui,sans-serif;
+  --f-hand:"Caveat","Segoe Print",cursive;
+  --r:18px;
+  --rand:clamp(16px,4vw,40px);
+  --abschnitt:clamp(72px,10vw,128px);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#14181b; --surface:#1d2226; --sunken:#262c31;
+    --stage:#0c0e0f; --stage-2:#171a1c;
+    --line:#2c343a; --line-2:#3b444b;
+    --ink:#f1f2ef; --ink-2:#c6ccd0; --muted:#8b959c;
+    --accent:#ff7d3f; --accent-hover:#ff9258; --accent-weich:#3a1f10; --accent-ink:#ffb184;
+    --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
+    --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
+    --herren:#b9c4cb; --damen:#35a9cc;
+    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#14181b; --surface:#1d2226; --sunken:#262c31;
+  --stage:#0c0e0f; --stage-2:#171a1c;
+  --line:#2c343a; --line-2:#3b444b;
+  --ink:#f1f2ef; --ink-2:#c6ccd0; --muted:#8b959c;
+  --accent:#ff7d3f; --accent-hover:#ff9258; --accent-weich:#3a1f10; --accent-ink:#ffb184;
+  --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
+  --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
+  --herren:#b9c4cb; --damen:#35a9cc;
+  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+}
+/* Seiten-Tokens der Unterseiten (Kalender/Vereine) */
+:root{--gruen:#39b54a;--orange:#f47b20;--on-heat:#ffffff;--rot:#c62828}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--gruen:#5cc274;--orange:#ff9247;--rot:#ff7b7b}}
+:root[data-theme="dark"]{--gruen:#5cc274;--orange:#ff9247;--rot:#ff7b7b}
+
+/* ---------- Typo-Bausteine ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.eyebrow::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--accent)}
+.h2{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,4.6vw,58px);line-height:1;letter-spacing:-.03em}
+.lead{font-size:clamp(18px,1.6vw,21px);font-weight:500;line-height:1.5;color:var(--ink-2);max-width:40ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;
+  font:800 16px/1 var(--f-ui);letter-spacing:-.005em;text-decoration:none;cursor:pointer;border:2px solid transparent;
+  transition:background .18s,color .18s,border-color .18s,transform .18s var(--ease)}
+.btn-primaer{background:var(--accent-cta);color:var(--on-accent)}
+.btn-primaer:hover{background:var(--accent-cta-hover)}
+.btn-sekundaer{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-sekundaer:hover{background:var(--ink);color:var(--ground)}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:999px}
+.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.btn svg{width:18px;height:18px;transition:transform .18s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.magnet{will-change:transform}
+.link{color:var(--ink);font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 2px no-repeat;transition:background-size .25s var(--ease);padding:4px 0}
+.link:hover,.link:focus-visible{background-size:100% 2px}
+.link svg{width:16px;height:16px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;
+  font:700 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;background:var(--sunken);color:var(--ink-2);white-space:nowrap}
+.tag-akzent{background:var(--accent-weich);color:var(--accent-ink)}
+.tag-platzhalter{border:1px dashed var(--line-2);background:transparent;color:var(--muted)}
+button.tag{min-height:44px;padding:0 18px;font-size:12px;transition:background .15s,color .15s}
+button.tag:hover{background:var(--line)}
+button.tag[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+button.tag:focus-visible{border-radius:999px}
+
+.rund-knopf{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;
+  border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);flex:none;transition:background .15s,color .15s,border-color .15s}
+.rund-knopf:hover{background:var(--sunken);color:var(--ink);border-color:var(--accent)}
+.rund-knopf:focus-visible{border-radius:999px}
+.rund-knopf svg{width:19px;height:19px}
+.burger{display:none;margin-left:auto}
+.menue{position:fixed;inset:0;z-index:70;background:var(--ground);padding:22px var(--rand);display:flex;flex-direction:column;gap:8px;
+  opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .2s,transform .2s var(--ease),visibility 0s .2s}
+.menue.offen{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .2s var(--ease)}
+.menue-kopf{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.menue a{font:900 34px/1.15 var(--f-display);letter-spacing:-.03em;text-decoration:none;color:var(--ink);padding:8px 0;border-bottom:1px solid var(--line)}
+.menue a:hover{color:var(--accent-ink)}
+
+/* Tokens 1:1 aus kalender.html (dobasket-Markenpalette). */
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 80px;display:flex;flex-direction:column;gap:24px}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+button,select{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:var(--accent-ink);text-decoration:none;font-weight:700}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* --- Kopf --- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.zurueck{display:inline-flex;align-items:center;gap:11px;color:var(--ink)}
+/* Wortmarke wie im Kalender: schwarzer Schrift-/Ball-Pfad folgt der Theme-Textfarbe,
+   die orange Kontur behaelt ihre Farbe. */
+.zurueck .marke-logo{height:44px;width:auto;display:block}
+.zurueck .arrow{font-family:var(--f-display);color:var(--muted);font-weight:700;font-size:14px;letter-spacing:-.01em}
+@media (max-width:520px){ .zurueck .arrow{display:none} .zurueck .marke-logo{height:38px} }
+.thema-knopf{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;
+  border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);
+  font-size:16px;line-height:1;box-shadow:var(--schatten);transition:.12s}
+.thema-knopf:hover{background:var(--sunken);color:var(--ink);border-color:var(--accent)}
+
+.welle{display:block;width:100%;height:3px;border:none;border-radius:2px;background:var(--accent)}
+
+/* --- Hero (Vereinskopf) --- */
+.hero{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.hero-txt{min-width:0;flex:1}
+.hero-name{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,4.4vw,42px);
+  letter-spacing:-.02em;line-height:1.02}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-top:10px;
+  font-size:13px;color:var(--muted)}
+.hero-meta b{color:var(--ink-2);font-weight:700;font-variant-numeric:tabular-nums}
+.hero-meta .platz{color:var(--muted);font-weight:600}
+.hero-wahl{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.hero-wahl label{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.hero-wahl select{border:1px solid var(--line-2);padding:9px 12px;border-radius:8px;
+  background:var(--surface);color:var(--ink);min-width:210px;font-weight:600}
+
+/* --- Abschnitt --- */
+.abschnitt{display:flex;flex-direction:column;gap:12px}
+.abschnitt-kopf{display:flex;align-items:baseline;gap:10px}
+.abschnitt-kopf h2{font-family:var(--f-display);font-weight:800;font-size:15px;letter-spacing:.02em;
+  text-transform:uppercase}
+.abschnitt-kopf span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* --- Team-Karten --- */
+.gruppe-titel{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;margin:4px 0 2px}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.team-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--schatten);padding:14px 15px;display:flex;flex-direction:column;gap:9px;
+  border-left:4px solid var(--pk,var(--muted))}
+.team-card .tc-liga{display:flex;align-items:center;gap:8px}
+.team-card .punkt{width:10px;height:10px;border-radius:50%;background:var(--pk,var(--muted));flex-shrink:0}
+.team-card .tc-name{font-weight:700;font-size:15px;color:var(--ink)}
+.team-card .tc-sub{font-size:12.5px;color:var(--muted)}
+.team-card .tc-tab{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2);
+  border-top:1px solid var(--line);padding-top:9px;font-variant-numeric:tabular-nums}
+.team-card .tc-tab .k{color:var(--muted)}
+.team-card .tc-tab b{color:var(--ink);font-weight:800}
+.team-card .tc-tab.leer{color:var(--muted);font-style:italic}
+.tc-platz{margin-left:auto;font-family:var(--f-eng);font-weight:800;font-size:14px;
+  color:var(--pk,var(--ink-2));font-variant-numeric:tabular-nums}
+
+/* --- Widgets (Zeilen 1:1 aus kalender.html) --- */
+.widgets{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){ .widgets{grid-template-columns:1fr} }
+.widget{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--schatten);overflow:hidden;display:flex;flex-direction:column}
+.widget-kopf{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:13px 16px;border-bottom:1px solid var(--line)}
+.widget-kopf h2{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.widget-kopf span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.widget-liste{display:flex;flex-direction:column}
+.wz{display:grid;grid-template-columns:3px 36px 56px 1fr auto;align-items:center;gap:11px;
+  padding:11px 16px;text-align:left;width:100%;border-top:1px solid var(--line)}
+.wz:first-child{border-top:none}
+.wz-rail{width:3px;align-self:stretch;min-height:32px;border-radius:2px;background:var(--pk,var(--muted))}
+.wz-tag{font-family:var(--f-eng);font-size:12px;font-weight:600;color:var(--muted);text-align:center;line-height:1.1}
+.wz-tag b{display:block;font-size:19px;color:var(--ink);font-variant-numeric:tabular-nums}
+.wz-zeit{font-family:var(--f-eng);font-weight:700;font-variant-numeric:tabular-nums;font-size:15.5px}
+.wz-zeit.offen{font-size:12px;color:var(--muted);font-weight:400}
+.wz-paar{font-size:14.5px;min-width:0}
+.wz-paar>span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wz-paar small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12.5px}
+.wz-liga{font-family:var(--f-eng);font-weight:700;color:var(--pk,var(--ink-2))}
+.wz-erg{font-family:var(--f-eng);font-weight:800;font-variant-numeric:tabular-nums;font-size:18px}
+.tn.sieger{font-weight:800;color:var(--ink)}
+.tn.verlierer{color:var(--muted)}
+.widget-leer{padding:26px 16px;text-align:center;color:var(--muted);font-size:13.5px}
+
+/* Rot fuer "Ausgeschieden" -- eigenes Token, in beiden Themes lesbar. */
+
+.team-card{cursor:pointer;transition:border-color .12s,box-shadow .12s,transform .06s}
+.team-card:hover{border-color:var(--accent);border-left-color:var(--pk,var(--accent))}
+.team-card:active{transform:translateY(1px)}
+.team-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tc-status-aus{color:var(--rot);font-weight:800}
+
+/* Mannschafts-Detail (Klick auf eine Karte) */
+.td{background:var(--sunken);border:1px solid var(--line-2);border-radius:var(--r);padding:18px}
+.td-kopf{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.td-back{align-self:flex-start;font-family:var(--f-display);font-weight:800;font-size:11.5px;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--accent-ink)}
+.td-titel{font-family:var(--f-display);font-weight:800;font-size:22px;letter-spacing:-.01em;line-height:1.1}
+.td-liga{color:var(--muted);font-weight:700;font-size:15px}
+.td-grid{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+@media (max-width:820px){ .td-grid{grid-template-columns:1fr} }
+.td-label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
+
+.tabelle{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;font-size:13px}
+.tabelle th{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  text-align:right;padding:9px 8px;border-bottom:1px solid var(--line);font-weight:700}
+.tabelle th.l,.tabelle td.l{text-align:left}
+.tabelle td{padding:8px;border-top:1px solid var(--line);text-align:right;
+  font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.tabelle td.l{color:var(--ink)}
+.tabelle td.rang{color:var(--muted)}
+.tabelle tr.ich td{background:var(--accent-weich);color:var(--ink);font-weight:800}
+.tabelle .tlink{color:var(--accent-ink);font-weight:700;cursor:pointer;
+  text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:2px}
+.tabelle .tlink:hover{text-decoration-color:var(--accent)}
+.tabelle tr.ich .tlink{color:inherit}
+.tabelle .tlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+.tab-hinweis{padding:8px 2px 0;font-size:12px;color:var(--muted)}
+
+.pfad{display:flex;flex-direction:column;gap:9px}
+.pfad-runde{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--pk,var(--accent));
+  border-radius:var(--r);padding:11px 13px}
+.pfad-runde.aus{border-left-color:var(--rot)}
+.pfad-runde .r-kopf{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;margin-bottom:4px}
+.pfad-runde .r-paar{font-size:14.5px}
+.pfad-runde .r-erg{font-family:var(--f-eng);font-weight:800;font-variant-numeric:tabular-nums}
+.pfad-runde .aus-text{margin-top:5px;color:var(--rot);font-weight:800;font-size:12.5px}
+
+.fuss{font-size:12px;color:var(--muted);text-align:center;border-top:1px solid var(--line);padding-top:16px}
+
+/* =================== dobasket Shell (DESIGN.md) =================== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);font-size:15.5px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+.sx-inhalt{max-width:1240px;margin:0 auto;padding:0 var(--rand)}
+.sx-nav{position:sticky;top:0;z-index:60;transition:background .25s,box-shadow .25s}
+.sx-nav.gescrollt{background:rgba(var(--ground-rgb),.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.sx-nav-innen{display:flex;align-items:center;gap:20px;height:76px;transition:height .25s var(--ease)}
+.sx-nav.gescrollt .sx-nav-innen{height:64px}
+.sx-marke{display:block;color:var(--ink);border-radius:8px;flex:none}
+.sx-marke svg{display:block;height:44px;width:auto;transition:height .25s var(--ease)}
+.sx-nav.gescrollt .sx-marke svg{height:38px}
+.sx-links{display:flex;align-items:center;gap:2px;margin-left:auto}
+.sx-links a{color:var(--ink-2);font-weight:600;font-size:15px;text-decoration:none;padding:10px 13px;border-radius:999px;transition:background .15s,color .15s}
+.sx-links a:hover{color:var(--ink);background:var(--sunken)}
+.sx-links a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent);border-radius:0}
+.sx-links a:focus-visible{border-radius:999px}
+.rund-knopf svg{display:block}
+.burger{display:none}
+
+.sx-kopf{position:relative;overflow:hidden;isolation:isolate;padding:clamp(24px,4vw,56px) 0 clamp(32px,4vw,52px)}
+.sx-linien{position:absolute;inset:0;z-index:-1;width:100%;height:100%;color:var(--line-2);opacity:.5}
+.sx-kopf .sx-inhalt{display:flex;flex-direction:column;gap:18px}
+.sx-zurueck{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px 0 12px;margin-bottom:4px;
+  border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:700;font-size:14.5px;
+  text-decoration:none;transition:border-color .15s,background .15s}
+.sx-zurueck svg{width:18px;height:18px;transform:scaleX(-1);color:var(--accent);transition:transform .2s var(--ease)}
+.sx-zurueck:hover{border-color:var(--ink);background:var(--sunken)}
+.sx-zurueck:hover svg{transform:scaleX(-1) translateX(4px)}
+.sx-zurueck:focus-visible{border-radius:999px}
+.sx-h1{font-family:var(--f-display);font-weight:900;font-size:clamp(46px,7vw,100px);line-height:.95;letter-spacing:-.035em;margin:0}
+.sx-h1 .punkt,.sx-punkt::after{color:var(--accent)}
+.sx-punkt::after{content:"."}
+.maske{display:block;overflow:hidden;padding:0 .04em .07em 0;margin-bottom:-.07em;white-space:nowrap}
+.maske>span{display:block;transform:translateY(105%);animation:sx-hoch .95s var(--ease) forwards}
+@keyframes sx-hoch{to{transform:none}}
+.sx-ein{opacity:0;transform:translateY(14px);animation:sx-ein .7s var(--d,.35s) var(--ease) forwards}
+@keyframes sx-ein{to{opacity:1;transform:none}}
+.sx-stats{display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:6px;border-top:1px solid var(--line);padding-top:18px}
+.sx-stats span{font-size:14px;color:var(--muted);font-weight:600}
+.sx-stats b{display:block;font:700 clamp(30px,3.4vw,44px)/1 var(--f-eng);color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+[data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+[data-reveal].sichtbar{opacity:1;transform:none}
+
+.sx-fuss{background:var(--stage);color:var(--on-stage);padding:64px 0 30px;margin-top:clamp(56px,8vw,96px)}
+.sx-fuss-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.sx-fuss .sx-marke{color:var(--on-stage)}
+.sx-fuss .sx-marke svg{height:auto;width:min(280px,100%)}
+.sx-fuss h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage-muted);margin:0 0 12px}
+.sx-fuss ul{list-style:none;margin:0;padding:0}
+.sx-fuss ul a{color:var(--on-stage);text-decoration:none;display:inline-block;padding:8px 0;opacity:.85;font-weight:500;transition:opacity .15s,color .15s}
+.sx-fuss ul a:hover{opacity:1;color:var(--accent)}
+.sx-fuss-unten{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--stage-2);font-size:13px;color:var(--on-stage-muted)}
+
+@media (max-width:1024px){ .sx-links{display:none} .thema{margin-left:auto} .burger{display:inline-flex} }
+@media (max-width:760px){ .sx-fuss-raster{grid-template-columns:1fr} .sx-marke svg{height:38px} }
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .maske>span,.sx-ein,[data-reveal]{animation:none!important;opacity:1!important;transform:none!important;transition:none!important}
+}
+
+/* =================== Vereine V2: Feinschliff nach DESIGN.md =================== */
+.wrap{max-width:1240px;padding:0 var(--rand);gap:clamp(40px,5vw,64px)}
+a{color:var(--accent-ink)}
+.hero{gap:clamp(18px,3vw,32px);align-items:center}
+.crest{position:relative;width:clamp(84px,9vw,118px);aspect-ratio:78/92;flex-shrink:0;color:var(--ink)}
+.crest svg{position:absolute;inset:0;width:100%;height:100%}
+.crest span{position:absolute;left:8%;right:22%;top:26%;text-align:center;font:900 clamp(17px,2vw,24px)/1 var(--f-display);letter-spacing:-.03em;color:var(--accent)}
+.hero-name{font-family:var(--f-display);font-weight:900;font-size:clamp(38px,5.6vw,80px);line-height:.98;letter-spacing:-.035em}
+.hero-name::after{content:".";color:var(--accent)}
+.hero-meta{font-size:14px;gap:8px 22px;margin-top:14px}
+.hero-meta b{font:700 20px/1 var(--f-eng);color:var(--ink);margin-right:3px}
+.hero-wahl label{font-size:11px;letter-spacing:.12em}
+.hero-wahl select{min-height:48px;border-radius:999px;padding:0 44px 0 20px;font-weight:700;font-size:15px;min-width:260px;
+  appearance:none;-webkit-appearance:none;cursor:pointer;border-color:var(--ink);transition:background-color .15s,border-color .15s;
+  background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23ef5a00' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 16px center/18px no-repeat}
+.hero-wahl select:hover{background-color:var(--sunken)}
+.hero-wahl select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.abschnitt{gap:18px}
+.abschnitt-kopf{align-items:baseline;gap:16px;flex-wrap:wrap}
+.abschnitt-kopf h2{font-weight:900;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.03em;text-transform:none;line-height:1}
+.abschnitt-kopf h2::after{content:".";color:var(--accent)}
+.abschnitt-kopf span{font-size:14px;font-weight:600}
+.gruppe-titel{display:inline-flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.16em;margin:14px 0 4px}
+.gruppe-titel::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--accent)}
+.team-grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.team-card{position:relative;overflow:hidden;border-radius:var(--r);padding:20px 20px 18px;gap:10px;border-left-width:5px;
+  transition:transform .22s var(--ease),border-color .22s,box-shadow .22s}
+.team-card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;
+  background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(var(--accent-rgb),.12),transparent 60%)}
+.team-card:hover{transform:translateY(-4px);box-shadow:var(--schatten-hoch);border-color:var(--line-2)}
+.team-card:hover::before{opacity:1}
+.team-card:active{transform:translateY(-1px)}
+.team-card .tc-name{font-weight:800;font-size:17px;letter-spacing:-.01em}
+.team-card .tc-tab{padding-top:12px;font-size:13px}
+.team-card .tc-tab b{font-family:var(--f-eng);font-size:15px}
+.widgets{gap:24px}
+.widget{border-radius:var(--r)}
+.widget-kopf{padding:18px 20px}
+.widget-kopf h2{font-size:18px;font-weight:800;letter-spacing:-.015em}
+.wz{padding:12px 20px;min-height:60px}
+.td{background:var(--surface);border-color:var(--line);border-radius:var(--r);padding:clamp(18px,3vw,32px);box-shadow:var(--schatten-hoch);border-top:4px solid var(--accent)}
+.td-back{min-height:44px;font-family:var(--f-ui);font-size:12px;letter-spacing:.12em;padding:0}
+.td-back:hover{color:var(--ink)}
+.td-titel{font-weight:900;font-size:clamp(26px,3vw,38px);letter-spacing:-.03em}
+.td-liga{font-family:var(--f-eng);font-size:clamp(16px,1.6vw,20px)}
+.td-label{letter-spacing:.14em;font-size:11.5px}
+.tabelle{border-radius:14px;font-size:14px}
+.tabelle th{padding:11px 10px;font-size:10.5px;letter-spacing:.1em}
+.tabelle td{padding:10px}
+.tabelle tr:hover td{background:var(--sunken)}
+.tabelle tr.ich td{background:var(--accent-weich)}
+.pfad-runde{border-radius:14px;padding:14px 16px}
+@media (max-width:760px){
+  .hero-wahl{align-items:stretch;width:100%}
+  .hero-wahl select{width:100%;min-width:0}
+}
+
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<g id="wortmarke" shape-rendering="geometricPrecision"><path d="M 1505,657 L 1505,701 L 1526,701 L 1534,698 L 1540,692 L 1543,683 L 1543,674 L 1539,664 L 1533,659 L 1528,657 Z M 1515,664 L 1527,665 L 1533,672 L 1534,676 L 1533,685 L 1531,689 L 1525,693 L 1515,693 L 1514,692 L 1514,665 Z M 1438,657 L 1438,701 L 1447,701 L 1447,675 L 1448,674 L 1452,678 L 1466,701 L 1475,701 L 1475,657 L 1466,657 L 1466,681 L 1465,682 L 1462,680 L 1448,657 Z M 1373,657 L 1373,689 L 1376,696 L 1381,700 L 1390,702 L 1402,699 L 1406,695 L 1409,687 L 1409,657 L 1400,657 L 1400,686 L 1399,689 L 1393,694 L 1386,693 L 1383,690 L 1382,687 L 1382,657 Z M 1299,656 L 1299,701 L 1307,701 L 1307,677 L 1308,676 L 1311,679 L 1316,694 L 1317,695 L 1325,695 L 1333,675 L 1335,676 L 1335,701 L 1343,701 L 1343,656 L 1336,656 L 1332,658 L 1322,682 L 1319,681 L 1310,658 L 1308,656 Z M 1239,656 L 1238,657 L 1238,664 L 1249,664 L 1250,665 L 1250,700 L 1251,701 L 1259,701 L 1259,665 L 1260,664 L 1271,664 L 1271,656 Z M 1182,656 L 1181,657 L 1181,700 L 1182,701 L 1189,701 L 1190,700 L 1190,686 L 1192,684 L 1195,684 L 1198,687 L 1201,694 L 1206,701 L 1215,701 L 1213,696 L 1206,686 L 1206,683 L 1212,678 L 1214,672 L 1213,664 L 1209,659 L 1201,656 Z M 1190,665 L 1191,664 L 1200,664 L 1202,665 L 1205,669 L 1204,674 L 1200,677 L 1192,677 L 1190,675 Z M 1048,656 L 1048,700 L 1071,700 L 1078,697 L 1082,693 L 1086,683 L 1086,674 L 1083,665 L 1077,659 L 1068,656 Z M 1058,664 L 1068,664 L 1072,666 L 1076,672 L 1077,682 L 1075,687 L 1070,692 L 1067,693 L 1058,693 L 1057,692 L 1057,665 Z M 912,656 L 912,700 L 921,700 L 921,656 Z M 855,656 L 855,700 L 884,700 L 884,693 L 883,692 L 882,693 L 874,693 L 864,691 L 864,682 L 865,681 L 881,681 L 882,676 L 881,674 L 865,674 L 864,673 L 864,665 L 866,663 L 884,663 L 884,656 Z M 794,656 L 794,700 L 802,700 L 803,685 L 804,684 L 808,684 L 810,686 L 817,700 L 828,700 L 818,684 L 824,678 L 826,673 L 826,666 L 823,660 L 816,656 Z M 803,664 L 804,663 L 813,664 L 817,668 L 816,673 L 813,676 L 804,676 L 803,675 Z M 1130,655 L 1123,657 L 1116,663 L 1112,671 L 1111,681 L 1113,689 L 1119,697 L 1127,701 L 1137,701 L 1145,698 L 1150,693 L 1153,686 L 1154,675 L 1152,667 L 1147,660 L 1140,656 Z M 1130,663 L 1138,664 L 1144,672 L 1143,687 L 1137,693 L 1133,694 L 1128,693 L 1123,688 L 1121,684 L 1122,670 L 1126,665 Z M 961,655 L 953,660 L 951,664 L 951,672 L 953,676 L 957,679 L 970,683 L 973,686 L 973,690 L 970,693 L 963,693 L 956,687 L 950,693 L 954,698 L 958,700 L 970,701 L 976,699 L 982,692 L 982,683 L 976,676 L 963,672 L 960,669 L 960,666 L 963,663 L 969,663 L 975,667 L 981,662 L 973,656 Z M 732,655 L 731,656 L 731,700 L 740,700 L 740,686 L 744,682 L 746,683 L 756,700 L 767,700 L 751,676 L 752,673 L 766,656 L 755,656 L 745,670 L 741,673 L 740,672 L 740,656 L 733,656 Z M 677,656 L 677,700 L 704,700 L 704,692 L 687,692 L 686,691 L 686,680 L 685,679 L 686,676 L 685,657 L 686,656 L 685,655 L 684,656 Z M 623,655 L 622,656 L 622,700 L 649,700 L 649,692 L 632,692 L 631,691 L 631,655 Z M 570,655 L 554,700 L 563,700 L 567,691 L 582,691 L 584,693 L 586,700 L 595,700 L 580,656 L 579,655 Z M 574,667 L 576,668 L 580,681 L 579,683 L 570,683 L 569,682 Z M 497,655 L 496,656 L 496,700 L 519,700 L 526,697 L 529,693 L 530,689 L 529,682 L 523,677 L 528,668 L 526,660 L 520,656 L 515,655 Z M 505,682 L 506,681 L 517,681 L 521,685 L 521,688 L 515,693 L 506,693 L 505,692 Z M 505,664 L 506,663 L 515,663 L 518,666 L 518,670 L 515,673 L 506,673 L 505,672 Z M 436,655 L 436,663 L 447,663 L 448,664 L 448,700 L 457,700 L 457,664 L 458,663 L 469,663 L 469,656 L 468,655 Z M 381,655 L 381,700 L 410,700 L 410,692 L 391,692 L 390,691 L 390,682 L 391,681 L 407,681 L 407,673 L 391,673 L 390,672 L 390,664 L 391,663 L 409,663 L 409,655 Z M 319,655 L 318,656 L 318,672 L 319,673 L 318,678 L 318,690 L 319,691 L 318,699 L 319,700 L 327,700 L 327,686 L 332,682 L 339,694 L 344,700 L 354,700 L 338,676 L 339,673 L 352,658 L 353,655 L 343,655 L 329,673 L 327,672 L 327,655 Z M 206,655 L 190,700 L 199,700 L 201,693 L 203,691 L 219,691 L 222,700 L 232,700 L 216,655 Z M 210,668 L 213,670 L 216,680 L 215,683 L 206,683 L 205,682 Z M 132,655 L 132,676 L 131,677 L 132,700 L 155,700 L 160,698 L 164,694 L 166,688 L 164,681 L 159,677 L 159,675 L 163,671 L 163,663 L 161,659 L 152,655 Z M 140,682 L 141,681 L 153,681 L 156,684 L 156,689 L 153,692 L 150,693 L 142,693 L 140,691 Z M 140,664 L 141,663 L 151,663 L 154,666 L 154,670 L 151,673 L 141,673 L 140,672 Z M 273,654 L 265,656 L 261,659 L 259,662 L 258,670 L 259,673 L 264,678 L 278,683 L 281,688 L 276,693 L 270,693 L 263,687 L 257,691 L 257,693 L 262,698 L 266,700 L 276,701 L 283,699 L 287,696 L 289,693 L 290,685 L 289,681 L 284,676 L 272,672 L 267,668 L 267,666 L 271,662 L 276,662 L 281,667 L 288,662 L 284,657 L 280,655 Z M 1005,378 L 1004,379 L 988,380 L 972,385 L 958,393 L 947,404 L 940,416 L 937,426 L 937,432 L 936,433 L 937,450 L 939,457 L 944,467 L 956,480 L 965,486 L 983,494 L 1006,500 L 1022,506 L 1028,512 L 1029,519 L 1027,523 L 1020,528 L 1012,530 L 1002,530 L 983,525 L 960,512 L 934,548 L 949,559 L 963,566 L 975,570 L 991,573 L 1015,574 L 1016,573 L 1026,573 L 1027,572 L 1037,571 L 1049,567 L 1065,558 L 1074,549 L 1081,537 L 1085,523 L 1085,504 L 1083,495 L 1079,486 L 1075,480 L 1066,471 L 1041,458 L 1002,447 L 994,440 L 993,437 L 994,432 L 999,427 L 1009,424 L 1017,424 L 1033,428 L 1043,433 L 1053,440 L 1075,411 L 1079,404 L 1061,391 L 1045,384 L 1023,379 Z M 783,395 L 771,407 L 763,420 L 764,423 L 805,447 L 807,447 L 810,442 L 822,430 L 834,425 L 848,425 L 857,429 L 864,437 L 866,443 L 866,453 L 861,455 L 831,457 L 805,462 L 787,469 L 775,477 L 768,484 L 760,498 L 757,509 L 757,530 L 760,541 L 768,555 L 774,561 L 788,569 L 798,572 L 812,573 L 813,574 L 829,573 L 844,569 L 854,564 L 865,555 L 867,556 L 868,569 L 929,569 L 928,554 L 927,553 L 927,541 L 926,540 L 926,445 L 921,423 L 918,416 L 910,404 L 901,395 L 888,387 L 875,382 L 861,379 L 853,379 L 852,378 L 833,378 L 832,379 L 818,380 L 801,385 Z M 866,492 L 866,512 L 863,518 L 854,527 L 841,532 L 830,532 L 824,530 L 817,524 L 815,520 L 815,511 L 817,507 L 825,500 L 835,496 L 845,494 L 850,494 L 863,491 Z M 1510,331 L 1451,345 L 1451,383 L 1450,384 L 1430,384 L 1430,429 L 1429,430 L 1427,429 L 1423,420 L 1416,410 L 1405,399 L 1397,393 L 1383,386 L 1370,382 L 1359,381 L 1358,380 L 1338,380 L 1337,381 L 1326,382 L 1308,388 L 1298,393 L 1288,400 L 1275,413 L 1266,427 L 1258,448 L 1255,464 L 1255,491 L 1259,511 L 1267,529 L 1276,542 L 1287,553 L 1300,562 L 1322,571 L 1338,574 L 1352,574 L 1355,575 L 1356,574 L 1372,574 L 1373,573 L 1385,572 L 1405,566 L 1418,559 L 1432,547 L 1402,514 L 1393,520 L 1377,527 L 1368,529 L 1351,529 L 1343,527 L 1333,522 L 1321,509 L 1317,497 L 1318,496 L 1436,496 L 1437,466 L 1436,465 L 1435,451 L 1429,431 L 1430,430 L 1450,430 L 1451,431 L 1451,520 L 1455,537 L 1462,551 L 1470,560 L 1477,565 L 1485,569 L 1499,573 L 1508,573 L 1509,574 L 1527,573 L 1548,568 L 1547,523 L 1534,526 L 1524,525 L 1518,522 L 1513,517 L 1510,509 L 1510,431 L 1511,430 L 1547,430 L 1547,384 L 1511,384 L 1510,383 Z M 1317,454 L 1322,441 L 1329,433 L 1340,427 L 1354,426 L 1365,430 L 1372,436 L 1377,444 L 1380,457 L 1379,458 L 1318,458 Z M 1092,310 L 1092,570 L 1151,570 L 1151,514 L 1163,501 L 1167,504 L 1209,570 L 1281,570 L 1207,463 L 1209,458 L 1267,397 L 1278,384 L 1206,384 L 1156,446 L 1152,449 L 1151,448 L 1151,311 L 1150,310 Z M 542,305 L 542,568 L 674,568 L 693,564 L 707,559 L 715,555 L 728,546 L 736,538 L 744,527 L 748,519 L 753,501 L 752,475 L 749,465 L 745,457 L 738,447 L 732,441 L 725,436 L 712,430 L 713,427 L 722,422 L 733,412 L 740,402 L 746,386 L 747,381 L 746,356 L 744,349 L 735,333 L 723,321 L 715,316 L 698,309 L 684,306 L 678,306 L 677,305 Z M 604,460 L 605,459 L 661,459 L 669,461 L 676,465 L 681,470 L 685,477 L 686,481 L 685,497 L 677,508 L 673,511 L 663,515 L 658,515 L 657,516 L 605,516 L 604,515 Z M 604,358 L 605,357 L 660,357 L 670,361 L 678,370 L 680,376 L 680,387 L 678,393 L 674,399 L 669,403 L 659,407 L 605,407 L 604,406 Z M 135,217 L 131,222 L 131,613 L 133,618 L 140,622 L 148,622 L 149,621 L 154,622 L 343,622 L 344,621 L 358,621 L 359,620 L 365,620 L 381,617 L 406,609 L 432,596 L 455,579 L 471,563 L 481,550 L 490,536 L 500,516 L 509,491 L 513,475 L 515,458 L 516,457 L 516,450 L 517,449 L 517,437 L 518,436 L 517,391 L 516,390 L 516,383 L 515,382 L 513,365 L 508,346 L 501,327 L 493,310 L 480,289 L 467,273 L 449,256 L 426,240 L 396,226 L 370,219 L 358,218 L 357,217 L 347,217 L 346,216 L 137,216 Z M 155,579 L 177,569 L 196,564 L 209,563 L 210,562 L 234,562 L 264,568 L 326,589 L 341,592 L 365,593 L 366,595 L 351,598 L 156,598 L 155,597 Z M 213,345 L 215,343 L 237,343 L 239,345 L 239,355 L 238,356 L 214,356 L 213,355 Z M 222,305 L 230,305 L 231,306 L 231,321 L 230,322 L 222,322 L 221,321 L 221,306 Z M 156,240 L 341,240 L 342,241 L 361,243 L 388,251 L 406,259 L 433,277 L 452,295 L 467,315 L 476,332 L 485,357 L 492,391 L 492,399 L 493,400 L 493,441 L 492,442 L 492,451 L 486,482 L 478,505 L 468,525 L 455,543 L 447,536 L 440,533 L 431,533 L 425,536 L 422,536 L 417,527 L 409,519 L 402,515 L 395,513 L 380,513 L 374,515 L 364,521 L 357,530 L 355,538 L 353,540 L 344,540 L 336,544 L 330,551 L 328,560 L 336,563 L 356,567 L 369,567 L 370,568 L 390,567 L 414,562 L 446,549 L 447,551 L 440,558 L 430,566 L 401,575 L 391,576 L 390,577 L 359,577 L 329,571 L 265,548 L 239,544 L 238,543 L 198,544 L 180,548 L 165,553 L 158,557 L 155,556 L 155,548 L 168,542 L 188,536 L 205,534 L 206,533 L 213,533 L 217,472 L 218,471 L 218,460 L 219,459 L 219,446 L 220,445 L 220,433 L 221,432 L 221,419 L 222,418 L 224,371 L 226,365 L 228,366 L 228,371 L 229,372 L 229,390 L 230,391 L 230,403 L 231,404 L 231,418 L 232,419 L 234,460 L 235,461 L 235,472 L 236,473 L 240,534 L 252,535 L 273,540 L 291,546 L 315,556 L 318,555 L 319,551 L 319,545 L 315,536 L 311,532 L 305,529 L 296,528 L 294,522 L 290,516 L 283,510 L 275,507 L 265,507 L 259,509 L 253,513 L 251,512 L 245,436 L 244,435 L 243,415 L 242,414 L 242,405 L 241,404 L 241,395 L 240,394 L 240,385 L 239,384 L 239,375 L 238,374 L 238,366 L 239,365 L 245,365 L 248,362 L 248,338 L 245,335 L 239,335 L 231,333 L 232,330 L 238,330 L 241,326 L 241,301 L 238,297 L 231,295 L 231,255 L 229,252 L 224,252 L 222,255 L 222,295 L 221,296 L 216,296 L 212,299 L 212,327 L 214,330 L 220,330 L 222,333 L 220,335 L 207,335 L 204,339 L 204,362 L 207,365 L 213,365 L 215,367 L 214,380 L 213,381 L 213,391 L 212,392 L 212,402 L 211,403 L 211,413 L 210,414 L 210,424 L 209,425 L 209,435 L 208,436 L 207,454 L 206,455 L 205,475 L 204,476 L 204,486 L 202,487 L 195,483 L 181,484 L 177,486 L 171,492 L 167,505 L 160,506 L 157,508 L 155,507 L 155,241 Z M 225,452 L 222,455 L 222,533 L 231,533 L 230,454 L 228,452 Z M 366,298 L 365,299 L 349,300 L 327,307 L 312,315 L 293,331 L 278,352 L 273,362 L 268,377 L 267,387 L 266,388 L 266,414 L 269,428 L 278,450 L 289,466 L 306,482 L 320,491 L 340,499 L 356,502 L 378,502 L 379,501 L 390,500 L 406,495 L 424,486 L 437,476 L 446,467 L 458,450 L 464,437 L 469,420 L 470,407 L 471,406 L 471,395 L 470,394 L 469,380 L 462,359 L 452,342 L 437,325 L 421,313 L 407,306 L 387,300 Z M 358,307 L 379,307 L 397,311 L 415,319 L 427,327 L 443,343 L 451,355 L 458,370 L 463,391 L 463,408 L 460,424 L 451,446 L 442,459 L 428,473 L 413,483 L 393,491 L 377,494 L 357,494 L 342,491 L 333,488 L 319,481 L 309,474 L 293,458 L 285,446 L 279,433 L 274,413 L 274,390 L 275,389 L 276,379 L 285,356 L 296,340 L 307,329 L 323,318 L 339,311 Z" fill="currentColor" fill-rule="evenodd"/><path d="M 449,622 L 1537,623 L 1542,621 L 1547,616 L 1549,608 L 1547,602 L 1540,596 L 973,596 L 972,595 L 971,596 L 968,595 L 964,596 L 960,595 L 951,595 L 950,596 L 797,596 L 796,595 L 792,596 L 772,596 L 771,595 L 768,596 L 766,595 L 763,596 L 516,596 L 515,595 L 511,596 L 485,596 L 484,595 L 465,611 Z M 363,308 L 362,309 L 354,309 L 344,311 L 332,315 L 322,320 L 310,328 L 295,343 L 287,355 L 278,377 L 276,386 L 276,393 L 275,394 L 275,409 L 278,425 L 286,445 L 293,456 L 306,470 L 318,479 L 334,487 L 347,491 L 352,491 L 359,493 L 373,493 L 374,492 L 388,491 L 404,486 L 422,476 L 438,462 L 446,452 L 456,432 L 460,419 L 461,398 L 462,397 L 461,396 L 460,382 L 456,368 L 444,346 L 429,330 L 416,321 L 401,314 L 382,309 Z M 385,409 L 385,413 L 382,423 L 377,433 L 370,443 L 356,457 L 345,465 L 334,471 L 328,472 L 316,464 L 304,452 L 296,440 L 297,436 L 305,436 L 322,431 L 360,414 L 383,408 Z M 405,406 L 406,407 L 406,423 L 402,443 L 397,457 L 385,479 L 381,481 L 374,481 L 373,482 L 362,482 L 361,481 L 353,481 L 345,479 L 343,476 L 352,471 L 366,460 L 381,443 L 385,437 L 392,421 L 394,408 L 397,406 Z M 433,405 L 436,406 L 450,406 L 451,407 L 447,427 L 443,434 L 440,432 L 436,423 L 432,408 Z M 422,405 L 424,407 L 424,413 L 429,429 L 437,444 L 437,446 L 417,466 L 400,475 L 399,472 L 407,456 L 412,440 L 414,430 L 414,422 L 415,421 L 415,406 L 416,405 Z M 439,363 L 441,363 L 443,365 L 449,381 L 450,392 L 451,393 L 450,397 L 447,396 L 433,396 L 432,395 L 433,380 L 436,369 Z M 286,410 L 286,391 L 288,381 L 293,367 L 296,364 L 308,361 L 327,361 L 350,368 L 368,379 L 378,389 L 382,395 L 381,400 L 372,401 L 356,406 L 324,421 L 301,428 L 292,428 L 290,426 Z M 380,320 L 391,322 L 408,329 L 421,338 L 433,350 L 434,354 L 431,359 L 426,373 L 423,387 L 423,395 L 422,396 L 415,396 L 414,395 L 412,379 L 406,360 L 395,340 L 389,332 L 379,322 Z M 302,352 L 314,339 L 332,327 L 349,321 L 363,320 L 380,335 L 393,353 L 403,378 L 405,388 L 405,396 L 404,397 L 395,397 L 393,398 L 388,388 L 381,379 L 372,371 L 356,361 L 343,356 L 330,353 L 316,352 L 315,353 L 305,353 L 303,354 Z" style="fill:var(--accent)" fill-rule="evenodd"/></g>
+<symbol id="i-pfeil" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-mond" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+<symbol id="i-sonne" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></symbol>
+<symbol id="i-menue" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-zu" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+</defs></svg>
+
+<header class="sx-nav" id="sx-nav">
+  <div class="sx-inhalt sx-nav-innen">
+    <a class="sx-marke" href="startseite-vorschau.html" aria-label="dobasket – Basketballkreis Dortmund, zur Startseite">
+      <svg viewBox="116 201 1448 430" aria-hidden="true"><use href="#wortmarke"/></svg>
+    </a>
+    <nav class="sx-links" aria-label="Hauptnavigation">
+      <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><a href="vereine-v2.html" aria-current="page">Vereine</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+    </nav>
+    <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
+    <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
+  </div>
+</header>
+
+<div class="menue" id="menue" role="dialog" aria-modal="true" aria-label="Menü">
+  <div class="menue-kopf">
+    <span class="eyebrow"><span>Menü</span></span>
+    <button class="rund-knopf" type="button" id="menue-zu" aria-label="Menü schließen"><svg><use href="#i-zu"/></svg></button>
+  </div>
+  <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><a href="vereine-v2.html" aria-current="page">Vereine</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+</div>
+
+<main>
+<section class="sx-kopf">
+  <svg class="sx-linien" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2"><circle cx="1180" cy="260" r="150"/><path d="M1180 -10v540"/><path d="M1440 120H1300v280h140"/></g>
+  </svg>
+  <div class="sx-inhalt">
+    <a class="sx-zurueck sx-ein" style="--d:0s" href="startseite-vorschau.html"><svg aria-hidden="true"><use href="#i-pfeil"/></svg>Zur Startseite</a>
+    <span class="eyebrow sx-ein" style="--d:.05s"><span>Vereine &amp; Teams · Saison <span id="sx-saison">–</span></span></span>
+    <div class="sx-ein" style="--d:.15s">
+
+  <div class="hero">
+    <div class="crest" aria-hidden="true"><svg viewBox="0 0 78 92"><path d="M5 5h26a38 41 0 0 1 0 82H5Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M8 76c12-6 24-6 34 0s16 4 22-2" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg><span id="crest">–</span></div>
+    <div class="hero-txt">
+      <h1 id="v-name" class="hero-name">–</h1>
+      <div id="v-meta" class="hero-meta"></div>
+    </div>
+    <div class="hero-wahl">
+      <label for="v-wahl">Verein</label>
+      <select id="v-wahl"></select>
+    </div>
+  </div>
+    </div>
+  </div>
+</section>
+<div class="wrap">
+
+  <div class="abschnitt" data-reveal>
+    <div class="abschnitt-kopf"><h2>Mannschaften</h2><span id="v-teamzahl"></span></div>
+    <div id="v-teams"></div>
+  </div>
+
+  <section id="team-detail" class="td" hidden>
+    <div class="td-kopf">
+      <button id="td-back" class="td-back">← Übersicht</button>
+      <div class="td-titel"><span id="td-team">–</span> <span id="td-liga" class="td-liga"></span></div>
+    </div>
+    <div class="td-grid">
+      <div>
+        <div class="td-label" id="td-spiele-label">Spiele</div>
+        <div id="td-spiele"></div>
+      </div>
+      <div>
+        <div class="td-label" id="td-rechts-label">Tabelle</div>
+        <div id="td-rechts"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="widgets" data-reveal>
+    <div class="widget">
+      <div class="widget-kopf"><h2>Nächste Spiele</h2><span id="m-naechste"></span></div>
+      <div id="w-naechste" class="widget-liste"></div>
+    </div>
+    <div class="widget">
+      <div class="widget-kopf"><h2>Letzte Ergebnisse</h2><span id="m-ergebnisse"></span></div>
+      <div id="w-ergebnisse" class="widget-liste"></div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+<footer class="sx-fuss">
+  <div class="sx-inhalt">
+    <div class="sx-fuss-raster">
+      <div>
+        <a class="sx-marke" href="startseite-vorschau.html" aria-label="dobasket Startseite"><svg viewBox="116 201 1448 516" aria-hidden="true"><use href="#wortmarke"/></svg></a>
+        <p style="margin:16px 0 0;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
+      </div>
+      <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="startseite-vorschau.html#spieltag">Spieltag</a></li></ul></div>
+      <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
+    </div>
+    <div class="sx-fuss-unten"><span id="fuss"></span><a href="startseite-vorschau.html" style="color:var(--accent);font-weight:700;text-decoration:none">Zur Startseite →</a></div>
+  </div>
+</footer>
+
+<script src="kalender/daten.js"></script>
+<script>
+
+var D = window.DOBASKET_DATEN;
+if(!D){ document.getElementById("v-name").textContent = "Vereinsdaten gerade nicht erreichbar"; throw new Error("kalender/daten.js fehlt"); }
+var SA = D.saison;
+document.getElementById("sx-saison").textContent = SA;
+
+// --- Zeit/Datum (UTC, wie im Kalender) ---
+function s2d(s){ return new Date(s+"T00:00:00Z"); }
+function wtag(s){ return (s2d(s).getUTCDay()+6)%7; }
+var WT=["Mo","Di","Mi","Do","Fr","Sa","So"];
+var MON=["Jan","Feb","März","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
+function heuteBerlin(){
+  var p=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Berlin",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+  var w={}; p.forEach(function(t){w[t.type]=t.value;}); return w.year+"-"+w.month+"-"+w.day;
+}
+var HEUTE=heuteBerlin();
+function zeitschluessel(s){ return s.d+"T"+(s.t||"99:99"); }
+
+// --- Farben/Labels (1:1 aus dem Kalender) ---
+var FARBEN={"Herren":"var(--herren)","Damen":"var(--damen)","U18":"var(--u18)","U16":"var(--u16)","U14":"var(--u14)","U12":"var(--u12)"};
+function farbGruppe(a){ var m=/^U\d+/.exec(a||""); return m?m[0]:a; }
+function farbe(lk){ var l=D.ligen[lk]; return l?(FARBEN[farbGruppe(l.alter)]||"var(--muted)"):"var(--muted)"; }
+function alterLang(li){ if(li.alter==="?")return""; var m=/^U(\d+)/.exec(li.alter);
+  if(!m)return li.alter; return "U"+m[1]+(li.geschlecht?" "+li.geschlecht:""); }
+function ligaLabel(li){ var mKL=/^KL(\d+)$/.exec(li.ebene);
+  var stufe=mKL?mKL[1]+". Kreisliga":li.ebene==="PK"?(li.jugend?"Jugendpokal":"WBV Pokal"):li.ebene_lang;
+  var alt=alterLang(li); return alt?stufe+" "+alt:stufe; }
+function ligaChip(li){ var mKL=/^KL(\d+)$/.exec(li.ebene);
+  var kurz=mKL?"KL"+mKL[1]:(li.ebene||"").replace(/[0-9]/g,""); var alt=li.alter==="?"?"":li.alter;
+  return alt?alt+" "+kurz:kurz; }
+var _LVL={RL:0,OL:1,LL:2,BL:3,KL:4,PK:5}, _ALT={Herren:0,Damen:1,U18:2,U16:3,U14:4,U12:5}, _GES={"männlich":0,"weiblich":1,"offen":2,"":0};
+function sortkeyLiga(li){ var grp=farbGruppe(li.alter); var jug=/^U/.test(grp)?1:0;
+  var ag=_ALT[grp]; if(ag===undefined)ag=0; var letters=(li.ebene||"").replace(/[0-9]/g,"");
+  var num=parseInt((li.ebene||"").replace(/[^0-9]/g,""),10)||0; var lv=_LVL[letters]; if(lv===undefined)lv=8;
+  var klnum=letters==="KL"?num:0; var ges=_GES[li.geschlecht||""]; if(ges===undefined)ges=3;
+  return [jug,lv,klnum,ag,ges]; }
+
+function mk(tag,kl,txt){ var n=document.createElement(tag); if(kl)n.className=kl; if(txt!=null)n.textContent=txt; return n; }
+function leer(n){ while(n.firstChild)n.removeChild(n.firstChild); return n; }
+function ergText(s){ return s.e?s.e[0]+":"+s.e[1]:(s.st==="Abgesagt"?"abges.":""); }
+
+// Team-Knoten mit Sieger-Hervorhebung (wie kalender.html)
+function teamKnoten(s){
+  var w=mk("span"); var hs=mk("span","tn",s.h), gs=mk("span","tn",s.g);
+  if(s.e && s.e[0]!==s.e[1]){ var heim=s.e[0]>s.e[1];
+    (heim?hs:gs).classList.add("sieger"); (heim?gs:hs).classList.add("verlierer"); }
+  w.appendChild(hs); w.appendChild(document.createTextNode(" – ")); w.appendChild(gs); return w;
+}
+function widgetZeile(s){
+  var b=mk("div","wz"); b.style.setProperty("--pk",farbe(s.lk));
+  b.appendChild(mk("span","wz-rail"));
+  var tg=mk("span","wz-tag"); tg.appendChild(mk("b",null,String(s2d(s.d).getUTCDate())));
+  tg.appendChild(document.createTextNode(WT[wtag(s.d)])); b.appendChild(tg);
+  var zt=mk("span","wz-zeit"+(s.t?"":" offen"),s.t||"offen"); b.appendChild(zt);
+  var pa=mk("span","wz-paar"); pa.appendChild(teamKnoten(s));
+  var sub=mk("small"); sub.appendChild(mk("span","wz-liga",ligaLabel(D.ligen[s.lk])));
+  sub.appendChild(document.createTextNode(" · "+(s.halle||"Halle offen"))); pa.appendChild(sub);
+  b.appendChild(pa); b.appendChild(mk("span","wz-erg",ergText(s))); return b;
+}
+function fuelleWidget(listeId,metaId,spiele,leerText){
+  var ziel=leer(document.getElementById(listeId));
+  document.getElementById(metaId).textContent = spiele.length?(spiele.length+(spiele.length===1?" Spiel":" Spiele")):"";
+  if(!spiele.length){ ziel.appendChild(mk("div","widget-leer",leerText)); return; }
+  spiele.forEach(function(s){ ziel.appendChild(widgetZeile(s)); });
+}
+
+// Monogramm aus dem Vereinsnamen (Platzhalter bis echte Logos da sind).
+function monogramm(name){
+  var w=name.replace(/e\.?\s?V\.?/gi,"").trim().split(/[\s\-]+/).filter(Boolean);
+  if(w[0] && w[0].length<=4 && w[0]===w[0].toUpperCase()) return w[0];   // ASC, TSG, TVE, SVD ...
+  return w.slice(0,3).map(function(x){return x[0];}).join("").toUpperCase();
+}
+
+// Team -> {lk, lnr, rohname} aus den Spielen (Team-Id an ht/gt).
+function teamInfo(teamId){
+  for(var i=0;i<D.spiele.length;i++){ var s=D.spiele[i];
+    if(s.sa!==SA) continue;
+    if(s.ht===teamId) return {lk:s.lk,lnr:s.lnr,roh:s.h};
+    if(s.gt===teamId) return {lk:s.lk,lnr:s.lnr,roh:s.g};
+  }
+  return null;
+}
+function tabellenzeile(sa,lnr,roh){
+  var tab=D.tabellen[sa+"|"+lnr]; if(!tab) return null;
+  for(var i=0;i<tab.length;i++){ if(tab[i].t===roh) return {row:tab[i],anz:tab.length}; }
+  return null;
+}
+
+function teamsBauen(verein){
+  var ziel=leer(document.getElementById("v-teams"));
+  var teams=(D.teams||[]).filter(function(t){ return t.sa===SA && t.verein===verein; });
+  // Liga-Objekt je Team ermitteln, dann sortieren wie im Kalender.
+  teams.forEach(function(t){ var inf=teamInfo(t.id); t._inf=inf; t._li=inf?D.ligen[inf.lk]:null; });
+  teams.sort(function(a,b){
+    var ja=a._li?sortkeyLiga(a._li):[9,9,9,9,9], jb=b._li?sortkeyLiga(b._li):[9,9,9,9,9];
+    for(var i=0;i<ja.length;i++){ if(ja[i]!==jb[i]) return ja[i]-jb[i]; }
+    return (a.label||"").localeCompare(b.label||"","de");
+  });
+  var senioren=teams.filter(function(t){ return !t._li || !t._li.jugend; });
+  var jugend=teams.filter(function(t){ return t._li && t._li.jugend; });
+  document.getElementById("v-teamzahl").textContent = teams.length+(teams.length===1?" Mannschaft":" Mannschaften");
+
+  function gruppe(titel,arr){
+    if(!arr.length) return;
+    ziel.appendChild(mk("div","gruppe-titel",titel));
+    var grid=mk("div","team-grid");
+    arr.forEach(function(t){
+      var li=t._li;
+      var card=mk("div","team-card"); if(li) card.style.setProperty("--pk",farbe(t._inf.lk));
+      card.setAttribute("role","button"); card.tabIndex=0; card.setAttribute("data-spot","");
+      card.addEventListener("click", function(){ teamDetail(t, li); });
+      card.addEventListener("keydown", function(e){
+        if(e.key==="Enter"||e.key===" "){ e.preventDefault(); teamDetail(t, li); } });
+      var lz=mk("div","tc-liga");
+      lz.appendChild(mk("span","punkt"));
+      lz.appendChild(mk("span","tc-name", li?ligaLabel(li):(t.label||"—")));
+      var istPokal = !!(li && (li.ebene||"").indexOf("PK") === 0);
+      card.appendChild(lz);
+      if(li) card.appendChild(mk("div","tc-sub", ligaChip(li)+" · "+li.name));
+      var tab=mk("div","tc-tab");
+      if(istPokal){
+        var pk=pokalInfo(t);
+        tab.className="tc-tab leer";
+        if(pk.status==="aus"){
+          tab.innerHTML='<span class="tc-status-aus">Ausgeschieden</span>'+
+            (pk.runde?' <span class="k">· '+pk.runde+'. Runde</span>':'');
+        } else if(pk.status==="offen"){
+          tab.textContent=(pk.runde?pk.runde+". Runde: ":"")+pk.spiel.h+" vs "+pk.spiel.g;
+        } else if(pk.status==="weiter"){
+          tab.textContent="Weiter"+(pk.runde?" · nach "+pk.runde+". Runde":"");
+        } else {
+          tab.textContent="Pokalrunde";
+        }
+      } else {
+        // Eigene Bilanz der Mannschaft. Die volle Tabelle gibt es erst im Detail
+        // (Klick auf die Karte) -- hier steht nur, wie DIESE Mannschaft dasteht.
+        var b=teamBilanz(t);
+        tab.innerHTML='<span><b>'+b.sp+'</b><span class="k"> Spiele</span></span>'+
+          '<span><span class="k">Bilanz </span><b>'+b.s+'</b>–<b>'+b.n+'</b></span>'+
+          '<span><b>'+b.p+'</b><span class="k"> Pkt</span></span>'+
+          '<span><span class="k">Körbe </span>'+b.k+':'+b.gk+'</span>';
+      }
+      card.appendChild(tab);
+      grid.appendChild(card);
+    });
+    ziel.appendChild(grid);
+  }
+  gruppe("Senioren",senioren);
+  gruppe("Jugend",jugend);
+}
+
+function seiteBauen(verein){
+  aktuellerVerein = verein;
+  var td=document.getElementById("team-detail"); if(td) td.hidden=true;   // beim Wechsel schliessen
+  document.getElementById("v-name").textContent = verein;
+  document.getElementById("crest").textContent = monogramm(verein);
+
+  var spiele=D.spiele.filter(function(s){ return s.sa===SA && (s.hv===verein||s.gv===verein); });
+  var naechste=spiele.filter(function(s){ return s.d>=HEUTE && !s.e; })
+    .sort(function(a,b){ return zeitschluessel(a)<zeitschluessel(b)?-1:1; }).slice(0,5);
+  var ergebnisse=spiele.filter(function(s){ return s.e; })
+    .sort(function(a,b){ return zeitschluessel(a)>zeitschluessel(b)?-1:1; }).slice(0,5);
+
+  var teams=(D.teams||[]).filter(function(t){ return t.sa===SA && t.verein===verein; });
+  var meta=document.getElementById("v-meta");
+  meta.innerHTML='<span><b>'+teams.length+'</b> Mannschaften</span>'+
+    '<span><b>'+spiele.length+'</b> Spiele '+SA+'</span>'+
+    '<span class="platz">@instagram · website — folgt</span>';
+
+  teamsBauen(verein);
+  fuelleWidget("w-naechste","m-naechste",naechste,"Keine anstehenden Spiele.");
+  fuelleWidget("w-ergebnisse","m-ergebnisse",ergebnisse,"Noch keine Ergebnisse in dieser Saison.");
+}
+
+function el(id){ return document.getElementById(id); }
+var aktuellerVerein="";
+
+// Rohname -> kanonischer Dortmunder Verein (aus hv/gv der Spiele). Grundlage,
+// um andere Dortmunder Teams in der Tabelle zu verlinken. Nicht-Dortmunder Teams
+// stehen hier nicht drin und bleiben normaler Text.
+var roh2v={};
+D.spiele.forEach(function(s){ if(s.hv) roh2v[s.h]=s.hv; if(s.gv) roh2v[s.g]=s.gv; });
+
+// Zu einem anderen Dortmunder Verein springen -- wenn moeglich direkt in dieselbe
+// Liga (die Mannschaft, deren Tabelle man gerade ansieht).
+function zuVerein(verein, ligaKuerzel){
+  if(!verein) return;
+  el("v-wahl").value = verein;
+  seiteBauen(verein);                     // Uebersicht neu, schliesst offenes Detail
+  if(ligaKuerzel){
+    var ts=(D.teams||[]).filter(function(t){ return t.sa===SA && t.verein===verein; });
+    for(var i=0;i<ts.length;i++){ var inf=teamInfo(ts[i].id);
+      if(inf && inf.lk===ligaKuerzel){ ts[i]._inf=inf; ts[i]._li=D.ligen[inf.lk];
+        teamDetail(ts[i], ts[i]._li); return; } }
+  }
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function fmtd(s){ var d=s2d(s);
+  return String(d.getUTCDate()).padStart(2,"0")+"."+String(d.getUTCMonth()+1).padStart(2,"0")+"."; }
+
+// Alle Spiele einer Mannschaft (ueber die Team-Id ht/gt), chronologisch.
+function teamSpiele(t){
+  return D.spiele.filter(function(s){ return s.sa===SA && (s.ht===t.id || s.gt===t.id); })
+    .sort(function(a,b){ return (a.d+(a.t||"99:99")) < (b.d+(b.t||"99:99")) ? -1 : 1; });
+}
+// Eigene Bilanz einer Mannschaft fuer die Karte: Spiele, Siege, Niederlagen,
+// Punkte, Koerbe. Quelle ist die offizielle Tabellenzeile (exakte Punkte je
+// nach Ligawertung); fehlt eine Tabelle, aus den eigenen Ergebnissen gezaehlt
+// (Punkte dann als 2 je Sieg -- WBV-Standard; greift nur, solange der Verband
+// noch keine Tabelle veroeffentlicht hat).
+function teamBilanz(t){
+  var tz = t._inf ? tabellenzeile(SA, t._inf.lnr, t._inf.roh) : null;
+  if(tz){ var r=tz.row; return {sp:r.sp, s:r.s, n:r.n, p:r.p, k:r.k, gk:r.gk}; }
+  var sp=0,s=0,n=0,k=0,gk=0;
+  teamSpiele(t).forEach(function(g){
+    if(!g.e) return;
+    var heim=g.ht===t.id, eig=heim?g.e[0]:g.e[1], geg=heim?g.e[1]:g.e[0];
+    sp++; k+=eig; gk+=geg; if(eig>geg) s++; else if(eig<geg) n++;
+  });
+  return {sp:sp, s:s, n:n, p:2*s, k:k, gk:gk};
+}
+// Pokal-Stand einer Mannschaft: ausgeschieden (erste Niederlage), sonst naechste
+// offene Runde, sonst "weiter" nach der letzten gespielten Runde.
+function pokalInfo(t){
+  var sp=teamSpiele(t).slice().sort(function(a,b){ return (a.rd||0)-(b.rd||0) || (a.d<b.d?-1:1); });
+  for(var i=0;i<sp.length;i++){ var s=sp[i];
+    if(s.e){ var heim=s.ht===t.id, eig=heim?s.e[0]:s.e[1], geg=heim?s.e[1]:s.e[0];
+      if(eig<geg) return {status:"aus", runde:s.rd, spiel:s}; } }
+  for(i=0;i<sp.length;i++){ if(!sp[i].e) return {status:"offen", runde:sp[i].rd, spiel:sp[i]}; }
+  var last=sp.length?sp[sp.length-1]:null;
+  return {status:last?"weiter":"", runde:last?last.rd:null};
+}
+
+// Volle Ligatabelle, eigene Mannschaft hervorgehoben. Vor dem 1. Spieltag (alle
+// sp=0) Platz/Punkte ausblenden -- die Reihenfolge ist dann nur alphabetisch.
+function tabelleBauen(t){
+  var wrap=mk("div");
+  var tz = t._inf ? D.tabellen[SA+"|"+t._inf.lnr] : null;
+  if(!tz || !tz.length){ var lw=mk("div","widget"); lw.appendChild(mk("div","widget-leer","Noch keine Tabelle veröffentlicht.")); wrap.appendChild(lw); return wrap; }
+  var gespielt = tz.some(function(r){ return r.sp>0; });
+  var lk = t._inf ? t._inf.lk : "";
+  var tbl=mk("table","tabelle");
+  var thead=mk("thead"); thead.innerHTML='<tr><th class="l">#</th><th class="l">Mannschaft</th><th>Sp</th><th>S</th><th>N</th><th>Pkt</th></tr>';
+  tbl.appendChild(thead);
+  var tb=mk("tbody");
+  tz.forEach(function(r){
+    var selbst = t._inf && r.t===t._inf.roh;
+    var vk = roh2v[r.t];                       // anderer Dortmunder Verein?
+    var tr=mk("tr"); if(selbst) tr.className="ich";
+    var zusatz = r.v ? ' <span class="k">(zur.)</span>' : '';
+    // Anderer Dortmunder Verein -> Link zu dessen Seite (gleiche Liga). Eigene
+    // Zeile und Nicht-Dortmunder bleiben schlichter Text.
+    var nameZelle = (vk && !selbst)
+      ? '<span class="tlink" role="link" tabindex="0" data-v="'+esc(vk)+'" data-lk="'+esc(lk)+'">'+esc(r.t)+'</span>'+zusatz
+      : esc(r.t)+zusatz;
+    tr.innerHTML='<td class="l rang">'+(gespielt?r.r:"–")+'</td>'+
+      '<td class="l">'+nameZelle+'</td>'+
+      '<td>'+r.sp+'</td><td>'+r.s+'</td><td>'+r.n+'</td><td>'+(gespielt?r.p:"–")+'</td>';
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb); wrap.appendChild(tbl);
+  // Delegation: Klick/Enter auf einen verlinkten Verein springt dorthin.
+  tbl.addEventListener("click", function(e){
+    var a=e.target.closest(".tlink"); if(a) zuVerein(a.dataset.v, a.dataset.lk);
+  });
+  tbl.addEventListener("keydown", function(e){
+    if(e.key!=="Enter" && e.key!==" ") return;
+    var a=e.target.closest(".tlink"); if(a){ e.preventDefault(); zuVerein(a.dataset.v, a.dataset.lk); }
+  });
+  if(!gespielt) wrap.appendChild(mk("div","tab-hinweis","Saison noch offen – Reihenfolge alphabetisch, Platz und Punkte ab dem ersten Spiel."));
+  return wrap;
+}
+
+// Pokalweg: Runde fuer Runde, verlorene Runde in Rot + "Ausgeschieden".
+function pfadBauen(t){
+  var sp=teamSpiele(t).slice().sort(function(a,b){ return (a.rd||0)-(b.rd||0) || (a.d<b.d?-1:1); });
+  var box=mk("div","pfad");
+  if(!sp.length){ box.appendChild(mk("div","widget-leer","Keine Pokalspiele.")); return box; }
+  sp.forEach(function(s){
+    var heim=s.ht===t.id, verloren=false;
+    if(s.e){ var eig=heim?s.e[0]:s.e[1], geg=heim?s.e[1]:s.e[0]; verloren=eig<geg; }
+    var r=mk("div","pfad-runde"+(verloren?" aus":"")); r.style.setProperty("--pk",farbe(s.lk));
+    r.appendChild(mk("div","r-kopf", s.rd?s.rd+". Runde":"Pokalrunde"));
+    var paar=mk("div","r-paar"); paar.appendChild(teamKnoten(s));
+    if(s.e){ paar.appendChild(document.createTextNode("  ")); paar.appendChild(mk("span","r-erg", s.e[0]+":"+s.e[1])); }
+    else { paar.appendChild(document.createTextNode("  · "+(s.t?s.t+" ":"")+fmtd(s.d))); }
+    r.appendChild(paar);
+    if(verloren) r.appendChild(mk("div","aus-text","Ausgeschieden"));
+    box.appendChild(r);
+  });
+  return box;
+}
+
+// Klick auf eine Mannschaft: links ihre Spiele, rechts Tabelle bzw. Pokalweg.
+function teamDetail(t, li){
+  el("td-team").textContent = aktuellerVerein;
+  el("td-liga").textContent = li ? "· "+ligaLabel(li) : "";
+  var sp=teamSpiele(t);
+  var w=mk("div","widget"), liste=mk("div","widget-liste");
+  if(sp.length) sp.forEach(function(s){ liste.appendChild(widgetZeile(s)); });
+  else liste.appendChild(mk("div","widget-leer","Keine Spiele in dieser Saison."));
+  w.appendChild(liste); leer(el("td-spiele")).appendChild(w);
+  el("td-spiele-label").textContent = "Spiele · "+sp.length+" in "+SA;
+  var istPokal=!!(li && (li.ebene||"").indexOf("PK")===0);
+  el("td-rechts-label").textContent = istPokal ? "Pokalweg" : "Tabelle";
+  leer(el("td-rechts")).appendChild(istPokal ? pfadBauen(t) : tabelleBauen(t));
+  el("team-detail").hidden=false;
+  el("team-detail").scrollIntoView({behavior:"smooth", block:"start"});
+}
+el("td-back").addEventListener("click", function(){
+  el("team-detail").hidden=true;
+  el("v-teams").scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+// Vereins-Umschalter
+(function(){
+  var sel=document.getElementById("v-wahl");
+  var namen=D.vereine.map(function(v){return v.name;}).sort(function(a,b){return a.localeCompare(b,"de");});
+  namen.forEach(function(n){ var o=mk("option",null,n); o.value=n; sel.appendChild(o); });
+  var start = namen.indexOf("TSG Dortmund-Schüren")>=0 ? "TSG Dortmund-Schüren" : namen[0];
+  sel.value=start;
+  sel.addEventListener("change",function(){ seiteBauen(sel.value); });
+  seiteBauen(start);
+})();
+
+document.getElementById("fuss").textContent =
+  "Muster-Vereinsseite · Daten "+SA+" · Stand "+HEUTE+" · Vereinslogos folgen (Platzhalter-Monogramm)";
+</script>
+<script>
+/* dobasket Shell: Theme, Menue, Nav-Zustand, Reveal, Spotlight (DESIGN.md Abschnitt 7) */
+(function(){
+"use strict";
+var wurzel = document.documentElement, ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
+var knopf = document.querySelector(".thema");
+function istDunkel(){ var g = wurzel.getAttribute("data-theme"); return g ? g === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+function malen(){ var d = istDunkel(); knopf.querySelector("use").setAttribute("href", d ? "#i-sonne" : "#i-mond");
+  knopf.setAttribute("aria-label", d ? "Helles Design einschalten" : "Dunkles Design einschalten"); }
+knopf.addEventListener("click", function(){ var neu = istDunkel() ? "light" : "dark"; wurzel.setAttribute("data-theme", neu);
+  try{ localStorage.setItem("dobasket-thema", neu); }catch(e){} malen(); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", malen);
+malen();
+
+var m = document.getElementById("menue"), b = document.getElementById("burger");
+function setze(offen){ m.classList.toggle("offen", offen); b.setAttribute("aria-expanded", String(offen));
+  document.body.style.overflow = offen ? "hidden" : ""; (offen ? document.getElementById("menue-zu") : b).focus(); }
+b.addEventListener("click", function(){ setze(true); });
+document.getElementById("menue-zu").addEventListener("click", function(){ setze(false); });
+m.addEventListener("click", function(ev){ if(ev.target.closest("a")){ m.classList.remove("offen"); b.setAttribute("aria-expanded","false"); document.body.style.overflow = ""; } });
+document.addEventListener("keydown", function(ev){
+  if(!m.classList.contains("offen")) return;
+  if(ev.key === "Escape"){ setze(false); return; }
+  if(ev.key !== "Tab") return;
+  var f = m.querySelectorAll("a,button"), erst = f[0], letzt = f[f.length-1];
+  if(ev.shiftKey && document.activeElement === erst){ ev.preventDefault(); letzt.focus(); }
+  else if(!ev.shiftKey && document.activeElement === letzt){ ev.preventDefault(); erst.focus(); }
+});
+
+var nav = document.getElementById("sx-nav"), geplant = false;
+function tick(){ geplant = false; nav.classList.toggle("gescrollt", scrollY > 12); }
+addEventListener("scroll", function(){ if(!geplant){ geplant = true; requestAnimationFrame(tick); } }, {passive:true});
+tick();
+
+var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("sichtbar"); io.unobserve(e.target); } }); }, {rootMargin:"0px 0px -8% 0px"});
+document.querySelectorAll("[data-reveal]").forEach(function(n){ io.observe(n); });
+
+if(!ruhig && matchMedia("(hover: hover) and (pointer: fine)").matches){
+  var letztes = null, gp = false;
+  document.addEventListener("pointermove", function(e){ letztes = e; if(!gp){ gp = true; requestAnimationFrame(function(){
+    gp = false; var k = letztes.target.closest && letztes.target.closest("[data-spot]"); if(!k) return;
+    var r = k.getBoundingClientRect(); k.style.setProperty("--mx", (letztes.clientX - r.left) + "px"); k.style.setProperty("--my", (letztes.clientY - r.top) + "px");
+  }); } }, {passive:true});
+}
+})();
+</script>
+
+</body>
+</html>
