@@ -22,7 +22,7 @@
   --accent-cta:#cc4d00; --accent-cta-hover:#b84400; --on-accent:#ffffff;
   --ink-rgb:31,31,31; --accent-rgb:239,90,0; --ground-rgb:248,248,246;
   --herren:#2b3a44; --damen:#007fa3;
-  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200;
+  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200; --u10:#2a5bd7;
   --schatten:0 1px 2px rgba(var(--ink-rgb),.06), 0 8px 24px -12px rgba(var(--ink-rgb),.18);
   --schatten-hoch:0 2px 4px rgba(var(--ink-rgb),.06), 0 24px 48px -20px rgba(var(--ink-rgb),.28);
   --f-display:"Archivo","Segoe UI",system-ui,sans-serif;
@@ -45,7 +45,7 @@
     --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
     --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
     --herren:#b9c4cb; --damen:#35a9cc;
-    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff;
   }
 }
 :root[data-theme="dark"]{
@@ -58,7 +58,7 @@
   --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
   --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
   --herren:#b9c4cb; --damen:#35a9cc;
-  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff;
 }
 /* Seiten-Tokens der Unterseiten (Kalender/Vereine) */
 :root{--gruen:#39b54a;--orange:#f47b20;--on-heat:#ffffff;--rot:#c62828}
@@ -339,9 +339,14 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 .wrap{max-width:1240px;padding:0 var(--rand);gap:clamp(40px,5vw,64px)}
 a{color:var(--accent-ink)}
 .hero{gap:clamp(18px,3vw,32px);align-items:center}
-.crest{position:relative;width:clamp(84px,9vw,118px);aspect-ratio:78/92;flex-shrink:0;color:var(--ink)}
-.crest svg{position:absolute;inset:0;width:100%;height:100%}
-.crest span{position:absolute;left:8%;right:22%;top:26%;text-align:center;font:900 clamp(17px,2vw,24px)/1 var(--f-display);letter-spacing:-.03em;color:var(--accent)}
+.crest{position:relative;width:clamp(84px,9vw,118px);aspect-ratio:830/870;flex-shrink:0;color:var(--ink)}
+.crest .d-wappen{display:block;width:100%;height:100%}
+.wappen-text{font-family:var(--f-display);font-weight:900;letter-spacing:-.03em;fill:var(--accent)}
+.v-ohne-team{display:flex;gap:18px;align-items:flex-start;padding:22px 24px;background:var(--surface);border:1px dashed var(--line-2);border-radius:var(--r);color:var(--ink-2);max-width:760px}
+.v-ohne-team b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+.v-ohne-team .d-wappen{width:44px;flex:none;color:var(--muted)}
+.ohne-team .widgets{display:none!important}
+.v-ueb-karte.leise .v-ueb-mono{background:var(--sunken);color:var(--muted)}
 .hero-name{font-family:var(--f-display);font-weight:900;font-size:clamp(38px,5.6vw,80px);line-height:.98;letter-spacing:-.035em}
 .hero-name::after{content:".";color:var(--accent)}
 .hero-meta{font-size:14px;gap:8px 22px;margin-top:14px}
@@ -423,6 +428,13 @@ a{color:var(--accent-ink)}
 <symbol id="i-menue" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
 <symbol id="i-zu" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
 <symbol id="i-runter" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-pfeife" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="14" r="5"/><path d="M13 11l8-3v4l-6 2M3 6l2 2M8 3v3"/></g></symbol>
+<symbol id="i-kalender" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></g></symbol>
+<symbol id="i-team" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></g></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></g></symbol>
+<symbol id="i-euro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6.5A7 7 0 1 0 18 17.5"/><path d="M4 10h9M4 14h9"/></g></symbol>
+<symbol id="i-laden" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-blatt" viewBox="0 0 40 48"><path d="M4 4a3 3 0 0 1 3-3h19l11 11v32a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><path d="M26 1v8a3 3 0 0 0 3 3h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
 </defs></svg>
 
 <header class="sx-nav" id="sx-nav">
@@ -438,7 +450,7 @@ a{color:var(--accent-ink)}
           <div class="drop-liste" data-vereine-liste></div>
           <a class="drop-alle" href="vereine-v2.html">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
         </div>
-      </div><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+      </div><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
     </nav>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
     <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
@@ -450,7 +462,7 @@ a{color:var(--accent-ink)}
     <span class="eyebrow"><span>Menü</span></span>
     <button class="rund-knopf" type="button" id="menue-zu" aria-label="Menü schließen"><svg><use href="#i-zu"/></svg></button>
   </div>
-  <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><a href="vereine-v2.html" aria-current="page">Vereine</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+  <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><a href="vereine-v2.html" aria-current="page">Vereine</a><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
 </div>
 
 <main>
@@ -464,7 +476,7 @@ a{color:var(--accent-ink)}
     <div class="sx-ein" style="--d:.15s">
 
   <div class="hero">
-    <div class="crest" aria-hidden="true"><svg viewBox="0 0 78 92"><path d="M5 5h26a38 41 0 0 1 0 82H5Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M8 76c12-6 24-6 34 0s16 4 22-2" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg><span id="crest">–</span></div>
+    <div class="crest" aria-hidden="true"><svg class="d-wappen " viewBox="215 200 830 870" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M 246.0,230.0 L 243.0,235.0 L 243.0,1044.0 L 244.0,1046.0 L 248.0,1049.0 L 651.0,1049.0 L 652.0,1048.0 L 660.0,1049.0 L 661.0,1048.0 L 683.0,1048.0 L 684.0,1047.0 L 696.0,1047.0 L 697.0,1046.0 L 704.0,1046.0 L 705.0,1045.0 L 713.0,1045.0 L 714.0,1044.0 L 720.0,1044.0 L 721.0,1043.0 L 726.0,1043.0 L 727.0,1042.0 L 746.0,1039.0 L 762.0,1035.0 L 766.0,1033.0 L 769.0,1033.0 L 773.0,1031.0 L 776.0,1031.0 L 822.0,1013.0 L 852.0,997.0 L 872.0,984.0 L 888.0,972.0 L 910.0,953.0 L 939.0,921.0 L 963.0,886.0 L 980.0,854.0 L 980.0,852.0 L 986.0,841.0 L 993.0,821.0 L 995.0,818.0 L 1001.0,800.0 L 1002.0,793.0 L 1004.0,789.0 L 1010.0,765.0 L 1010.0,761.0 L 1014.0,745.0 L 1014.0,740.0 L 1015.0,739.0 L 1015.0,734.0 L 1016.0,733.0 L 1016.0,726.0 L 1017.0,725.0 L 1018.0,710.0 L 1019.0,709.0 L 1019.0,698.0 L 1020.0,697.0 L 1020.0,640.0 L 1019.0,639.0 L 1019.0,628.0 L 1018.0,627.0 L 1018.0,618.0 L 1017.0,617.0 L 1015.0,594.0 L 1014.0,593.0 L 1013.0,580.0 L 1012.0,579.0 L 1012.0,574.0 L 1011.0,573.0 L 1011.0,568.0 L 1010.0,567.0 L 1010.0,562.0 L 1009.0,561.0 L 1006.0,542.0 L 1004.0,537.0 L 1004.0,533.0 L 997.0,505.0 L 985.0,467.0 L 971.0,432.0 L 954.0,398.0 L 934.0,367.0 L 908.0,335.0 L 890.0,317.0 L 871.0,301.0 L 850.0,286.0 L 830.0,274.0 L 802.0,260.0 L 800.0,260.0 L 785.0,253.0 L 777.0,251.0 L 774.0,249.0 L 765.0,247.0 L 758.0,244.0 L 751.0,243.0 L 747.0,241.0 L 725.0,237.0 L 724.0,236.0 L 719.0,236.0 L 718.0,235.0 L 696.0,233.0 L 695.0,232.0 L 686.0,232.0 L 685.0,231.0 L 671.0,231.0 L 670.0,230.0 Z  M 292.0,959.0 L 323.0,944.0 L 358.0,932.0 L 384.0,926.0 L 389.0,926.0 L 390.0,925.0 L 426.0,923.0 L 427.0,924.0 L 442.0,924.0 L 443.0,925.0 L 459.0,926.0 L 460.0,927.0 L 470.0,928.0 L 490.0,933.0 L 534.0,948.0 L 590.0,971.0 L 621.0,981.0 L 642.0,985.0 L 643.0,986.0 L 655.0,987.0 L 656.0,988.0 L 664.0,988.0 L 665.0,989.0 L 704.0,990.0 L 705.0,989.0 L 731.0,988.0 L 732.0,987.0 L 751.0,985.0 L 756.0,983.0 L 758.0,983.0 L 759.0,985.0 L 749.0,989.0 L 746.0,989.0 L 739.0,992.0 L 736.0,992.0 L 732.0,994.0 L 716.0,998.0 L 701.0,1000.0 L 700.0,1001.0 L 694.0,1001.0 L 693.0,1002.0 L 687.0,1002.0 L 686.0,1003.0 L 668.0,1004.0 L 667.0,1005.0 L 293.0,1005.0 L 292.0,1004.0 Z  M 293.0,275.0 L 667.0,275.0 L 668.0,276.0 L 678.0,276.0 L 679.0,277.0 L 686.0,277.0 L 687.0,278.0 L 706.0,280.0 L 732.0,286.0 L 757.0,294.0 L 772.0,300.0 L 783.0,306.0 L 785.0,306.0 L 802.0,315.0 L 818.0,325.0 L 842.0,343.0 L 873.0,373.0 L 898.0,405.0 L 913.0,430.0 L 932.0,470.0 L 945.0,507.0 L 945.0,510.0 L 948.0,517.0 L 956.0,549.0 L 956.0,553.0 L 960.0,569.0 L 960.0,574.0 L 961.0,575.0 L 961.0,580.0 L 962.0,581.0 L 962.0,586.0 L 963.0,587.0 L 963.0,593.0 L 964.0,594.0 L 965.0,610.0 L 966.0,611.0 L 966.0,622.0 L 967.0,623.0 L 967.0,640.0 L 968.0,641.0 L 968.0,674.0 L 967.0,675.0 L 967.0,693.0 L 966.0,694.0 L 965.0,714.0 L 964.0,715.0 L 961.0,739.0 L 952.0,776.0 L 941.0,809.0 L 922.0,849.0 L 913.0,864.0 L 893.0,892.0 L 882.0,905.0 L 868.0,919.0 L 840.0,935.0 L 838.0,935.0 L 821.0,943.0 L 800.0,950.0 L 774.0,956.0 L 762.0,957.0 L 761.0,958.0 L 753.0,958.0 L 752.0,959.0 L 709.0,959.0 L 708.0,958.0 L 698.0,958.0 L 697.0,957.0 L 683.0,956.0 L 682.0,955.0 L 667.0,953.0 L 647.0,948.0 L 604.0,933.0 L 575.0,920.0 L 530.0,902.0 L 509.0,895.0 L 506.0,895.0 L 502.0,893.0 L 482.0,888.0 L 472.0,887.0 L 466.0,885.0 L 460.0,885.0 L 459.0,884.0 L 453.0,884.0 L 452.0,883.0 L 444.0,883.0 L 443.0,882.0 L 397.0,882.0 L 396.0,883.0 L 387.0,883.0 L 386.0,884.0 L 367.0,886.0 L 339.0,893.0 L 319.0,900.0 L 294.0,912.0 L 292.0,911.0 L 292.0,276.0 Z "/><text id="crest" x="605" y="655" text-anchor="middle" font-size="190" class="wappen-text">–</text></svg></div>
     <div class="hero-txt">
       <h1 id="v-name" class="hero-name">–</h1>
       <div id="v-meta" class="hero-meta"></div>
@@ -525,7 +537,7 @@ a{color:var(--accent-ink)}
         <p style="margin:16px 0 0;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
       </div>
       <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="startseite-vorschau.html#spieltag">Spieltag</a></li></ul></div>
-      <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
+      <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
     </div>
     <div class="sx-fuss-unten"><span id="fuss"></span><a href="startseite-vorschau.html" style="color:var(--accent);font-weight:700;text-decoration:none">Zur Startseite →</a></div>
   </div>
@@ -552,7 +564,7 @@ var HEUTE=heuteBerlin();
 function zeitschluessel(s){ return s.d+"T"+(s.t||"99:99"); }
 
 // --- Farben/Labels (1:1 aus dem Kalender) ---
-var FARBEN={"Herren":"var(--herren)","Damen":"var(--damen)","U18":"var(--u18)","U16":"var(--u16)","U14":"var(--u14)","U12":"var(--u12)"};
+var FARBEN={"Herren":"var(--herren)","Damen":"var(--damen)","U18":"var(--u18)","U16":"var(--u16)","U14":"var(--u14)","U12":"var(--u12)","U10":"var(--u10)"};
 function farbGruppe(a){ var m=/^U\d+/.exec(a||""); return m?m[0]:a; }
 function farbe(lk){ var l=D.ligen[lk]; return l?(FARBEN[farbGruppe(l.alter)]||"var(--muted)"):"var(--muted)"; }
 function alterLang(li){ if(li.alter==="?")return""; var m=/^U(\d+)/.exec(li.alter);
@@ -563,7 +575,7 @@ function ligaLabel(li){ var mKL=/^KL(\d+)$/.exec(li.ebene);
 function ligaChip(li){ var mKL=/^KL(\d+)$/.exec(li.ebene);
   var kurz=mKL?"KL"+mKL[1]:(li.ebene||"").replace(/[0-9]/g,""); var alt=li.alter==="?"?"":li.alter;
   return alt?alt+" "+kurz:kurz; }
-var _LVL={RL:0,OL:1,LL:2,BL:3,KL:4,PK:5}, _ALT={Herren:0,Damen:1,U18:2,U16:3,U14:4,U12:5}, _GES={"männlich":0,"weiblich":1,"offen":2,"":0};
+var _LVL={RL:0,OL:1,LL:2,BL:3,LEI:3.5,KL:4,PK:5}, _ALT={Herren:0,Damen:1,U18:2,U16:3,U14:4,U12:5,U10:6}, _GES={"männlich":0,"weiblich":1,"offen":2,"":0};
 function sortkeyLiga(li){ var grp=farbGruppe(li.alter); var jug=/^U/.test(grp)?1:0;
   var ag=_ALT[grp]; if(ag===undefined)ag=0; var letters=(li.ebene||"").replace(/[0-9]/g,"");
   var num=parseInt((li.ebene||"").replace(/[^0-9]/g,""),10)||0; var lv=_LVL[letters]; if(lv===undefined)lv=8;
@@ -684,13 +696,17 @@ function teamsBauen(verein){
   gruppe("Jugend",jugend);
 }
 
+function wappenText(t){
+  var n = document.getElementById("crest"); n.textContent = t;
+  n.setAttribute("font-size", t.length >= 4 ? 150 : t.length === 3 ? 190 : 230);
+}
 function seiteBauen(verein){
   aktuellerVerein = verein;
   document.body.classList.remove("ohne-verein"); el("v-uebersicht").hidden = true;
   try{ history.replaceState(null, "", "?verein=" + encodeURIComponent(verein)); }catch(e){}
   var td=document.getElementById("team-detail"); if(td) td.hidden=true;   // beim Wechsel schliessen
   document.getElementById("v-name").textContent = verein;
-  document.getElementById("crest").textContent = monogramm(verein);
+  wappenText(monogramm(verein));
 
   var spiele=D.spiele.filter(function(s){ return s.sa===SA && (s.hv===verein||s.gv===verein); });
   var naechste=spiele.filter(function(s){ return s.d>=HEUTE && !s.e; })
@@ -700,11 +716,20 @@ function seiteBauen(verein){
 
   var teams=(D.teams||[]).filter(function(t){ return t.sa===SA && t.verein===verein; });
   var meta=document.getElementById("v-meta");
-  meta.innerHTML='<span><b>'+teams.length+'</b> Mannschaften</span>'+
+  meta.innerHTML='<span><b>'+teams.length+'</b> '+(teams.length===1?"Mannschaft":"Mannschaften")+'</span>'+
     '<span><b>'+spiele.length+'</b> Spiele '+SA+'</span>'+
     '<span class="platz">@instagram · website — folgt</span>';
 
   teamsBauen(verein);
+  var ohne = teams.length === 0;
+  document.body.classList.toggle("ohne-team", ohne);
+  if(ohne){
+    var zt = leer(document.getElementById("v-teams")), box = mk("div","v-ohne-team");
+    box.innerHTML = "<svg class=\"d-wappen \" viewBox=\"215 200 830 870\" aria-hidden=\"true\"><path fill=\"currentColor\" fill-rule=\"evenodd\" d=\"M 246.0,230.0 L 243.0,235.0 L 243.0,1044.0 L 244.0,1046.0 L 248.0,1049.0 L 651.0,1049.0 L 652.0,1048.0 L 660.0,1049.0 L 661.0,1048.0 L 683.0,1048.0 L 684.0,1047.0 L 696.0,1047.0 L 697.0,1046.0 L 704.0,1046.0 L 705.0,1045.0 L 713.0,1045.0 L 714.0,1044.0 L 720.0,1044.0 L 721.0,1043.0 L 726.0,1043.0 L 727.0,1042.0 L 746.0,1039.0 L 762.0,1035.0 L 766.0,1033.0 L 769.0,1033.0 L 773.0,1031.0 L 776.0,1031.0 L 822.0,1013.0 L 852.0,997.0 L 872.0,984.0 L 888.0,972.0 L 910.0,953.0 L 939.0,921.0 L 963.0,886.0 L 980.0,854.0 L 980.0,852.0 L 986.0,841.0 L 993.0,821.0 L 995.0,818.0 L 1001.0,800.0 L 1002.0,793.0 L 1004.0,789.0 L 1010.0,765.0 L 1010.0,761.0 L 1014.0,745.0 L 1014.0,740.0 L 1015.0,739.0 L 1015.0,734.0 L 1016.0,733.0 L 1016.0,726.0 L 1017.0,725.0 L 1018.0,710.0 L 1019.0,709.0 L 1019.0,698.0 L 1020.0,697.0 L 1020.0,640.0 L 1019.0,639.0 L 1019.0,628.0 L 1018.0,627.0 L 1018.0,618.0 L 1017.0,617.0 L 1015.0,594.0 L 1014.0,593.0 L 1013.0,580.0 L 1012.0,579.0 L 1012.0,574.0 L 1011.0,573.0 L 1011.0,568.0 L 1010.0,567.0 L 1010.0,562.0 L 1009.0,561.0 L 1006.0,542.0 L 1004.0,537.0 L 1004.0,533.0 L 997.0,505.0 L 985.0,467.0 L 971.0,432.0 L 954.0,398.0 L 934.0,367.0 L 908.0,335.0 L 890.0,317.0 L 871.0,301.0 L 850.0,286.0 L 830.0,274.0 L 802.0,260.0 L 800.0,260.0 L 785.0,253.0 L 777.0,251.0 L 774.0,249.0 L 765.0,247.0 L 758.0,244.0 L 751.0,243.0 L 747.0,241.0 L 725.0,237.0 L 724.0,236.0 L 719.0,236.0 L 718.0,235.0 L 696.0,233.0 L 695.0,232.0 L 686.0,232.0 L 685.0,231.0 L 671.0,231.0 L 670.0,230.0 Z  M 292.0,959.0 L 323.0,944.0 L 358.0,932.0 L 384.0,926.0 L 389.0,926.0 L 390.0,925.0 L 426.0,923.0 L 427.0,924.0 L 442.0,924.0 L 443.0,925.0 L 459.0,926.0 L 460.0,927.0 L 470.0,928.0 L 490.0,933.0 L 534.0,948.0 L 590.0,971.0 L 621.0,981.0 L 642.0,985.0 L 643.0,986.0 L 655.0,987.0 L 656.0,988.0 L 664.0,988.0 L 665.0,989.0 L 704.0,990.0 L 705.0,989.0 L 731.0,988.0 L 732.0,987.0 L 751.0,985.0 L 756.0,983.0 L 758.0,983.0 L 759.0,985.0 L 749.0,989.0 L 746.0,989.0 L 739.0,992.0 L 736.0,992.0 L 732.0,994.0 L 716.0,998.0 L 701.0,1000.0 L 700.0,1001.0 L 694.0,1001.0 L 693.0,1002.0 L 687.0,1002.0 L 686.0,1003.0 L 668.0,1004.0 L 667.0,1005.0 L 293.0,1005.0 L 292.0,1004.0 Z  M 293.0,275.0 L 667.0,275.0 L 668.0,276.0 L 678.0,276.0 L 679.0,277.0 L 686.0,277.0 L 687.0,278.0 L 706.0,280.0 L 732.0,286.0 L 757.0,294.0 L 772.0,300.0 L 783.0,306.0 L 785.0,306.0 L 802.0,315.0 L 818.0,325.0 L 842.0,343.0 L 873.0,373.0 L 898.0,405.0 L 913.0,430.0 L 932.0,470.0 L 945.0,507.0 L 945.0,510.0 L 948.0,517.0 L 956.0,549.0 L 956.0,553.0 L 960.0,569.0 L 960.0,574.0 L 961.0,575.0 L 961.0,580.0 L 962.0,581.0 L 962.0,586.0 L 963.0,587.0 L 963.0,593.0 L 964.0,594.0 L 965.0,610.0 L 966.0,611.0 L 966.0,622.0 L 967.0,623.0 L 967.0,640.0 L 968.0,641.0 L 968.0,674.0 L 967.0,675.0 L 967.0,693.0 L 966.0,694.0 L 965.0,714.0 L 964.0,715.0 L 961.0,739.0 L 952.0,776.0 L 941.0,809.0 L 922.0,849.0 L 913.0,864.0 L 893.0,892.0 L 882.0,905.0 L 868.0,919.0 L 840.0,935.0 L 838.0,935.0 L 821.0,943.0 L 800.0,950.0 L 774.0,956.0 L 762.0,957.0 L 761.0,958.0 L 753.0,958.0 L 752.0,959.0 L 709.0,959.0 L 708.0,958.0 L 698.0,958.0 L 697.0,957.0 L 683.0,956.0 L 682.0,955.0 L 667.0,953.0 L 647.0,948.0 L 604.0,933.0 L 575.0,920.0 L 530.0,902.0 L 509.0,895.0 L 506.0,895.0 L 502.0,893.0 L 482.0,888.0 L 472.0,887.0 L 466.0,885.0 L 460.0,885.0 L 459.0,884.0 L 453.0,884.0 L 452.0,883.0 L 444.0,883.0 L 443.0,882.0 L 397.0,882.0 L 396.0,883.0 L 387.0,883.0 L 386.0,884.0 L 367.0,886.0 L 339.0,893.0 L 319.0,900.0 L 294.0,912.0 L 292.0,911.0 L 292.0,276.0 Z \"/></svg>";
+    var tx = mk("div"); tx.appendChild(mk("b",null,"Aktuell keine Mannschaft im Spielbetrieb"));
+    tx.appendChild(mk("span",null, verein + " ist beim WBV für den Basketballkreis Dortmund gemeldet, stellt in der Saison " + SA + " aber keine Mannschaft."));
+    box.appendChild(tx); zt.appendChild(box);
+  }
   fuelleWidget("w-naechste","m-naechste",naechste,"Keine anstehenden Spiele.");
   fuelleWidget("w-ergebnisse","m-ergebnisse",ergebnisse,"Noch keine Ergebnisse in dieser Saison.");
 }
@@ -857,7 +882,7 @@ function uebersichtBauen(namen){
   try{ history.replaceState(null, "", location.pathname); }catch(e){}
   el("team-detail").hidden = true;
   el("v-name").textContent = "Alle Vereine";
-  el("crest").textContent = "DO";
+  wappenText("DO");
   var teamsJe = {}, spieleJe = {}, teamsGesamt = 0;
   (D.teams||[]).forEach(function(t){ if(t.sa===SA){ teamsJe[t.verein] = (teamsJe[t.verein]||0) + 1; teamsGesamt++; } });
   D.spiele.forEach(function(s){ if(s.sa!==SA) return;
@@ -875,7 +900,9 @@ function uebersichtBauen(namen){
     a.appendChild(mk("span","v-ueb-mono", monogramm(n)));
     var tx = mk("span","v-ueb-text"); tx.appendChild(mk("b",null,n));
     var tz = teamsJe[n]||0, sz = spieleJe[n]||0;
-    tx.appendChild(mk("small",null, tz + (tz===1?" Mannschaft":" Mannschaften") + " · " + sz + " Spiele " + SA));
+    if(!tz && !sz) a.classList.add("leise");
+    tx.appendChild(mk("small",null, !tz && !sz ? "Beim WBV gemeldet · aktuell ohne Mannschaft"
+      : tz + (tz===1?" Mannschaft":" Mannschaften") + " · " + sz + " Spiele " + SA));
     a.appendChild(tx);
     var pf = document.createElementNS("http://www.w3.org/2000/svg","svg"); pf.setAttribute("aria-hidden","true");
     var u = document.createElementNS("http://www.w3.org/2000/svg","use"); u.setAttribute("href","#i-pfeil"); pf.appendChild(u); a.appendChild(pf);
@@ -887,7 +914,7 @@ function uebersichtBauen(namen){
 // Vereins-Umschalter
 (function(){
   var sel=document.getElementById("v-wahl");
-  var namen=D.vereine.map(function(v){return v.name;}).sort(function(a,b){return a.localeCompare(b,"de");});
+  var namen=D.vereine.concat(D.vereine_ohne_team||[]).map(function(v){return v.name;}).sort(function(a,b){return a.localeCompare(b,"de");});
   var leerOpt=mk("option",null,"Alle Vereine"); leerOpt.value=""; sel.appendChild(leerOpt);
   namen.forEach(function(n){ var o=mk("option",null,n); o.value=n; sel.appendChild(o); });
   var wunsch=null; try{ wunsch=new URLSearchParams(location.search).get("verein"); }catch(e){}
@@ -915,11 +942,12 @@ function vereinsMenue(){
     if(!DV || !DV.vereine || !DV.vereine.length){ ziel.parentNode.querySelector(".drop-kopf").textContent = "Vereinsliste gerade nicht verfügbar"; return; }
     var teams = {};
     (DV.teams || []).forEach(function(t){ if(t.sa === DV.saison) teams[t.verein] = (teams[t.verein] || 0) + 1; });
-    DV.vereine.map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
+    // inkl. der beim WBV gemeldeten Vereine ohne Mannschaft (TuS Wellinghofen, TV Hoerde)
+    DV.vereine.concat(DV.vereine_ohne_team || []).map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
       var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
       var m = document.createElement("span"); m.className = "drop-mono"; m.textContent = vereinsKuerzel(n); m.setAttribute("aria-hidden","true");
       var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
-      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z + (z === 1 ? " Mannschaft" : " Mannschaften");
+      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z ? z + (z === 1 ? " Mannschaft" : " Mannschaften") : "aktuell ohne Mannschaft";
       t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
     });
   });

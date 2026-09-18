@@ -22,7 +22,7 @@
   --accent-cta:#cc4d00; --accent-cta-hover:#b84400; --on-accent:#ffffff;
   --ink-rgb:31,31,31; --accent-rgb:239,90,0; --ground-rgb:248,248,246;
   --herren:#2b3a44; --damen:#007fa3;
-  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200;
+  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200; --u10:#2a5bd7;
   --schatten:0 1px 2px rgba(var(--ink-rgb),.06), 0 8px 24px -12px rgba(var(--ink-rgb),.18);
   --schatten-hoch:0 2px 4px rgba(var(--ink-rgb),.06), 0 24px 48px -20px rgba(var(--ink-rgb),.28);
   --f-display:"Archivo","Segoe UI",system-ui,sans-serif;
@@ -45,7 +45,7 @@
     --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
     --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
     --herren:#b9c4cb; --damen:#35a9cc;
-    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff;
   }
 }
 :root[data-theme="dark"]{
@@ -58,7 +58,7 @@
   --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
   --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
   --herren:#b9c4cb; --damen:#35a9cc;
-  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff;
 }
 /* Seiten-Tokens der Unterseiten (Kalender/Vereine) */
 :root{--gruen:#39b54a;--orange:#f47b20;--on-heat:#ffffff;--rot:#c62828}
@@ -555,13 +555,28 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 .zu{width:44px;height:44px;border-radius:999px}
 .paarung{border-radius:14px}
 .punkte{font-weight:900}
-.legende{padding:14px 20px}
+.legende{padding:14px 20px;gap:10px 16px}
+.legende .leg-titel{font-weight:700;color:var(--ink-2)}
+.legende .leg-trenner{margin-left:8px;padding-left:16px;border-left:1px solid var(--line-2)}
+.legende .leg-kz{font:700 11px/1 var(--f-eng);letter-spacing:.04em;padding:3px 6px;border-radius:5px;background:var(--sunken);color:var(--ink)}
+.feld-schalter{align-self:flex-end}
+.schalter{display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:0 14px 0 8px;border:1px solid var(--line-2);border-radius:999px;
+  background:var(--surface);color:var(--ink);font:700 13.5px/1 var(--f-ui);cursor:pointer;transition:border-color .15s,background .15s}
+.schalter:hover{border-color:var(--ink-2)}
+.schalter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.schalter-bahn{position:relative;width:34px;height:20px;border-radius:999px;background:var(--line-2);transition:background .2s var(--ease);flex:none}
+.schalter-knopf{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(var(--ink-rgb),.3);transition:transform .2s var(--ease)}
+.schalter[aria-checked="true"]{border-color:var(--accent)}
+.schalter[aria-checked="true"] .schalter-bahn{background:var(--accent-cta)}
+.schalter[aria-checked="true"] .schalter-knopf{transform:translateX(14px)}
 @media (max-width:640px){
   .wrap{padding:0 var(--rand)}
   .nav b{min-width:0;flex:1;font-size:18px}
   .leiste{padding:14px}
   .ansichten{width:100%} .ansichten button{flex:1;padding:0 6px}
   .chip-btn{min-height:44px}
+  .schalter{min-height:44px}
+  .legende .leg-trenner{margin-left:0;padding-left:0;border-left:none;flex-basis:100%}
   .blatt{border-radius:0}
 }
 
@@ -577,6 +592,13 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 <symbol id="i-menue" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
 <symbol id="i-zu" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
 <symbol id="i-runter" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-pfeife" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="14" r="5"/><path d="M13 11l8-3v4l-6 2M3 6l2 2M8 3v3"/></g></symbol>
+<symbol id="i-kalender" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></g></symbol>
+<symbol id="i-team" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></g></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></g></symbol>
+<symbol id="i-euro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6.5A7 7 0 1 0 18 17.5"/><path d="M4 10h9M4 14h9"/></g></symbol>
+<symbol id="i-laden" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-blatt" viewBox="0 0 40 48"><path d="M4 4a3 3 0 0 1 3-3h19l11 11v32a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><path d="M26 1v8a3 3 0 0 0 3 3h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
 </defs></svg>
 
 <header class="sx-nav" id="sx-nav">
@@ -592,7 +614,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
           <div class="drop-liste" data-vereine-liste></div>
           <a class="drop-alle" href="vereine-v2.html">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
         </div>
-      </div><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+      </div><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
     </nav>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
     <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
@@ -604,7 +626,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
     <span class="eyebrow"><span>Menü</span></span>
     <button class="rund-knopf" type="button" id="menue-zu" aria-label="Menü schließen"><svg><use href="#i-zu"/></svg></button>
   </div>
-  <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html" aria-current="page">Kalender</a><a href="vereine-v2.html">Vereine</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+  <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html" aria-current="page">Kalender</a><a href="vereine-v2.html">Vereine</a><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
 </div>
 
 <main>
@@ -670,6 +692,13 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
           <label>Altersklasse</label>
           <div class="alter-chips" id="f-alter"></div>
         </div>
+        <div class="feld feld-schalter">
+          <label id="l-gespielt">Anzeige</label>
+          <button class="schalter" id="f-gespielt" type="button" role="switch" aria-checked="false" aria-labelledby="l-gespielt f-gespielt-text">
+            <span class="schalter-bahn" aria-hidden="true"><span class="schalter-knopf"></span></span>
+            <span id="f-gespielt-text">Gespielte ausblenden</span>
+          </button>
+        </div>
         <button class="filter-reset" id="f-reset" hidden>Filter zurücksetzen</button>
       </div>
     </div>
@@ -689,7 +718,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
         <p style="margin:16px 0 0;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
       </div>
       <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="startseite-vorschau.html#spieltag">Spieltag</a></li></ul></div>
-      <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
+      <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
     </div>
     <div class="sx-fuss-unten"><span>Spieldaten: basketball-bund.net · täglich aktualisiert</span><a href="startseite-vorschau.html" style="color:var(--accent);font-weight:700;text-decoration:none">Zur Startseite →</a></div>
   </div>
@@ -725,7 +754,7 @@ var MON = ["Januar","Februar","März","April","Mai","Juni","Juli","August","Sept
 // Die Farbe steht nie allein -- daneben steht immer der Text-Chip.
 var FARBEN = {
   "Herren":"var(--herren)", "Damen":"var(--damen)",
-  "U18":"var(--u18)", "U16":"var(--u16)", "U14":"var(--u14)", "U12":"var(--u12)"
+  "U18":"var(--u18)", "U16":"var(--u16)", "U14":"var(--u14)", "U12":"var(--u12)", "U10":"var(--u10)"
 };
 function farbGruppe(alter){                      // "U16w" -> "U16", "Herren" -> "Herren"
   var m = /^U\d+/.exec(alter);
@@ -764,8 +793,8 @@ function ligaChip(li){
 // Sortierung: Senioren vor Jugend, darin absteigend nach Liga (OL zuerst, Pokal
 // zuletzt), bei gleicher Liga nach Alter (Herren, Damen, dann U18->U12), zuletzt
 // nach Geschlecht.
-var _LVL = {RL:0,OL:1,LL:2,BL:3,KL:4,PK:5};
-var _ALT = {Herren:0,Damen:1,U18:2,U16:3,U14:4,U12:5};
+var _LVL = {RL:0,OL:1,LL:2,BL:3,LEI:3.5,KL:4,PK:5};
+var _ALT = {Herren:0,Damen:1,U18:2,U16:3,U14:4,U12:5,U10:6};
 var _GES = {"männlich":0,"weiblich":1,"offen":2,"":0};
 function ligaSortkey(li){
   var grp = farbGruppe(li.alter);
@@ -815,7 +844,8 @@ var zustand = {
   alter: {},                                    // Gruppe -> an/aus
   saison: D.saison,                             // gezeigte Saison
   ziel: null,                                   // aus der Jahresansicht angesprungener Tag
-  aktiv: null                                   // spiel_uid, dessen Fenster offen ist
+  aktiv: null,                                  // spiel_uid, dessen Fenster offen ist
+  ohneGespielte: false                          // Schalter 'Gespielte ausblenden'
 };
 Object.keys(FARBEN).forEach(function(g){ zustand.alter[g] = true; });
 
@@ -864,6 +894,8 @@ function passt(s){
   if(!l) return false;
   if(s.sa !== zustand.saison) return false;
   if(!zustand.alter[farbGruppe(l.alter)]) return false;
+  // Gespielt = liegt vor heute oder hat schon ein Ergebnis.
+  if(zustand.ohneGespielte && (s.d < HEUTE || (s.e && typeof s.e[0] === "number"))) return false;
   // zustand.liga ist ein Anzeige-Label -- so fallen die Pokal-Phasen (gleiche
   // Beschriftung, verschiedene Liganummern) zu einem Filter zusammen.
   if(zustand.liga && ligaLabel(l) !== zustand.liga) return false;
@@ -1481,8 +1513,16 @@ function filterBauen(){
     chips.appendChild(b);
   });
 
+  var gs = el("f-gespielt");
+  gs.addEventListener("click", function(){
+    zustand.ohneGespielte = !zustand.ohneGespielte;
+    gs.setAttribute("aria-checked", zustand.ohneGespielte ? "true" : "false");
+    zeichne();
+  });
+
   el("f-reset").addEventListener("click", function(){
     zustand.liga = ""; zustand.verein = ""; zustand.team = ""; zustand.suche = "";
+    zustand.ohneGespielte = false; el("f-gespielt").setAttribute("aria-checked","false");
     Object.keys(zustand.alter).forEach(function(g){ zustand.alter[g] = true; });
     el("f-liga").value = ""; el("f-suche").value = "";
     Array.prototype.forEach.call(chips.children, function(b){ b.setAttribute("aria-pressed","true"); });
@@ -1559,14 +1599,21 @@ function teamsFuellen(){
 
 function legendeBauen(){
   var l = leer(el("legende"));
-  l.appendChild(mk("span",null,"Farbe = Altersklasse, Kürzel = Spielebene:"));
+  l.appendChild(mk("span","leg-titel","Farbe = Altersklasse"));
   Object.keys(FARBEN).forEach(function(g){
     var p = mk("span","paar");
     var sw = mk("span","sw"); sw.style.setProperty("--pk", FARBEN[g]);
     p.appendChild(sw); p.appendChild(mk("span",null,g));
     l.appendChild(p);
   });
-  l.appendChild(mk("span",null,"· KL Kreis · BL Bezirk · LL Landes · OL Ober · PK Pokal"));
+  var da = {};
+  D.spiele.forEach(function(s){ var li = D.ligen[s.lk]; if(li) da[(li.ebene||"").replace(/[0-9]/g,"")] = 1; });
+  l.appendChild(mk("span","leg-titel leg-trenner","Kürzel = Spielebene"));
+  [["RL","Regionalliga"],["OL","Oberliga"],["LL","Landesliga"],["BL","Bezirksliga"],["LEI","Leistungsliga (Koop)"],["KL","Kreisliga"],["PK","Pokal"]]
+    .forEach(function(e){
+      if(!da[e[0]]) return;
+      var p = mk("span","paar"); p.appendChild(mk("b","leg-kz",e[0])); p.appendChild(mk("span",null,e[1])); l.appendChild(p);
+    });
 }
 
 // --- Zeichnen ---
@@ -1610,7 +1657,7 @@ function zeichne(){
   tr.appendChild(document.createTextNode(
     (n === 1 ? " Spiel" : " Spiele") + " im Filter" +
     (n < inSaison ? " (von " + inSaison + " der Saison " + zustand.saison + ")" : "")));
-  var gefiltert = zustand.liga || zustand.verein || zustand.team || zustand.suche ||
+  var gefiltert = zustand.liga || zustand.verein || zustand.team || zustand.suche || zustand.ohneGespielte ||
     Object.keys(zustand.alter).some(function(g){ return !zustand.alter[g]; });
   el("f-reset").hidden = !gefiltert;
 
@@ -1622,9 +1669,12 @@ function zeichne(){
 
 // --- Verdrahten ---
 el("m-saison").textContent = D.saison;
-el("m-spiele").textContent = D.spiele.filter(function(s){ return s.sa === D.saison; }).length.toLocaleString("de-DE");
-el("m-ligen").textContent = Object.keys(D.ligen).length;
-el("m-vereine").textContent = D.vereine.length;
+(function(){
+  var lauf = D.spiele.filter(function(s){ return s.sa === D.saison; });
+  el("m-spiele").textContent = lauf.filter(function(s){ return s.st !== "Abgesagt"; }).length.toLocaleString("de-DE");
+  el("m-ligen").textContent = Object.keys(lauf.reduce(function(o,s){ o[s.lk] = 1; return o; }, {})).length;
+  el("m-vereine").textContent = D.vereine.length + (D.vereine_ohne_team || []).length;
+})();
 
 Array.prototype.forEach.call(document.querySelectorAll(".ansichten button"), function(b){
   b.addEventListener("click", function(){ wechsle(b.dataset.ansicht); });
@@ -1657,6 +1707,24 @@ filterBauen();
 teamsFuellen();
 legendeBauen();
 zeichne();
+
+// Direktsprung von der Startseite (Widget/Live-Karte): ?spiel=<spiel_uid> zeigt
+// den Monat des Spiels, markiert den Tag und oeffnet das Fenster zur Partie --
+// als haette man im Kalender selbst auf das Spiel geklickt.
+(function(){
+  var uid = null;
+  try{ uid = new URLSearchParams(location.search).get("spiel"); }catch(e){}
+  if(!uid) return;
+  var s = D.spiele.filter(function(x){ return x.uid === uid; })[0];
+  if(!s) return;
+  zustand.saison = s.sa; el("f-saison").value = s.sa;
+  zustand.cursor = monatsErster(s.d);
+  zustand.ziel = s.d;
+  auswahlKaskade();
+  wechsle("monat");
+  el("kalender").scrollIntoView({block:"start"});
+  spielOeffnen(s);
+})();
 })();
 </script>
 <script>
@@ -1675,11 +1743,12 @@ function vereinsMenue(){
     if(!DV || !DV.vereine || !DV.vereine.length){ ziel.parentNode.querySelector(".drop-kopf").textContent = "Vereinsliste gerade nicht verfügbar"; return; }
     var teams = {};
     (DV.teams || []).forEach(function(t){ if(t.sa === DV.saison) teams[t.verein] = (teams[t.verein] || 0) + 1; });
-    DV.vereine.map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
+    // inkl. der beim WBV gemeldeten Vereine ohne Mannschaft (TuS Wellinghofen, TV Hoerde)
+    DV.vereine.concat(DV.vereine_ohne_team || []).map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
       var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
       var m = document.createElement("span"); m.className = "drop-mono"; m.textContent = vereinsKuerzel(n); m.setAttribute("aria-hidden","true");
       var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
-      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z + (z === 1 ? " Mannschaft" : " Mannschaften");
+      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z ? z + (z === 1 ? " Mannschaft" : " Mannschaften") : "aktuell ohne Mannschaft";
       t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
     });
   });

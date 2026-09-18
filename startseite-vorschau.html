@@ -27,7 +27,7 @@ try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")docu
   --accent-cta:#cc4d00; --accent-cta-hover:#b84400; --on-accent:#ffffff;
   --ink-rgb:31,31,31; --accent-rgb:239,90,0; --ground-rgb:248,248,246;
   --herren:#2b3a44; --damen:#007fa3;
-  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200;
+  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200; --u10:#2a5bd7;
   --schatten:0 1px 2px rgba(var(--ink-rgb),.06), 0 8px 24px -12px rgba(var(--ink-rgb),.18);
   --schatten-hoch:0 2px 4px rgba(var(--ink-rgb),.06), 0 24px 48px -20px rgba(var(--ink-rgb),.28);
   --f-display:"Archivo","Segoe UI",system-ui,sans-serif;
@@ -50,7 +50,7 @@ try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")docu
     --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
     --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
     --herren:#b9c4cb; --damen:#35a9cc;
-    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff;
   }
 }
 :root[data-theme="dark"]{
@@ -63,7 +63,7 @@ try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")docu
   --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
   --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
   --herren:#b9c4cb; --damen:#35a9cc;
-  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040;
+  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -308,6 +308,10 @@ button.tag:focus-visible{border-radius:999px}
 .fakt svg{width:26px;height:26px;color:var(--accent);margin-top:2px}
 .fakt b{display:block;font-weight:800;font-size:17px}
 .fakt span{color:var(--on-stage-muted);font-size:15px}
+.fakt-link{color:inherit;text-decoration:none;transition:background .15s}
+.fakt-link b span{color:var(--accent);font-size:inherit;display:inline-block;transition:transform .2s var(--ease)}
+.fakt-link:hover b span{transform:translateX(4px)}
+.fakt-link:focus-visible{outline-offset:-2px;border-radius:0}
 
 /* ---------- Entdecken ---------- */
 .zwei{display:grid;grid-template-columns:1fr 1fr;gap:24px}
@@ -399,9 +403,17 @@ button.tag:focus-visible{border-radius:999px}
   .nav-links a{padding:10px 9px;font-size:14.5px}
 }
 @media (max-width:1024px){
-  .hero-raster{grid-template-columns:1fr}
-  .hero-bild{max-width:620px;width:100%;margin:10px auto 40px}
-  .live-karte{left:0}
+  /* Text- und Bildspalte loesen sich auf, damit das Logo direkt NEBEN der
+     Headline stehen kann und die Live-Karte unter die Knoepfe rutscht. */
+  .hero-raster{grid-template-columns:1fr auto;column-gap:clamp(12px,3vw,32px);row-gap:0;align-items:center;
+    grid-template-areas:"eyebrow eyebrow" "titel logo" "lead lead" "knoepfe knoepfe" "live live"}
+  .hero-text,.hero-bild{display:contents}
+  .hero-text>.eyebrow{grid-area:eyebrow;margin-bottom:18px}
+  .hero-text>.h1{grid-area:titel;font-size:clamp(34px,9.2vw,92px)}
+  .hero-text>.lead{grid-area:lead;margin-top:24px}
+  .hero-text>.hero-knoepfe{grid-area:knoepfe;margin-top:24px}
+  .hero-logo{grid-area:logo;width:clamp(92px,26vw,250px);max-width:none;margin:0}
+  .live-karte{grid-area:live;position:relative;left:auto;bottom:auto;width:min(420px,100%);margin-top:32px}
   .bento{grid-template-columns:repeat(2,1fr)}
   .bento .gross{grid-column:span 2;grid-row:auto}
   .bento .klein{grid-column:span 1}
@@ -419,8 +431,7 @@ button.tag:focus-visible{border-radius:999px}
   .stat{padding:20px 16px}
   .stat:nth-child(odd){border-left:none;padding-left:0}
   .stat:nth-child(n+3){border-top:1px solid var(--line)}
-  .live-karte{position:relative;left:auto;bottom:auto;width:100%;margin-top:-30px}
-  .hero-bild{margin-bottom:0;padding-bottom:0}
+  .live-karte{width:100%}
   .doku{grid-template-columns:36px 1fr auto;gap:14px;padding:14px 16px}
   .doku-groesse{display:none}
   .doku-icon{width:34px;height:42px}
@@ -506,6 +517,7 @@ button.tag:focus-visible{border-radius:999px}
         </div>
       </div>
       <a href="kalender-v2.html" class="unterseite">Kalender</a>
+      <a href="schiedsrichter-v2.html" class="unterseite">Schiedsrichter</a>
       <a href="#vorstand">Vorstand</a>
       <a href="#dokumente">Dokumente</a>
     </nav>
@@ -523,6 +535,7 @@ button.tag:focus-visible{border-radius:999px}
   <a href="#news">News</a>
   <a href="vereine-v2.html">Vereine ↗</a>
   <a href="kalender-v2.html">Kalender ↗</a>
+  <a href="schiedsrichter-v2.html">Schiedsrichter ↗</a>
   <a href="#vorstand">Vorstand</a>
   <a href="#dokumente">Dokumente</a>
 </div>
@@ -574,11 +587,9 @@ button.tag:focus-visible{border-radius:999px}
 
 <!-- ======= Laufband ======= -->
 <div class="laufband" aria-hidden="true">
-  <div class="laufband-spur">
-    <span>Dortmund spielt Basketball <i></i> <em>Klar</em> <i></i> Urban <i></i> <em>Modern</em> <i></i></span>
-    <span>Dortmund spielt Basketball <i></i> <em>Klar</em> <i></i> Urban <i></i> <em>Modern</em> <i></i></span>
-    <span>Dortmund spielt Basketball <i></i> <em>Klar</em> <i></i> Urban <i></i> <em>Modern</em> <i></i></span>
-    <span>Dortmund spielt Basketball <i></i> <em>Klar</em> <i></i> Urban <i></i> <em>Modern</em> <i></i></span>
+  <div class="laufband-spur" id="laufband-spur">
+    <span>Dortmund spielt Basketball <i></i> <em>Dortmund spielt Basketball</em> <i></i></span>
+    <span>Dortmund spielt Basketball <i></i> <em>Dortmund spielt Basketball</em> <i></i></span>
   </div>
 </div>
 
@@ -587,7 +598,7 @@ button.tag:focus-visible{border-radius:999px}
   <div class="inhalt">
     <div class="abschnitt-kopf">
       <div class="links">
-        <span class="eyebrow" data-reveal>Spieltag · live aus dem Spielplan</span>
+        <span class="eyebrow" data-reveal>Spieltag · Die aktuellen Spiele</span>
         <h2 class="h2" data-float>Was auf dem Feld los ist<span class="punkt">.</span></h2>
       </div>
       <a class="link" href="kalender-v2.html" data-reveal>Kompletter Kalender <svg><use href="#i-pfeil"/></svg></a>
@@ -683,7 +694,7 @@ button.tag:focus-visible{border-radius:999px}
     </div>
     <div class="fakten">
       <div class="fakt" data-reveal style="--i:0"><svg><use href="#i-kalender"/></svg><div><b>Spielbetrieb</b><span>Kreisligen, Jugendligen und Kreispokal – angesetzt, geleitet, gewertet.</span></div></div>
-      <div class="fakt" data-reveal style="--i:1"><svg><use href="#i-pfeife"/></svg><div><b>Schiedsrichterwesen</b><span>Ausbildung, Fortbildung und Ansetzungen für den Kreis.</span></div></div>
+      <a class="fakt fakt-link" href="schiedsrichter-v2.html" data-reveal style="--i:1"><svg><use href="#i-pfeife"/></svg><div><b>Schiedsrichterwesen <span aria-hidden="true">→</span></b><span>Ausbildung, Fortbildung und Ansetzungen für den Kreis.</span></div></a>
       <div class="fakt" data-reveal style="--i:2"><svg><use href="#i-team"/></svg><div><b>Jugendförderung</b><span>Auswahl, Camps und Unterstützung für die Vereinsjugend.</span></div></div>
     </div>
   </div>
@@ -764,7 +775,7 @@ button.tag:focus-visible{border-radius:999px}
         <p style="margin-top:18px;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
       </div>
       <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="#spieltag">Ergebnisse</a></li></ul></div>
-      <div><h4>Der Kreis</h4><ul><li><a href="#news">News</a></li><li><a href="#vorstand">Vorstand</a></li><li><a href="#dokumente">Dokumente</a></li></ul></div>
+      <div><h4>Der Kreis</h4><ul><li><a href="#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="#vorstand">Vorstand</a></li><li><a href="#dokumente">Dokumente</a></li></ul></div>
       <div><h4>Rechtliches</h4><ul><li><a href="#">Impressum</a></li><li><a href="#">Datenschutz</a></li><li><a href="#vorstand">Kontakt</a></li></ul></div>
     </div>
     <div class="fuss-unten">
@@ -810,7 +821,7 @@ function tageBis(s){ return Math.round((s2d(s) - s2d(HEUTE)) / 864e5); }
 el("stand").textContent = fmtKurz(HEUTE) + HEUTE.slice(0,4);
 
 /* ---------------- Liga-Farben & -Labels (1:1 aus kalender-vorschau) ---------------- */
-var FARBEN = {"Herren":"var(--herren)","Damen":"var(--damen)","U18":"var(--u18)","U16":"var(--u16)","U14":"var(--u14)","U12":"var(--u12)"};
+var FARBEN = {"Herren":"var(--herren)","Damen":"var(--damen)","U18":"var(--u18)","U16":"var(--u16)","U14":"var(--u14)","U12":"var(--u12)","U10":"var(--u10)"};
 function farbe(lk){
   var l = D.ligen[lk]; if(!l) return "var(--muted)";
   var m = /^U\d+/.exec(l.alter);
@@ -843,7 +854,7 @@ function zeitschluessel(s){ return s.d + "T" + (s.t || "00:00"); }
 
 /* ---------------- Spiel-Widgets + Live-Karte + Zaehler ---------------- */
 function widgetZeile(s){
-  var a = mk("a","wz"); a.href = "kalender-v2.html";
+  var a = mk("a","wz"); a.href = "kalender-v2.html?spiel=" + encodeURIComponent(s.uid);
   a.style.setProperty("--pk", farbe(s.lk));
   a.appendChild(mk("span","wz-rail"));
   var tg = mk("span","wz-tag"); tg.appendChild(mk("b",null,String(s2d(s.d).getUTCDate()))); tg.appendChild(document.createTextNode(WT[wtag(s.d)]));
@@ -887,6 +898,7 @@ function datenBauen(){
   if(n){
     var t = tageBis(n.d);
     el("live-wann").textContent = t === 0 ? "Heute" : t === 1 ? "Morgen" : "In " + t + " Tagen";
+    el("live-karte").href = "kalender-v2.html?spiel=" + encodeURIComponent(n.uid);
     var liga = el("live-liga"); liga.textContent = ligaLabel(D.ligen[n.lk]); liga.style.color = farbe(n.lk);
     var p = el("live-paar"); p.textContent = "";
     p.appendChild(mk("span",null,n.h)); p.appendChild(mk("small",null,"gegen")); p.appendChild(mk("span",null,n.g));
@@ -900,8 +912,30 @@ function datenBauen(){
 
   ZAHLEN.spiele = laufend.filter(function(s){ return s.st !== "Abgesagt"; }).length;
   ZAHLEN.ligen = Object.keys(laufend.reduce(function(o,s){ o[s.lk] = 1; return o; }, {})).length;
-  ZAHLEN.vereine = (D.vereine || []).length;
+  ZAHLEN.vereine = (D.vereine || []).length + (D.vereine_ohne_team || []).length;
   ZAHLEN.teams = (D.teams || []).filter(function(x){ return x.sa === D.saison; }).length;
+}
+
+/* ---------------- Laufband: die Vereine des Kreises ---------------- */
+// Zwei identische Haelften, die Spur laeuft um -50% -> nahtlose Schleife. Die
+// Dauer richtet sich nach der Breite, damit das Tempo bei 14 Namen dasselbe
+// bleibt wie frueher bei vier Woertern (~75 px/s).
+function laufbandBauen(){
+  if(!D || !D.vereine) return;
+  var namen = D.vereine.concat(D.vereine_ohne_team || []).map(function(v){ return v.name; })
+    .sort(function(a,b){ return a.localeCompare(b,"de"); });
+  if(!namen.length) return;
+  var spur = el("laufband-spur"); spur.textContent = "";
+  for(var k = 0; k < 2; k++){
+    var h = mk("span");
+    namen.forEach(function(n, i){
+      h.appendChild(i % 2 ? mk("em", null, n) : document.createTextNode(n));
+      h.appendChild(document.createTextNode(" ")); h.appendChild(mk("i")); h.appendChild(document.createTextNode(" "));
+    });
+    spur.appendChild(h);
+  }
+  var breite = spur.scrollWidth / 2;
+  if(breite > 0) spur.style.animationDuration = Math.round(breite / 75) + "s";
 }
 
 /* ---------------- Vorstand & Dokumente (Platzhalter-Daten) ---------------- */
@@ -936,11 +970,12 @@ function vereinsMenue(){
     if(!DV || !DV.vereine || !DV.vereine.length){ ziel.parentNode.querySelector(".drop-kopf").textContent = "Vereinsliste gerade nicht verfügbar"; return; }
     var teams = {};
     (DV.teams || []).forEach(function(t){ if(t.sa === DV.saison) teams[t.verein] = (teams[t.verein] || 0) + 1; });
-    DV.vereine.map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
+    // inkl. der beim WBV gemeldeten Vereine ohne Mannschaft (TuS Wellinghofen, TV Hoerde)
+    DV.vereine.concat(DV.vereine_ohne_team || []).map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
       var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
       var m = document.createElement("span"); m.className = "drop-mono"; m.textContent = vereinsKuerzel(n); m.setAttribute("aria-hidden","true");
       var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
-      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z + (z === 1 ? " Mannschaft" : " Mannschaften");
+      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z ? z + (z === 1 ? " Mannschaft" : " Mannschaften") : "aktuell ohne Mannschaft";
       t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
     });
   });
@@ -1195,6 +1230,7 @@ function eggInit(){
   p.parentNode.appendChild(b);
 })();
 datenBauen();
+laufbandBauen();
 vereinsMenue();
 vorstandBauen();
 dokumenteBauen();
