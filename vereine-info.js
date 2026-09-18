@@ -9,7 +9,7 @@
    den Stadtteil nennt; sonst die Haupt-Heimhalle bzw. Hendriks Vorgabe. */
 window.DOBASKET_VEREINE_INFO = {
   "ASC 09 Dortmund":           { pos: [51.48969, 7.56231], ort: "Aplerbeck", logo: "img/vereine/asc-09-dortmund.png", web: "https://asc-09-dortmund.de/basketball-abteilung/", insta: "https://www.instagram.com/asc_09_basketball/" },
-  "Basketballclub Do-Wickede": { pos: [51.52801, 7.60990], ort: "Wickede" },          // Halle Steinbrink-Grundschule
+  "Basketballclub Do-Wickede": { pos: [51.52801, 7.60990], ort: "Wickede", logo: "img/vereine/basketballclub-do-wickede.png", insta: "https://www.instagram.com/bcwickede/" },          // Halle Steinbrink-Grundschule
   "BB UNITY Dortmund":         { pos: [51.52914, 7.46861], ort: "Nordstadt", logo: "img/vereine/bb-unity-dortmund.png", insta: "https://www.instagram.com/basketballunitydortmund/" },        // Hendrik
   "Dortmunder TG":             { pos: [51.51000, 7.46877], ort: "Innenstadt", logo: "img/vereine/dortmunder-tg.png", web: "https://www.dtg1873.de/sportangebot-1/basketball/", insta: "https://www.instagram.com/dtg_bucketz/" },       // Halle Stadtgymnasium, Ostwall
   "SC 1885 Huckarde-Rahm":     { pos: [51.53179, 7.41566], ort: "Huckarde", logo: "img/vereine/sc-1885-huckarde-rahm.png", web: "https://www.sc-huckarde-rahm.de/", insta: "https://www.instagram.com/sc.1885.huckarde.rahm/" },
@@ -21,10 +21,10 @@ window.DOBASKET_VEREINE_INFO = {
     web: "https://www.tsg1868.de/basketball",
     insta: "https://www.instagram.com/tsgschueren_basketball/"
   },
-  "TuS Makkabi Dortmund":      { pos: [51.52144, 7.47187], ort: "Nordstadt" },        // Kleine Kielstraße (Hendrik)
+  "TuS Makkabi Dortmund":      { pos: [51.52144, 7.47187], ort: "Nordstadt", logo: "img/vereine/tus-makkabi-dortmund.png" },        // Kleine Kielstraße (Hendrik)
   "TV Dortmund Mengede":       { pos: [51.57490, 7.36700], ort: "Mengede", logo: "img/vereine/tv-dortmund-mengede.png", web: "https://tv-mengede.de/basketball/", insta: "https://www.instagram.com/tvmengede_basketball/" },
   "TVA Dortmund Wickede":      { pos: [51.53437, 7.61951], ort: "Wickede", logo: "img/vereine/tva-dortmund-wickede.png", web: "https://tva-do.de/basketball-91.html", insta: "https://www.instagram.com/tvawickedebasketball/" },          // Halle Bachschule, Dollersweg
   "TVE Dortmund Barop":        { pos: [51.48661, 7.43879], ort: "Barop", logo: "img/vereine/tve-dortmund-barop.png", web: "https://www.tve-barop.de/basketball.html", insta: "https://www.instagram.com/tvebarop_basketball/" },
   "TuS Wellinghofen":          { pos: [51.46697, 7.49221], ort: "Wellinghofen", logo: "img/vereine/tus-wellinghofen.png", web: "https://www.tus-wellinghofen.de/basketball_2021/", insta: "https://www.instagram.com/tus05wellinghofen/" },
-  "TV Hörde":                  { pos: [51.48843, 7.49725], ort: "Hörde" }
+  "TV Hörde":                  { pos: [51.48843, 7.49725], ort: "Hörde", logo: "img/vereine/tv-hoerde.png", web: "https://www.tvhoerde.de/" }
 };
