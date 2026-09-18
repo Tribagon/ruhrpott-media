@@ -340,9 +340,38 @@ button.tag:focus-visible{border-radius:999px}
 .person-foto::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
 .person:hover .person-foto::after{transform:scaleX(1)}
 .person-ohne{display:grid;place-items:center}
-.d-avatar{position:relative;width:96px;height:114px;color:var(--ink)}
-.d-avatar svg.rahmen{position:absolute;inset:0;width:100%;height:100%}
-.d-avatar .rolle-icon{position:absolute;left:22px;top:36px;width:40px;height:40px;color:var(--accent)}
+.d-avatar{position:relative;width:min(62%,150px);aspect-ratio:830/870;color:var(--ink)}
+.d-avatar .d-wappen{display:block;width:100%;height:100%;overflow:visible}
+.wappen-icon{color:var(--accent)}
+/* PFIFF */
+/* Easter Egg: dreimal schnell auf die Pfeife -> sie pfeift. Lautlos, als Comic. */
+.pfiff{position:relative}
+.pfiff-knopf{position:absolute;left:36%;top:22%;width:52%;height:50%;margin:0;padding:0;border:0;background:none;border-radius:50%;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pfiff-knopf:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:50%}
+.pfiff .wappen-icon{transform-box:fill-box;transform-origin:40% 60%}
+.pfiff.tipp .wappen-icon{animation:pfiff-tipp .22s var(--ease)}
+.pfiff.pfeift .wappen-icon{animation:pfiff-wackeln .11s linear 14}
+@keyframes pfiff-tipp{50%{transform:scale(.88)}}
+@keyframes pfiff-wackeln{0%,100%{transform:none}25%{transform:rotate(-8deg) translateX(-3%)}75%{transform:rotate(8deg) translateX(3%)}}
+.pfiff-blase{position:absolute;left:42%;top:8%;z-index:5;transform:translate(-50%,-100%) rotate(-6deg);pointer-events:none;white-space:nowrap;
+  background:var(--accent-cta);color:var(--on-accent);font:900 clamp(15px,1.5vw,21px)/1 var(--f-display);letter-spacing:-.01em;
+  padding:8px 13px 9px;border-radius:14px;box-shadow:var(--schatten-hoch);animation:pfiff-blase 1.9s var(--ease) forwards}
+.pfiff-blase::after{content:"";position:absolute;left:28%;bottom:-8px;border:8px solid transparent;border-bottom:0;border-top-color:var(--accent-cta)}
+@keyframes pfiff-blase{0%{opacity:0;transform:translate(-50%,-70%) rotate(-6deg) scale(.4)}
+  12%{opacity:1;transform:translate(-50%,-100%) rotate(-6deg) scale(1.1)}22%{transform:translate(-50%,-100%) rotate(-6deg) scale(1)}
+  80%{opacity:1;transform:translate(-50%,-100%) rotate(-6deg)}100%{opacity:0;transform:translate(-50%,-118%) rotate(-6deg)}}
+.pfiff-wellen{position:absolute;left:64%;top:4%;width:34%;height:34%;overflow:visible;color:var(--accent);pointer-events:none}
+.pfiff-wellen path{fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;opacity:0;transform-box:view-box;transform-origin:0% 100%;
+  animation:pfiff-welle .55s ease-out 3}
+.pfiff-wellen path:nth-child(2){animation-delay:.12s}
+.pfiff-wellen path:nth-child(3){animation-delay:.24s}
+@keyframes pfiff-welle{0%{opacity:0;transform:scale(.55)}30%{opacity:1}100%{opacity:0;transform:scale(1.15)}}
+@media (prefers-reduced-motion:reduce){
+  .pfiff .wappen-icon,.pfiff-wellen path{animation:none!important}
+  .pfiff-wellen path{opacity:1}
+  .pfiff-blase{animation:none!important;opacity:1}
+}
+/* /PFIFF */
 .person-text{padding:18px 20px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
 .person-amt{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);overflow-wrap:anywhere;hyphens:auto;-webkit-hyphens:auto}
 .person-name{font-size:20px;font-weight:800;letter-spacing:-.015em;line-height:1.2}
@@ -969,6 +998,42 @@ var DOKUMENTE = [
   {kat:"formular", titel:"Antrag auf Spielverlegung", sub:"ausfüllbares Formular", datum:"01.07.2026", typ:"DOCX", groesse:"48 KB"},
   {kat:"formular", titel:"Anmeldung Schiedsrichter-Lehrgang", sub:"Neulingslehrgang Herbst 2026", datum:"10.09.2026", typ:"PDF", groesse:"96 KB"}
 ];
+/* PFIFF */
+// Easter Egg: dreimal schnell (innerhalb 1,2 s) auf die Pfeife -> sie pfeift.
+// Kein Ton -- die Pfeife wackelt, Schallwellen gehen raus, Comic-Blase "TRRRIIIT!".
+function pfiffVerdrahten(wrap){
+  var NS = "http://www.w3.org/2000/svg";
+  wrap.classList.add("pfiff");
+  var knopf = document.createElement("button");
+  knopf.type = "button"; knopf.className = "pfiff-knopf"; knopf.setAttribute("aria-label","Pfeife");
+  wrap.appendChild(knopf);
+  var klicks = [], laeuft = false;
+  knopf.addEventListener("click", function(){
+    var jetzt = Date.now();
+    klicks = klicks.filter(function(z){ return jetzt - z < 1200; });
+    klicks.push(jetzt);
+    wrap.classList.remove("tipp"); void wrap.offsetWidth; wrap.classList.add("tipp");
+    if(klicks.length < 3 || laeuft) return;
+    klicks = []; laeuft = true;
+    var wellen = document.createElementNS(NS,"svg");
+    wellen.setAttribute("class","pfiff-wellen"); wellen.setAttribute("viewBox","0 0 40 40"); wellen.setAttribute("aria-hidden","true");
+    [11,20,29].forEach(function(r){
+      var b = document.createElementNS(NS,"path");
+      b.setAttribute("d","M0 " + (40 - r) + "A" + r + " " + r + " 0 0 1 " + r + " 40");
+      wellen.appendChild(b);
+    });
+    var blase = document.createElement("span");
+    blase.className = "pfiff-blase"; blase.setAttribute("role","status"); blase.textContent = "TRRRIIIT!";
+    wrap.appendChild(wellen); wrap.appendChild(blase); wrap.classList.add("pfeift");
+    setTimeout(function(){
+      wrap.classList.remove("pfeift");
+      if(wellen.parentNode) wellen.parentNode.removeChild(wellen);
+      if(blase.parentNode) blase.parentNode.removeChild(blase);
+      laeuft = false;
+    }, 1900);
+  });
+}
+/* /PFIFF */
 /* VEREINSMENUE */
 function vereinsKuerzel(name){
   var w = name.replace(/e\.?\s?V\.?/gi,"").trim().split(/[\s\-]+/).filter(Boolean);
@@ -995,6 +1060,13 @@ function vereinsMenue(){
   });
 }
 /* /VEREINSMENUE */
+// Logo-Kontur ohne Ball: Teilpfade 5/6 sind die Ringe um den Ball (wie baue_v2.py).
+function logoOhneBall(){
+  var n = document.querySelector("#hero-logo .logo-d");
+  if(!n) return "";
+  var teile = n.getAttribute("d").trim().split(/(?=M )/).filter(function(s){ return s.trim(); });
+  return teile.filter(function(s, i){ return i !== 5 && i !== 6; }).join(" ");
+}
 function vorstandBauen(){
   var ziel = el("vorstand-raster");
   VORSTAND.forEach(function(p, i){
@@ -1004,10 +1076,19 @@ function vorstandBauen(){
       var img = mk("img"); img.src = p.foto; img.alt = "Porträt " + p.name; img.loading = "lazy"; img.width = 480; img.height = 600;
       bild.appendChild(img);
     } else {
-      var av = mk("div","d-avatar"); av.setAttribute("aria-hidden","true");
-      av.innerHTML = '<svg class="rahmen" viewBox="0 0 78 92"><path d="M5 5h26a38 41 0 0 1 0 82H5Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M8 76c12-6 24-6 34 0s16 4 22-2" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>';
-      var ic = svgUse(p.icon); ic.setAttribute("class","rolle-icon"); av.appendChild(ic);
+      // Dasselbe Wappen wie auf der Schiri-Seite: das D-Logo (Turm, Buesche),
+      // der Ball ersetzt durch das Rollen-Icon.
+      var av = mk("div","d-avatar");
+      var sv = document.createElementNS("http://www.w3.org/2000/svg","svg");
+      sv.setAttribute("class","d-wappen"); sv.setAttribute("viewBox","215 200 830 870"); sv.setAttribute("aria-hidden","true");
+      var pf = document.createElementNS("http://www.w3.org/2000/svg","path");
+      pf.setAttribute("fill","currentColor"); pf.setAttribute("fill-rule","evenodd"); pf.setAttribute("d", logoOhneBall());
+      sv.appendChild(pf);
+      var ic = svgUse(p.icon).firstChild; ic.setAttribute("class","wappen-icon");
+      ic.setAttribute("x","529.5"); ic.setAttribute("y","413.5"); ic.setAttribute("width","400"); ic.setAttribute("height","400");
+      sv.appendChild(ic); av.appendChild(sv);
       bild.appendChild(av);
+      if(p.icon === "i-pfeife") pfiffVerdrahten(av);
     }
     k.appendChild(bild);
     var tx = mk("div","person-text");
