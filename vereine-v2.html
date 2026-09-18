@@ -368,7 +368,8 @@ a{color:var(--accent-ink)}
 .ohne-team .widgets{display:none!important}
 .v-ueb-intro{color:var(--ink-2);margin:-6px 0 4px;max-width:60ch}
 .v-ueb-karte.leise .v-ueb-mono{background:var(--sunken);color:var(--muted)}
-.hero-name{font-family:var(--f-display);font-weight:900;font-size:clamp(38px,5.6vw,80px);line-height:.98;letter-spacing:-.035em}
+.hero-name{font-family:var(--f-display);font-weight:900;font-size:clamp(38px,5.6vw,80px);line-height:.98;letter-spacing:-.035em;
+  hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
 .hero-name::after{content:".";color:var(--accent)}
 .hero-meta{font-size:14px;gap:8px 22px;margin-top:14px}
 .hero-meta b{font:700 20px/1 var(--f-eng);color:var(--ink);margin-right:3px}
@@ -774,11 +775,22 @@ function teamsBauen(verein){
   gruppe("Jugend",jugend);
 }
 
+// Lange Einzelwoerter ("Basketballclub") passen am Handy nicht neben das Wappen:
+// Silbentrennung per CSS, und wo der Browser nicht trennt, Schrift verkleinern.
+function nameEinpassen(){
+  var n = document.getElementById("v-name"); if(!n) return;
+  n.style.fontSize = "";
+  var g = parseFloat(getComputedStyle(n).fontSize);
+  while(n.scrollWidth > n.clientWidth + 1 && g > 24){ g -= 2; n.style.fontSize = g + "px"; }
+}
+addEventListener("resize", nameEinpassen);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(nameEinpassen);
 function wappenText(t){
   var n = document.getElementById("crest"); n.textContent = t;
   // Groesse nach Laenge, damit das Kuerzel in der Ballflaeche bleibt (Mitte y=613.5)
   var g = t.length >= 4 ? 120 : t.length === 3 ? 160 : 200;
   n.setAttribute("font-size", g); n.setAttribute("y", 613.5 + g * 0.36);
+  nameEinpassen();
 }
 // Homepage/Instagram aus vereine-info.js; ohne Eintrag ein Platzhalter
 function vereinsLinks(ziel, verein){
