@@ -142,6 +142,7 @@ button.tag:focus-visible{border-radius:999px}
 .rund-knopf:focus-visible{border-radius:999px}
 .rund-knopf svg{width:19px;height:19px}
 .burger{display:none;margin-left:auto}
+.insta{text-decoration:none}
 .menue{position:fixed;inset:0;z-index:70;background:var(--ground);padding:22px var(--rand);display:flex;flex-direction:column;gap:8px;
   opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .2s,transform .2s var(--ease),visibility 0s .2s}
 .menue.offen{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .2s var(--ease)}
@@ -165,6 +166,8 @@ button.tag:focus-visible{border-radius:999px}
 .drop-panel a::after{content:none!important}
 .drop-mono{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--accent-weich);color:var(--accent-ink);
   font:900 11px/1 var(--f-display);letter-spacing:-.02em}
+.drop-mono.mit-logo{background:transparent}
+.drop-mono img{width:100%;height:100%;object-fit:contain}
 .drop-name{min-width:0;display:flex;flex-direction:column;line-height:1.25}
 .drop-name small{color:var(--muted);font-size:12px;font-weight:500}
 .drop-alle{justify-content:center;margin-top:8px;border-top:1px solid var(--line);border-radius:0 0 12px 12px!important;color:var(--accent-ink)!important;font-weight:700!important}
@@ -376,6 +379,9 @@ button.tag:focus-visible{border-radius:999px}
 .fuss-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
 .fuss .marke{color:var(--on-stage)}
 .fuss .marke svg{height:auto;width:min(300px,100%)}
+.fuss-insta{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:14px;color:var(--on-stage);font-weight:700;text-decoration:none;transition:color .15s}
+.fuss-insta svg{width:22px;height:22px}
+.fuss-insta:hover{color:var(--accent)}
 .fuss h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage-muted);margin-bottom:14px}
 .fuss ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
 .fuss ul a{color:var(--on-stage);text-decoration:none;display:inline-block;padding:8px 0;opacity:.85;transition:opacity .15s,color .15s}
@@ -421,7 +427,7 @@ button.tag:focus-visible{border-radius:999px}
   .buehne-inhalt{grid-template-columns:1fr}
   .fuss-raster{grid-template-columns:1fr 1fr}
   .nav-links{display:none}
-  .thema{margin-left:auto}
+  .insta{margin-left:auto}
   .burger{display:inline-flex;margin-left:0}
 }
 @media (max-width:760px){
@@ -472,6 +478,8 @@ button.tag:focus-visible{border-radius:999px}
     <symbol id="i-ball" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.6 5.6c3 2.6 3 10.2 0 12.8M18.4 5.6c-3 2.6-3 10.2 0 12.8"/></g></symbol>
     <symbol id="i-plan" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><rect x="9" y="2.5" width="6" height="4" rx="1.2"/><path d="M8 12h8M8 16h5"/></g></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></g></symbol>
+    <symbol id="i-insta" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></g></symbol>
+    <symbol id="i-web" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></g></symbol>
     <symbol id="i-laden" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-mond" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
     <symbol id="i-sonne" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></symbol>
@@ -521,6 +529,7 @@ button.tag:focus-visible{border-radius:999px}
       <a href="#vorstand">Vorstand</a>
       <a href="#dokumente">Dokumente</a>
     </nav>
+    <a class="rund-knopf insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener" aria-label="dobasket auf Instagram"><svg><use href="#i-insta"/></svg></a>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
     <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
   </div>
@@ -773,6 +782,7 @@ button.tag:focus-visible{border-radius:999px}
       <div>
         <div class="marke"><svg viewBox="116 201 1448 516" role="img" aria-label="dobasket – Basketballkreis Dortmund"><use href="#wortmarke"/></svg></div>
         <p style="margin-top:18px;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
+        <a class="fuss-insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-insta"/></svg>@dobasket</a>
       </div>
       <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="#spieltag">Ergebnisse</a></li></ul></div>
       <div><h4>Der Kreis</h4><ul><li><a href="#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="#vorstand">Vorstand</a></li><li><a href="#dokumente">Dokumente</a></li></ul></div>
@@ -785,6 +795,7 @@ button.tag:focus-visible{border-radius:999px}
   </div>
 </footer>
 
+<script src="vereine-info.js"></script>
 <script src="kalender/daten.js"></script>
 <script>
 (function(){
@@ -973,7 +984,10 @@ function vereinsMenue(){
     // inkl. der beim WBV gemeldeten Vereine ohne Mannschaft (TuS Wellinghofen, TV Hoerde)
     DV.vereine.concat(DV.vereine_ohne_team || []).map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
       var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
-      var m = document.createElement("span"); m.className = "drop-mono"; m.textContent = vereinsKuerzel(n); m.setAttribute("aria-hidden","true");
+      var m = document.createElement("span"); m.className = "drop-mono"; m.setAttribute("aria-hidden","true");
+      var info = (window.DOBASKET_VEREINE_INFO || {})[n];
+      if(info && info.logo){ var bild = document.createElement("img"); bild.src = info.logo; bild.alt = ""; bild.loading = "lazy"; m.appendChild(bild); m.classList.add("mit-logo"); }
+      else m.textContent = vereinsKuerzel(n);
       var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
       var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z ? z + (z === 1 ? " Mannschaft" : " Mannschaften") : "aktuell ohne Mannschaft";
       t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);

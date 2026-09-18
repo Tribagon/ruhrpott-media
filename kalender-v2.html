@@ -103,6 +103,7 @@ button.tag:focus-visible{border-radius:999px}
 .rund-knopf:focus-visible{border-radius:999px}
 .rund-knopf svg{width:19px;height:19px}
 .burger{display:none;margin-left:auto}
+.insta{text-decoration:none}
 .menue{position:fixed;inset:0;z-index:70;background:var(--ground);padding:22px var(--rand);display:flex;flex-direction:column;gap:8px;
   opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .2s,transform .2s var(--ease),visibility 0s .2s}
 .menue.offen{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .2s var(--ease)}
@@ -126,6 +127,8 @@ button.tag:focus-visible{border-radius:999px}
 .drop-panel a::after{content:none!important}
 .drop-mono{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--accent-weich);color:var(--accent-ink);
   font:900 11px/1 var(--f-display);letter-spacing:-.02em}
+.drop-mono.mit-logo{background:transparent}
+.drop-mono img{width:100%;height:100%;object-fit:contain}
 .drop-name{min-width:0;display:flex;flex-direction:column;line-height:1.25}
 .drop-name small{color:var(--muted);font-size:12px;font-weight:500}
 .drop-alle{justify-content:center;margin-top:8px;border-top:1px solid var(--line);border-radius:0 0 12px 12px!important;color:var(--accent-ink)!important;font-weight:700!important}
@@ -512,7 +515,11 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 .sx-fuss ul a:hover{opacity:1;color:var(--accent)}
 .sx-fuss-unten{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--stage-2);font-size:13px;color:var(--on-stage-muted)}
 
-@media (max-width:1024px){ .sx-links{display:none} .thema{margin-left:auto} .burger{display:inline-flex} }
+.insta{text-decoration:none}
+.sx-fuss-insta{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:14px;color:var(--on-stage);font-weight:700;text-decoration:none;transition:color .15s}
+.sx-fuss-insta svg{width:22px;height:22px}
+.sx-fuss-insta:hover{color:var(--accent)}
+@media (max-width:1024px){ .sx-links{display:none} .insta{margin-left:auto} .burger{display:inline-flex} }
 @media (max-width:760px){ .sx-fuss-raster{grid-template-columns:1fr} .sx-marke svg{height:38px} }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -599,6 +606,8 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 <symbol id="i-euro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6.5A7 7 0 1 0 18 17.5"/><path d="M4 10h9M4 14h9"/></g></symbol>
 <symbol id="i-laden" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-blatt" viewBox="0 0 40 48"><path d="M4 4a3 3 0 0 1 3-3h19l11 11v32a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><path d="M26 1v8a3 3 0 0 0 3 3h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+<symbol id="i-insta" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></g></symbol>
+<symbol id="i-web" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></g></symbol>
 </defs></svg>
 
 <header class="sx-nav" id="sx-nav">
@@ -616,6 +625,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
         </div>
       </div><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
     </nav>
+    <a class="rund-knopf insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener" aria-label="dobasket auf Instagram"><svg><use href="#i-insta"/></svg></a>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
     <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
   </div>
@@ -716,6 +726,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
       <div>
         <a class="sx-marke" href="startseite-vorschau.html" aria-label="dobasket Startseite"><svg viewBox="116 201 1448 516" aria-hidden="true"><use href="#wortmarke"/></svg></a>
         <p style="margin:16px 0 0;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
+        <a class="sx-fuss-insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-insta"/></svg>@dobasket</a>
       </div>
       <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="startseite-vorschau.html#spieltag">Spieltag</a></li></ul></div>
       <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
@@ -724,6 +735,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
   </div>
 </footer>
 
+<script src="vereine-info.js"></script>
 <script src="kalender/daten.js"></script>
 <script>
 
@@ -1746,7 +1758,10 @@ function vereinsMenue(){
     // inkl. der beim WBV gemeldeten Vereine ohne Mannschaft (TuS Wellinghofen, TV Hoerde)
     DV.vereine.concat(DV.vereine_ohne_team || []).map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
       var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
-      var m = document.createElement("span"); m.className = "drop-mono"; m.textContent = vereinsKuerzel(n); m.setAttribute("aria-hidden","true");
+      var m = document.createElement("span"); m.className = "drop-mono"; m.setAttribute("aria-hidden","true");
+      var info = (window.DOBASKET_VEREINE_INFO || {})[n];
+      if(info && info.logo){ var bild = document.createElement("img"); bild.src = info.logo; bild.alt = ""; bild.loading = "lazy"; m.appendChild(bild); m.classList.add("mit-logo"); }
+      else m.textContent = vereinsKuerzel(n);
       var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
       var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z ? z + (z === 1 ? " Mannschaft" : " Mannschaften") : "aktuell ohne Mannschaft";
       t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
