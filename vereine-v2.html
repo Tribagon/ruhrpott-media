@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
 :root{
   color-scheme:light;
@@ -364,6 +366,7 @@ a{color:var(--accent-ink)}
 .v-ohne-team b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
 .v-ohne-team .d-wappen{width:44px;flex:none;color:var(--muted)}
 .ohne-team .widgets{display:none!important}
+.v-ueb-intro{color:var(--ink-2);margin:-6px 0 4px;max-width:60ch}
 .v-ueb-karte.leise .v-ueb-mono{background:var(--sunken);color:var(--muted)}
 .hero-name{font-family:var(--f-display);font-weight:900;font-size:clamp(38px,5.6vw,80px);line-height:.98;letter-spacing:-.035em}
 .hero-name::after{content:".";color:var(--accent)}
@@ -433,6 +436,55 @@ a{color:var(--accent-ink)}
   .hero-wahl{align-items:stretch;width:100%}
   .hero-wahl select{width:100%;min-width:0}
 }
+
+/* =================== Vereinskarte (Uebersicht) =================== */
+.v-karte-box{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--schatten)}
+.v-karte{height:clamp(380px,58vh,580px);background:var(--sunken);z-index:0}
+.v-karte-leiste{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 18px;border-top:1px solid var(--line)}
+.v-nahe{display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:0 18px 0 14px;border-radius:999px;border:0;cursor:pointer;
+  background:var(--accent-cta);color:var(--on-accent);font:800 14.5px/1 var(--f-ui);transition:background .15s,transform .15s var(--ease)}
+.v-nahe:hover{background:var(--accent-cta-hover)}
+.v-nahe:active{transform:scale(.97)}
+.v-nahe:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.v-nahe svg{width:18px;height:18px}
+.v-nahe[aria-busy="true"]{opacity:.7;pointer-events:none}
+.v-nahe-status{font-size:14px;color:var(--ink-2)}
+.v-nahe-status b{color:var(--ink)}
+.v-ueb-dist{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--accent-weich);color:var(--accent-ink);font:700 11.5px/1.4 var(--f-eng)}
+/* Marker: rundes Badge mit Logo bzw. Kuerzel; Hover/Fokus vergroessert */
+.v-karte .leaflet-tile-pane{filter:grayscale(1) brightness(1.03) contrast(.9)}
+:root[data-theme="dark"] .v-karte .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) grayscale(1) brightness(.82) contrast(.9)}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .v-karte .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) grayscale(1) brightness(.82) contrast(.9)} }
+/* Nur das sichtbare Badge ist klickbar -- die Leaflet-Box bleibt an der echten
+   Position und wuerde beim Auffaechern sonst den Nachbarn verdecken. */
+.k-marker{background:none;border:0;pointer-events:none!important}
+.k-pin{pointer-events:auto;cursor:pointer}
+.k-versatz{display:grid;place-items:center;width:46px;height:46px;transition:transform .25s var(--ease)}
+.v-karte.klein .k-pin{width:32px;height:32px;border-width:1.5px}
+.v-karte.klein .k-pin img{width:24px;height:24px}
+.v-karte.klein .k-pin span{font-size:9px}
+.k-pin{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--surface);border:2px solid var(--ink);
+  box-shadow:0 3px 10px -2px rgba(var(--ink-rgb),.45);transition:transform .2s var(--ease),border-color .2s;transform-origin:50% 50%;overflow:hidden}
+.k-pin img{width:34px;height:34px;object-fit:contain}
+.k-pin span{font:900 12px/1 var(--f-display);letter-spacing:-.03em;color:var(--accent-ink)}
+.k-pin.leise{border-style:dashed;border-color:var(--muted)}
+.k-pin.leise span{color:var(--muted)}
+.k-marker:hover .k-pin,.k-marker:focus .k-pin,.k-marker.aktiv .k-pin{transform:scale(1.5);border-color:var(--accent)}
+.k-marker:focus{outline:none}
+.k-marker:focus-visible .k-pin{outline:3px solid var(--accent);outline-offset:2px}
+.k-ich{display:block;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);box-shadow:0 0 0 6px rgba(var(--accent-rgb),.25)}
+/* Leaflet an das Design anpassen */
+.v-karte .leaflet-tooltip{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:var(--schatten-hoch);
+  padding:8px 12px;font:600 13px/1.35 var(--f-ui)}
+.v-karte .leaflet-tooltip b{display:block;font-size:14.5px;font-weight:800}
+.v-karte .leaflet-tooltip small{color:var(--muted);font-size:12.5px}
+.v-karte .leaflet-tooltip-top::before{border-top-color:var(--surface)}
+.v-karte .leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.v-karte .leaflet-bar a:hover{background:var(--sunken)}
+.v-karte .leaflet-control-attribution{background:rgba(var(--ground-rgb),.8);color:var(--muted);font-size:10.5px}
+.v-karte .leaflet-control-attribution a{color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){ .k-pin,.k-versatz{transition:none} }
+@media (max-width:640px){ .v-karte{height:420px} .v-karte-leiste{padding:12px 14px} }
 
 </style>
 </head>
@@ -939,9 +991,12 @@ function uebersichtBauen(namen){
     var sp = mk("span"); sp.appendChild(mk("b",null,String(p[0]))); sp.appendChild(document.createTextNode(p[1])); meta.appendChild(sp); });
   var ziel = leer(el("v-uebersicht")); ziel.hidden = false;
   var kopf = mk("div","abschnitt-kopf"); kopf.appendChild(mk("h2",null,"Wähle deinen Verein")); ziel.appendChild(kopf);
-  var grid = mk("div","v-ueb-grid");
+  ziel.appendChild(mk("p","v-ueb-intro","Finde einen Verein in deiner Nähe – auf der Karte oder in der Liste darunter."));
+  var kbox = karteBox();
+  if(kbox) ziel.appendChild(kbox);
+  var grid = mk("div","v-ueb-grid"); grid.id = "v-ueb-grid";
   namen.forEach(function(n){
-    var a = mk("a","v-ueb-karte"); a.href = "?verein=" + encodeURIComponent(n); a.setAttribute("data-spot","");
+    var a = mk("a","v-ueb-karte"); a.href = "?verein=" + encodeURIComponent(n); a.setAttribute("data-spot",""); a.setAttribute("data-verein", n);
     a.addEventListener("click", function(e){ e.preventDefault(); el("v-wahl").value = n; seiteBauen(n); window.scrollTo({top:0, behavior:"smooth"}); });
     var vi = (window.DOBASKET_VEREINE_INFO || {})[n];
     if(vi && vi.logo){ var mo = mk("span","v-ueb-mono mit-logo"), im = mk("img"); im.src = vi.logo; im.alt = ""; im.loading = "lazy"; mo.appendChild(im); a.appendChild(mo); }
@@ -957,6 +1012,142 @@ function uebersichtBauen(namen){
     grid.appendChild(a);
   });
   ziel.appendChild(grid);
+  if(kbox) karteBauen(namen, teamsJe);
+}
+
+// ---------- Vereinskarte (Leaflet, Kacheln von CARTO/OpenStreetMap) ----------
+// Positionen/Orte kommen aus vereine-info.js (pos, ort). Ohne Leaflet oder ohne
+// Positionen bleibt es bei der Liste -- die Seite funktioniert auch so.
+var GRENZE = {"type":"Polygon","coordinates":[[[7.3024,51.5077],[7.3043,51.506],[7.304,51.5043],[7.3135,51.5042],[7.3148,51.5048],[7.3152,51.5058],[7.3173,51.506],[7.3194,51.5],[7.3183,51.4993],[7.3189,51.4991],[7.3163,51.4983],[7.3167,51.4973],[7.3158,51.4964],[7.3174,51.4939],[7.3225,51.4945],[7.3233,51.4927],[7.3229,51.4905],[7.3235,51.4889],[7.3236,51.4896],[7.325,51.4898],[7.3252,51.4891],[7.3268,51.4891],[7.3274,51.4901],[7.3282,51.49],[7.3298,51.4931],[7.3316,51.4931],[7.3314,51.4946],[7.3305,51.4946],[7.3306,51.4965],[7.3341,51.4965],[7.3342,51.4957],[7.3376,51.496],[7.3404,51.4953],[7.3397,51.4932],[7.3429,51.4931],[7.3426,51.4917],[7.3437,51.4915],[7.3425,51.4887],[7.3413,51.4889],[7.3402,51.4864],[7.3425,51.4835],[7.3475,51.4843],[7.3476,51.4831],[7.3488,51.482],[7.3513,51.4823],[7.3513,51.4836],[7.3537,51.4843],[7.3547,51.4819],[7.3561,51.4823],[7.3579,51.4807],[7.3592,51.4809],[7.3612,51.4805],[7.3613,51.48],[7.3713,51.4827],[7.3727,51.4802],[7.3716,51.4804],[7.371,51.4784],[7.3716,51.4764],[7.3776,51.478],[7.3798,51.4779],[7.3808,51.4788],[7.3871,51.4744],[7.3894,51.4741],[7.389,51.473],[7.3898,51.4728],[7.3887,51.4705],[7.3882,51.4672],[7.3885,51.4663],[7.3911,51.4659],[7.3912,51.4653],[7.3891,51.4626],[7.3928,51.4609],[7.3926,51.4592],[7.3938,51.4592],[7.3938,51.4577],[7.3986,51.4576],[7.4004,51.4581],[7.405,51.4549],[7.4083,51.4548],[7.4088,51.4536],[7.4114,51.4528],[7.4114,51.452],[7.4124,51.4517],[7.412,51.4512],[7.4142,51.4501],[7.4141,51.4482],[7.4151,51.4468],[7.4169,51.4449],[7.4185,51.4447],[7.4187,51.4404],[7.4221,51.4371],[7.4235,51.4317],[7.4298,51.4339],[7.4378,51.4356],[7.4437,51.4346],[7.4526,51.4361],[7.4615,51.4363],[7.4626,51.4339],[7.4668,51.4345],[7.4674,51.4325],[7.4676,51.4313],[7.4653,51.4291],[7.4649,51.426],[7.4636,51.4242],[7.4638,51.4186],[7.4651,51.4168],[7.4864,51.4179],[7.493,51.4157],[7.5009,51.4184],[7.5063,51.4185],[7.5108,51.4178],[7.5119,51.4183],[7.5088,51.4194],[7.5082,51.4211],[7.5072,51.4212],[7.5073,51.423],[7.505,51.4248],[7.5058,51.425],[7.5058,51.4261],[7.5047,51.4269],[7.5085,51.4278],[7.5105,51.4296],[7.5118,51.4334],[7.5201,51.4353],[7.5231,51.4368],[7.5286,51.4344],[7.5322,51.435],[7.5365,51.4454],[7.5386,51.4489],[7.5443,51.4526],[7.5526,51.4551],[7.5494,51.4576],[7.545,51.46],[7.5449,51.4608],[7.5424,51.461],[7.5433,51.4631],[7.5458,51.4645],[7.5461,51.4665],[7.5539,51.4695],[7.5617,51.4705],[7.566,51.4725],[7.5668,51.4722],[7.5716,51.475],[7.5739,51.4745],[7.5774,51.4707],[7.5794,51.4715],[7.5816,51.4692],[7.583,51.4688],[7.583,51.4661],[7.5841,51.4643],[7.593,51.4672],[7.5997,51.4713],[7.6057,51.4772],[7.6097,51.4798],[7.6095,51.4802],[7.6083,51.4797],[7.6022,51.4907],[7.601,51.4904],[7.6008,51.491],[7.5998,51.4912],[7.5987,51.4951],[7.5975,51.496],[7.5964,51.4959],[7.5982,51.4969],[7.5965,51.5076],[7.6066,51.5115],[7.6188,51.5172],[7.6328,51.5192],[7.6306,51.5219],[7.6363,51.5234],[7.6347,51.5265],[7.6382,51.5277],[7.6364,51.5302],[7.6359,51.532],[7.6347,51.532],[7.6312,51.5395],[7.6309,51.5404],[7.6327,51.541],[7.6326,51.5419],[7.6288,51.5416],[7.6294,51.543],[7.6335,51.5457],[7.6323,51.548],[7.6326,51.5497],[7.6293,51.5504],[7.6261,51.5523],[7.6201,51.5503],[7.608,51.5485],[7.6065,51.5501],[7.608,51.5509],[7.6065,51.5519],[7.6057,51.5513],[7.603,51.5547],[7.607,51.555],[7.6064,51.5569],[7.6045,51.557],[7.6035,51.5577],[7.6041,51.5595],[7.604,51.5624],[7.6059,51.5641],[7.6057,51.5648],[7.6067,51.5659],[7.6063,51.5685],[7.6005,51.5678],[7.6009,51.5653],[7.5994,51.5649],[7.5941,51.5648],[7.5908,51.5658],[7.5921,51.5663],[7.593,51.5683],[7.5938,51.5686],[7.5906,51.57],[7.5907,51.5722],[7.593,51.5735],[7.5963,51.574],[7.5972,51.5762],[7.5963,51.5764],[7.5962,51.5778],[7.5927,51.5797],[7.5903,51.5832],[7.5822,51.5812],[7.5815,51.5837],[7.5774,51.5831],[7.5699,51.5841],[7.5703,51.5858],[7.5637,51.5849],[7.563,51.5868],[7.5521,51.5851],[7.5319,51.5792],[7.5327,51.5797],[7.5259,51.5786],[7.5268,51.5782],[7.5264,51.5781],[7.5028,51.5791],[7.5021,51.5808],[7.5041,51.5855],[7.5038,51.5862],[7.5017,51.5863],[7.4978,51.5923],[7.4901,51.5925],[7.4781,51.5893],[7.4762,51.5907],[7.4711,51.5871],[7.4695,51.5872],[7.4679,51.5888],[7.4671,51.5869],[7.4656,51.5858],[7.464,51.5859],[7.46,51.5832],[7.4589,51.5839],[7.4564,51.5838],[7.4562,51.5843],[7.4525,51.5819],[7.4496,51.583],[7.4482,51.5816],[7.4466,51.5818],[7.4461,51.5795],[7.4275,51.5839],[7.4179,51.585],[7.421,51.5873],[7.4234,51.5902],[7.4228,51.5907],[7.4255,51.5919],[7.4237,51.5937],[7.426,51.5946],[7.4226,51.5976],[7.4234,51.598],[7.4213,51.5995],[7.419,51.6],[7.4148,51.598],[7.4133,51.5962],[7.4062,51.5942],[7.4003,51.5934],[7.3981,51.5885],[7.3957,51.5872],[7.392,51.5876],[7.3905,51.587],[7.382,51.5883],[7.38,51.5882],[7.3718,51.5907],[7.3719,51.5899],[7.3683,51.5825],[7.3632,51.5836],[7.3608,51.583],[7.3607,51.5822],[7.3582,51.5818],[7.3572,51.5822],[7.3569,51.5835],[7.3538,51.5855],[7.3534,51.5835],[7.3502,51.582],[7.3487,51.5819],[7.3497,51.5811],[7.3429,51.579],[7.3426,51.5784],[7.3385,51.5768],[7.3445,51.5712],[7.3464,51.5719],[7.3477,51.571],[7.3503,51.5674],[7.3492,51.567],[7.3538,51.5652],[7.3514,51.5632],[7.351,51.5597],[7.3518,51.5597],[7.3513,51.5602],[7.3519,51.5608],[7.3565,51.556],[7.3511,51.5526],[7.3526,51.552],[7.3536,51.5506],[7.3511,51.5497],[7.3523,51.549],[7.3484,51.5465],[7.3497,51.5468],[7.3505,51.5463],[7.3474,51.5454],[7.3494,51.5431],[7.3487,51.5428],[7.35,51.5405],[7.3498,51.5393],[7.3529,51.5379],[7.3535,51.5389],[7.3546,51.5388],[7.3555,51.5368],[7.3572,51.5357],[7.3578,51.5337],[7.3614,51.5341],[7.3619,51.5332],[7.3606,51.533],[7.3614,51.5312],[7.3639,51.5298],[7.3628,51.5294],[7.364,51.5281],[7.3626,51.5271],[7.3614,51.5283],[7.3603,51.528],[7.3562,51.5261],[7.3557,51.5249],[7.354,51.525],[7.3542,51.5238],[7.3463,51.5223],[7.3465,51.5241],[7.3448,51.5232],[7.3435,51.5233],[7.3433,51.5243],[7.3414,51.5234],[7.34,51.5217],[7.3347,51.5202],[7.3325,51.521],[7.3301,51.5208],[7.3274,51.5222],[7.3247,51.5226],[7.3244,51.5236],[7.3236,51.524],[7.3236,51.5235],[7.3199,51.5226],[7.3195,51.523],[7.3161,51.5219],[7.3157,51.5225],[7.3139,51.5211],[7.3126,51.5214],[7.3108,51.5206],[7.3075,51.5188],[7.3082,51.5185],[7.3069,51.5178],[7.3052,51.5177],[7.3035,51.5157],[7.3026,51.5123],[7.3024,51.5077]]]};
+var karte = null, karteBoxEl = null, kachel = null, maske = null, grenzlinie = null, ichMarker = null, marker = {};
+function vInfo(n){ return (window.DOBASKET_VEREINE_INFO || {})[n] || {}; }
+function karteBox(){
+  if(!window.L) return null;
+  if(karteBoxEl) return karteBoxEl;
+  karteBoxEl = mk("div","v-karte-box");
+  var k = mk("div","v-karte"); k.id = "v-karte"; k.setAttribute("aria-label","Karte der Vereine in Dortmund"); k.setAttribute("role","region");
+  karteBoxEl.appendChild(k);
+  var leiste = mk("div","v-karte-leiste");
+  var b = mk("button","v-nahe"); b.type = "button"; b.id = "v-nahe";
+  var s = document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true");
+  s.innerHTML = '<g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7.5"/></g>';
+  b.appendChild(s); b.appendChild(document.createTextNode("Vereine in meiner Nähe"));
+  var st = mk("span","v-nahe-status"); st.id = "v-nahe-status"; st.setAttribute("role","status");
+  st.textContent = "Tipp: Auf ein Logo klicken öffnet die Vereinsseite.";
+  leiste.appendChild(b); leiste.appendChild(st); karteBoxEl.appendChild(leiste);
+  b.addEventListener("click", naheSuchen);
+  return karteBoxEl;
+}
+function cssFarbe(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+// Kacheln: OpenStreetMap-Standard (kein API-Key noetig). Hell/Dunkel macht ein
+// CSS-Filter auf der Kachel-Ebene (.v-karte .leaflet-tile-pane), nicht ein zweiter Kachelsatz.
+function kartenStil(){
+  if(!karte) return;
+  if(!kachel) kachel = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende'}).addTo(karte);
+  if(maske) maske.setStyle({fillColor: cssFarbe("--ground"), fillOpacity: .55});
+  if(grenzlinie) grenzlinie.setStyle({color: cssFarbe("--accent")});
+}
+function karteBauen(namen, teamsJe){
+  if(karte){ setTimeout(function(){ karte.invalidateSize(); }, 0); return; }
+  var mobil = matchMedia("(pointer: coarse)").matches;
+  karte = L.map("v-karte", {scrollWheelZoom: false, dragging: !mobil, tap: false, zoomSnap: .25});
+  // Alles ausserhalb Dortmunds leicht abdunkeln, die Stadtgrenze orange nachziehen
+  var ring = GRENZE.coordinates[0].map(function(c){ return [c[1], c[0]]; });
+  maske = L.polygon([[[85,-180],[85,180],[-85,180],[-85,-180]], ring], {stroke: false, interactive: false}).addTo(karte);
+  grenzlinie = L.polygon(ring, {weight: 2.5, dashArray: "6 7", fill: false, interactive: false}).addTo(karte);
+  kartenStil();
+  new MutationObserver(kartenStil).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", kartenStil);
+  karte.fitBounds(grenzlinie.getBounds(), {padding: [12, 12]});
+  namen.forEach(function(n){
+    var info = vInfo(n); if(!info.pos) return;
+    var tz = teamsJe[n] || 0;
+    var pin = mk("span","k-pin" + (tz ? "" : " leise"));
+    if(info.logo){ var im = mk("img"); im.src = info.logo; im.alt = ""; pin.appendChild(im); }
+    else pin.appendChild(mk("span", null, monogramm(n)));
+    var icon = L.divIcon({className: "k-marker", html: '<span class="k-versatz">' + pin.outerHTML + '</span>', iconSize: [46,46], iconAnchor: [23,23]});
+    var m = L.marker(info.pos, {icon: icon, title: n, alt: n, riseOnHover: true, keyboard: true}).addTo(karte);
+    var tip = mk("div"); tip.appendChild(mk("b", null, n));
+    tip.appendChild(mk("small", null, (info.ort ? info.ort + " · " : "") + (tz ? tz + (tz === 1 ? " Mannschaft" : " Mannschaften") : "aktuell ohne Mannschaft")));
+    m.bindTooltip(tip, {direction: "top", offset: [0, -30], opacity: 1});
+    m.on("click", function(){ el("v-wahl").value = n; seiteBauen(n); window.scrollTo({top: 0, behavior: "smooth"}); });
+    marker[n] = m;
+  });
+  karte.on("zoomend", entzerren);
+  entzerren();
+}
+// Marker, die sich auf dem Bildschirm beruehren (Innenstadt, Wickede), minimal
+// auseinanderschieben: jedes zu nahe Paar wird entlang seiner Verbindungslinie
+// getrennt, bis nichts mehr ueberlappt. Die echte Position bleibt der Anker; beim
+// Reinzoomen schrumpft der Versatz und alles steht wieder am richtigen Ort.
+function entzerren(){
+  // Weit herausgezoomt (Handy: ganze Stadt auf ~360 px) kleinere Badges
+  var s = karte.getZoom() < 11 ? 0.7 : 1;
+  karte.getContainer().classList.toggle("klein", s < 1);
+  var abstand = 50 * s;
+  var P = Object.keys(marker).map(function(n){
+    var q = karte.latLngToLayerPoint(marker[n].getLatLng());
+    return {n: n, x0: q.x, y0: q.y, x: q.x, y: q.y};
+  });
+  for(var runde = 0; runde < 120; runde++){
+    var bewegt = false;
+    for(var i = 0; i < P.length; i++) for(var j = i + 1; j < P.length; j++){
+      var dx = P[j].x - P[i].x, dy = P[j].y - P[i].y, d = Math.sqrt(dx*dx + dy*dy);
+      if(d >= abstand) continue;
+      if(d < 0.01){ dx = Math.cos(i + j); dy = Math.sin(i + j); d = 1; }
+      var schub = (abstand - d) / 2 + 0.5, ux = dx / d, uy = dy / d;
+      P[i].x -= ux * schub; P[i].y -= uy * schub; P[j].x += ux * schub; P[j].y += uy * schub;
+      bewegt = true;
+    }
+    if(!bewegt) break;
+  }
+  P.forEach(function(p){
+    var dx = p.x - p.x0, dy = p.y - p.y0;
+    var e = marker[p.n].getElement(), v = e && e.querySelector(".k-versatz");
+    if(v) v.style.transform = "translate(" + dx.toFixed(1) + "px," + dy.toFixed(1) + "px)";
+    var tt = marker[p.n].getTooltip();
+    if(tt){ tt.options.offset = L.point(dx, dy - 30 * s); if(tt.isOpen()) tt.update(); }
+  });
+}
+function km(a, b){
+  var R = 6371, r = Math.PI / 180, dLat = (b[0]-a[0]) * r, dLon = (b[1]-a[1]) * r;
+  var h = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dLon/2)*Math.sin(dLon/2);
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+function naheSuchen(){
+  var b = el("v-nahe"), st = el("v-nahe-status");
+  if(!navigator.geolocation){ st.textContent = "Dein Browser kann keinen Standort bestimmen."; return; }
+  b.setAttribute("aria-busy","true"); st.textContent = "Standort wird bestimmt …";
+  navigator.geolocation.getCurrentPosition(function(p){
+    b.removeAttribute("aria-busy");
+    var ich = [p.coords.latitude, p.coords.longitude];
+    var liste = Object.keys(marker).map(function(n){ return {n: n, d: km(ich, vInfo(n).pos)}; })
+      .sort(function(x, y){ return x.d - y.d; });
+    if(!liste.length) return;
+    if(ichMarker) karte.removeLayer(ichMarker);
+    ichMarker = L.marker(ich, {icon: L.divIcon({className: "", html: '<span class="k-ich"></span>', iconSize: [18,18], iconAnchor: [9,9]}),
+      title: "Dein Standort", keyboard: false, interactive: false}).addTo(karte);
+    var fmt = function(d){ return d < 10 ? d.toFixed(1).replace(".", ",") + " km" : Math.round(d) + " km"; };
+    karte.fitBounds(L.latLngBounds([ich].concat(liste.slice(0, 3).map(function(x){ return vInfo(x.n).pos; }))), {padding: [48, 48], maxZoom: 14});
+    st.textContent = "";
+    st.appendChild(document.createTextNode("Am nächsten: ")); st.appendChild(mk("b", null, liste[0].n));
+    st.appendChild(document.createTextNode(" (" + fmt(liste[0].d) + ") – die Liste unten ist jetzt nach Entfernung sortiert."));
+    // Liste nach Entfernung sortieren und Entfernung anzeigen
+    var grid = el("v-ueb-grid"); if(!grid) return;
+    liste.forEach(function(x){
+      var karteEl = null;
+      Array.prototype.forEach.call(grid.children, function(c){ if(c.getAttribute("data-verein") === x.n) karteEl = c; });
+      if(!karteEl) return;
+      var alt = karteEl.querySelector(".v-ueb-dist"); if(alt) alt.parentNode.removeChild(alt);
+      karteEl.querySelector(".v-ueb-text b").appendChild(mk("span","v-ueb-dist", fmt(x.d)));
+      grid.appendChild(karteEl);
+    });
+  }, function(fehler){
+    b.removeAttribute("aria-busy");
+    st.textContent = fehler.code === 1 ? "Standort nicht freigegeben – du kannst die Karte auch einfach verschieben und zoomen."
+                                       : "Standort konnte gerade nicht bestimmt werden.";
+  }, {enableHighAccuracy: false, timeout: 10000, maximumAge: 300000});
 }
 
 // Vereins-Umschalter
