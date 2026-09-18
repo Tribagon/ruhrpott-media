@@ -175,7 +175,10 @@ button.tag:focus-visible{border-radius:999px}
 
 /* ---------- Hero ---------- */
 .hero{position:relative;overflow:hidden;padding:clamp(28px,5vw,64px) 0 clamp(64px,8vw,104px);isolation:isolate}
-.hallenlinien{position:absolute;inset:0;z-index:-2;width:100%;height:100%;color:var(--line-2);opacity:.5}
+.hallenlinien{position:absolute;inset:clamp(12px,3vw,40px);z-index:-2;width:calc(100% - 2*clamp(12px,3vw,40px));height:calc(100% - 2*clamp(12px,3vw,40px));color:var(--line-2);opacity:.55}
+/* Feld quer auf breiten, hochkant auf schmalen/hohen Flaechen -- immer ganz sichtbar */
+.feld-hoch{display:none}
+@media (max-aspect-ratio:1/1){ .feld-quer{display:none} .feld-hoch{display:block} }
 .hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:radial-gradient(520px circle at var(--gx,78%) var(--gy,30%),rgba(var(--accent-rgb),.10),transparent 65%);transition:background-position .3s}
 .hero-raster{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(24px,4vw,64px);align-items:center}
@@ -582,15 +585,10 @@ button.tag:focus-visible{border-radius:999px}
 
 <!-- ======= Hero ======= -->
 <section class="hero" id="hero">
-  <svg class="hallenlinien" viewBox="0 0 1440 820" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <g fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="1080" cy="410" r="150"/>
-      <path d="M1080 -10v840"/>
-      <path d="M-40 250h250v320H-40"/>
-      <path d="M210 290a120 120 0 0 1 0 240"/>
-      <path d="M-40 60h140a360 360 0 0 1 0 700H-40"/>
-    </g>
-  </svg>
+  <!-- FELD: massstabsgetreues Basketballfeld, quer/hochkant, nie beschnitten -->
+  <svg class="hallenlinien feld-quer" viewBox="-24 -24 1448 798" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5" vector-effect="non-scaling-stroke"><rect x="0" y="0" width="1400" height="750"/><path d="M700.0 0V750"/><circle cx="700.0" cy="375.0" r="90"/><path d="M0 252.5H290V497.5H0"/><circle cx="290" cy="375.0" r="90"/><path d="M0 45H149.5A337.5 337.5 0 0 1 149.5 705H0"/><path d="M60 330.0V420.0"/><circle cx="78.75" cy="375.0" r="11"/><path d="M1400 252.5H1110V497.5H1400"/><circle cx="1110" cy="375.0" r="90"/><path d="M1400 45H1250.5A337.5 337.5 0 0 0 1250.5 705H1400"/><path d="M1340 330.0V420.0"/><circle cx="1321.25" cy="375.0" r="11"/></g></svg>
+  <svg class="hallenlinien feld-hoch" viewBox="-24 -24 798 1448" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5" vector-effect="non-scaling-stroke"><g transform="translate(750 0) rotate(90)"><rect x="0" y="0" width="1400" height="750"/><path d="M700.0 0V750"/><circle cx="700.0" cy="375.0" r="90"/><path d="M0 252.5H290V497.5H0"/><circle cx="290" cy="375.0" r="90"/><path d="M0 45H149.5A337.5 337.5 0 0 1 149.5 705H0"/><path d="M60 330.0V420.0"/><circle cx="78.75" cy="375.0" r="11"/><path d="M1400 252.5H1110V497.5H1400"/><circle cx="1110" cy="375.0" r="90"/><path d="M1400 45H1250.5A337.5 337.5 0 0 0 1250.5 705H1400"/><path d="M1340 330.0V420.0"/><circle cx="1321.25" cy="375.0" r="11"/></g></g></svg>
+  <!-- /FELD -->
   <div class="inhalt hero-raster">
     <div class="hero-text">
       <span class="eyebrow einblenden" style="--d:.1s"><span>Basketballkreis Dortmund · Saison <span data-saison>2026/27</span></span></span>

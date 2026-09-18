@@ -483,7 +483,9 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 .burger{display:none}
 
 .sx-kopf{position:relative;overflow:hidden;isolation:isolate;padding:clamp(24px,4vw,56px) 0 clamp(32px,4vw,52px)}
-.sx-linien{position:absolute;inset:0;z-index:-1;width:100%;height:100%;color:var(--line-2);opacity:.5}
+.sx-linien{position:absolute;inset:clamp(12px,3vw,40px);z-index:-1;width:calc(100% - 2*clamp(12px,3vw,40px));height:calc(100% - 2*clamp(12px,3vw,40px));color:var(--line-2);opacity:.5}
+.feld-hoch{display:none}
+@media (max-aspect-ratio:1/1){ .feld-quer{display:none} .feld-hoch{display:block} }
 .sx-kopf .sx-inhalt{display:flex;flex-direction:column;gap:18px}
 .sx-zurueck{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px 0 12px;margin-bottom:4px;
   border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:700;font-size:14.5px;
@@ -642,9 +644,8 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 
 <main>
 <section class="sx-kopf">
-  <svg class="sx-linien" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <g fill="none" stroke="currentColor" stroke-width="2"><circle cx="1180" cy="260" r="150"/><path d="M1180 -10v540"/><path d="M1440 120H1300v280h140"/></g>
-  </svg>
+  <svg class="sx-linien feld-quer" viewBox="-24 -24 1448 798" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5" vector-effect="non-scaling-stroke"><rect x="0" y="0" width="1400" height="750"/><path d="M700.0 0V750"/><circle cx="700.0" cy="375.0" r="90"/><path d="M0 252.5H290V497.5H0"/><circle cx="290" cy="375.0" r="90"/><path d="M0 45H149.5A337.5 337.5 0 0 1 149.5 705H0"/><path d="M60 330.0V420.0"/><circle cx="78.75" cy="375.0" r="11"/><path d="M1400 252.5H1110V497.5H1400"/><circle cx="1110" cy="375.0" r="90"/><path d="M1400 45H1250.5A337.5 337.5 0 0 0 1250.5 705H1400"/><path d="M1340 330.0V420.0"/><circle cx="1321.25" cy="375.0" r="11"/></g></svg>
+  <svg class="sx-linien feld-hoch" viewBox="-24 -24 798 1448" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.5" vector-effect="non-scaling-stroke"><g transform="translate(750 0) rotate(90)"><rect x="0" y="0" width="1400" height="750"/><path d="M700.0 0V750"/><circle cx="700.0" cy="375.0" r="90"/><path d="M0 252.5H290V497.5H0"/><circle cx="290" cy="375.0" r="90"/><path d="M0 45H149.5A337.5 337.5 0 0 1 149.5 705H0"/><path d="M60 330.0V420.0"/><circle cx="78.75" cy="375.0" r="11"/><path d="M1400 252.5H1110V497.5H1400"/><circle cx="1110" cy="375.0" r="90"/><path d="M1400 45H1250.5A337.5 337.5 0 0 0 1250.5 705H1400"/><path d="M1340 330.0V420.0"/><circle cx="1321.25" cy="375.0" r="11"/></g></g></svg>
   <div class="sx-inhalt">
     <a class="sx-zurueck sx-ein" style="--d:0s" href="startseite-vorschau.html"><svg aria-hidden="true"><use href="#i-pfeil"/></svg>Zur Startseite</a>
     <span class="eyebrow sx-ein" style="--d:.05s"><span>Spielbetrieb · Saison <span id="m-saison">–</span></span></span>
