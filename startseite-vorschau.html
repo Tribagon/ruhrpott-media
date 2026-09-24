@@ -281,6 +281,7 @@ button.tag:focus-visible{border-radius:999px}
 .cover svg.muster{position:absolute;inset:0;width:100%;height:100%}
 .gross .cover{flex:1;min-height:280px;background:var(--stage);color:var(--on-stage)}
 .klein .cover{height:92px}
+.cover-bild img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%}
 .cover-glyphe{position:absolute;right:22px;bottom:18px;width:64px;height:64px;border-radius:50%;background:var(--surface);
   display:grid;place-items:center;color:var(--accent);box-shadow:var(--schatten)}
 .cover-glyphe svg{width:30px;height:30px}
@@ -405,6 +406,10 @@ button.tag:focus-visible{border-radius:999px}
 .doku:hover .doku-laden{background:var(--accent-cta);color:var(--on-accent);border-color:var(--accent-cta)}
 .doku-laden svg{width:19px;height:19px}
 .doku-leer{padding:30px;text-align:center;color:var(--muted)}
+.doku-folgt{grid-template-columns:44px 1fr auto}
+.doku-folgt:hover{background:transparent}
+.doku-folgt .doku-icon,.doku-folgt .doku-titel{opacity:.6}
+.doku-status{grid-column:3;justify-self:end}
 
 /* ---------- Footer ---------- */
 .fuss{background:var(--stage);color:var(--on-stage);padding:72px 0 32px}
@@ -662,7 +667,7 @@ button.tag:focus-visible{border-radius:999px}
   </div>
 </section>
 
-<!-- ======= News (Platzhalter) ======= -->
+<!-- ======= News ======= -->
 <section class="abschnitt" id="news" style="padding-top:0">
   <div class="inhalt">
     <div class="abschnitt-kopf">
@@ -670,19 +675,17 @@ button.tag:focus-visible{border-radius:999px}
         <span class="eyebrow" data-reveal>News</span>
         <h2 class="h2" data-float>Neues aus dem Kreis<span class="punkt">.</span></h2>
       </div>
-      <span class="tag tag-platzhalter" data-reveal>Platzhalter-Inhalte</span>
     </div>
 
     <div class="bento">
-      <a class="karte gross" href="#" data-reveal style="--i:0">
-        <div class="cover">
-          <svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster-buehne)" opacity=".45"/></svg>
-          <div class="cover-glyphe"><svg><use href="#i-ball"/></svg></div>
+      <a class="karte gross" href="news-3x3-basketballnacht.html" data-reveal style="--i:0">
+        <div class="cover cover-bild">
+          <img src="img/news/3x3-basketballnacht-2026.jpg" alt="Plakat der 3. 3x3-Basketballnacht: Basketballkorb im Flutlicht, 2. Oktober 2026, 19 Uhr, Phoenix-Gymnasium" loading="lazy" width="984" height="1350">
         </div>
         <div class="news-text">
-          <div class="news-meta"><span class="tag tag-akzent">Spielbetrieb</span><time datetime="2026-09-05">05.09.2026</time></div>
-          <h3>Saisonstart 2026/27: Alles, was ihr zum neuen Spieljahr wissen müsst</h3>
-          <p>Neue Staffeleinteilung, geänderte Meldefristen und der Kreispokal im neuen Modus – der Überblick für Vereine, Trainer:innen und Fans.</p>
+          <div class="news-meta"><span class="tag tag-akzent">Jugend</span><time datetime="2026-09-24">24.09.2026</time></div>
+          <h3>3. 3x3-Basketballnacht am 2. Oktober in Hörde</h3>
+          <p>Der TVE Barop lädt gemeinsam mit AWO und Sportjugend Dortmund zum Streetball-Abend ins Phoenix-Gymnasium – für die Jahrgänge 2008 bis 2015, Anmeldung kostenlos bis 30. September.</p>
           <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
         </div>
       </a>
@@ -690,7 +693,7 @@ button.tag:focus-visible{border-radius:999px}
         <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
           <div class="cover-glyphe"><svg><use href="#i-pokal"/></svg></div></div>
         <div class="news-text">
-          <div class="news-meta"><span class="tag">Pokal</span><time datetime="2026-09-14">14.09.2026</time></div>
+          <div class="news-meta"><span class="tag">Pokal</span><span class="tag tag-platzhalter">Platzhalter</span><time datetime="2026-09-14">14.09.2026</time></div>
           <h3>Kreispokal: Die Auslosung der 2. Runde</h3>
           <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
         </div>
@@ -699,7 +702,7 @@ button.tag:focus-visible{border-radius:999px}
         <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
           <div class="cover-glyphe"><svg><use href="#i-pfeife"/></svg></div></div>
         <div class="news-text">
-          <div class="news-meta"><span class="tag">Schiedsrichter</span><time datetime="2026-09-10">10.09.2026</time></div>
+          <div class="news-meta"><span class="tag">Schiedsrichter</span><span class="tag tag-platzhalter">Platzhalter</span><time datetime="2026-09-10">10.09.2026</time></div>
           <h3>Neulingslehrgang im Oktober – jetzt anmelden</h3>
           <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
         </div>
@@ -708,7 +711,7 @@ button.tag:focus-visible{border-radius:999px}
         <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
           <div class="cover-glyphe"><svg><use href="#i-stimme"/></svg></div></div>
         <div class="news-text">
-          <div class="news-meta"><span class="tag">Kreistag</span><time datetime="2026-09-02">02.09.2026</time></div>
+          <div class="news-meta"><span class="tag">Kreistag</span><span class="tag tag-platzhalter">Platzhalter</span><time datetime="2026-09-02">02.09.2026</time></div>
           <h3>Einladung zum Kreistag 2026</h3>
           <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
         </div>
@@ -780,7 +783,7 @@ button.tag:focus-visible{border-radius:999px}
   </div>
 </section>
 
-<!-- ======= Dokumente (Platzhalter) ======= -->
+<!-- ======= Dokumente ======= -->
 <section class="abschnitt" id="dokumente" style="padding-top:0">
   <div class="inhalt">
     <div class="abschnitt-kopf">
@@ -796,7 +799,7 @@ button.tag:focus-visible{border-radius:999px}
       </div>
     </div>
     <div class="doku-liste" id="doku-liste" data-reveal></div>
-    <p style="margin-top:14px;font-size:13px;color:var(--muted)">Platzhalter: Die Dateien werden verlinkt, sobald die echten Dokumente vorliegen.</p>
+    <p style="margin-top:14px;font-size:13px;color:var(--muted)">Satzung, weitere Ordnungen und Formulare folgen.</p>
   </div>
 </section>
 
@@ -976,7 +979,7 @@ function laufbandBauen(){
   if(breite > 0) spur.style.animationDuration = Math.round(breite / 75) + "s";
 }
 
-/* ---------------- Vorstand & Dokumente (Platzhalter-Daten) ---------------- */
+/* ---------------- Vorstand & Dokumente ---------------- */
 var VORSTAND = [
   {amt:"1. Vorsitzender", name:"Dirk Weber", aufgabe:"Satzungsänderungen", mail:"vorsitz1@dobasket.de", foto:"img/vorstand/weber.jpg"},
   {amt:"2. Vorsitzender", name:"Michael Mazur", aufgabe:"Hallenausschuss, Website", mail:"vorsitz2@dobasket.de", foto:"img/vorstand/mazur.jpg"},
@@ -987,14 +990,9 @@ var VORSTAND = [
   {amt:"Rechtsausschussvorsitzender", name:"Thomas Grossmann", aufgabe:"Datenschutz", mail:"rechtsausschuss@dobasket.de", foto:"img/vorstand/grossmann.jpg"}
 ];
 var DOKUMENTE = [
-  {kat:"kreistag", titel:"Protokoll Kreistag 2026", sub:"Beschlüsse und Wahlergebnisse", datum:"14.03.2026", typ:"PDF", groesse:"412 KB"},
-  {kat:"kreistag", titel:"Einladung & Tagesordnung Kreistag 2026", sub:"inkl. Anträge der Vereine", datum:"12.02.2026", typ:"PDF", groesse:"188 KB"},
-  {kat:"kreistag", titel:"Protokoll Kreistag 2025", sub:"Beschlüsse und Wahlergebnisse", datum:"22.03.2025", typ:"PDF", groesse:"396 KB"},
-  {kat:"ordnung", titel:"Satzung des Basketballkreises Dortmund", sub:"Fassung vom Kreistag 2024", datum:"16.03.2024", typ:"PDF", groesse:"254 KB"},
-  {kat:"ordnung", titel:"Jugendordnung", sub:"gültig ab Saison 2024/25", datum:"16.03.2024", typ:"PDF", groesse:"142 KB"},
-  {kat:"ordnung", titel:"Ausschreibung Kreisligen 2026/27", sub:"Spielmodus, Fristen, Gebühren", datum:"01.07.2026", typ:"PDF", groesse:"320 KB"},
-  {kat:"formular", titel:"Antrag auf Spielverlegung", sub:"ausfüllbares Formular", datum:"01.07.2026", typ:"DOCX", groesse:"48 KB"},
-  {kat:"formular", titel:"Anmeldung Schiedsrichter-Lehrgang", sub:"Neulingslehrgang Herbst 2026", datum:"10.09.2026", typ:"PDF", groesse:"96 KB"}
+  // url = echte Datei im Repo; ohne url steht das Dokument als "folgt" in der Liste (kein Link).
+  {kat:"ordnung", titel:"Gebührenordnung des Basketballkreises", sub:"Gebühren, Strafen und Startgelder", datum:"25.06.2026", typ:"PDF", groesse:"188 KB", url:"dokumente/gebuehrenordnung-2026.pdf"},
+  {kat:"kreistag", titel:"Protokoll Kreistag 2026", sub:"wird nachgereicht", datum:"", typ:"PDF", groesse:""}
 ];
 /* PFIFF */
 // Easter Egg: dreimal schnell (innerhalb 1,2 s) auf die Pfeife -> sie pfeift.
@@ -1110,18 +1108,33 @@ function vorstandBauen(){
 function dokumenteBauen(){
   var ziel = el("doku-liste");
   DOKUMENTE.forEach(function(d){
-    var a = mk("a","doku"); a.href = "#"; a.setAttribute("data-kat", d.kat);
-    a.setAttribute("aria-label", d.titel + ", " + d.typ + ", " + d.groesse + " herunterladen");
+    // Ohne url gibt es die Datei noch nicht: Zeile ohne Link, "folgt" statt Groesse.
+    var a;
+    if(d.url){
+      a = mk("a","doku"); a.href = d.url; a.target = "_blank"; a.rel = "noopener";
+      a.setAttribute("aria-label", d.titel + ", " + d.typ + ", " + d.groesse + " öffnen");
+    } else {
+      a = mk("div","doku doku-folgt");
+    }
+    a.setAttribute("data-kat", d.kat);
     var ic = document.createElementNS("http://www.w3.org/2000/svg","svg");
     ic.setAttribute("class","doku-icon"); ic.setAttribute("viewBox","0 0 40 48");
     ic.innerHTML = '<use href="#i-blatt"/><text x="20" y="36" text-anchor="middle" font-size="9.5" font-weight="800" font-family="Archivo Narrow, sans-serif" fill="var(--accent-ink)">' + d.typ + '</text>';
     a.appendChild(ic);
-    var t = mk("span","doku-titel", d.titel); t.appendChild(mk("small",null, d.sub + " · " + d.datum)); a.appendChild(t);
-    a.appendChild(mk("span","doku-groesse", d.typ + " · " + d.groesse));
-    var l = mk("span","doku-laden"); l.appendChild(svgUse("i-laden")); a.appendChild(l);
+    var t = mk("span","doku-titel", d.titel); t.appendChild(mk("small",null, d.datum ? d.sub + " · " + d.datum : d.sub)); a.appendChild(t);
+    if(d.url){
+      a.appendChild(mk("span","doku-groesse", d.typ + " · " + d.groesse));
+      var l = mk("span","doku-laden"); l.appendChild(svgUse("i-laden")); a.appendChild(l);
+    } else {
+      a.appendChild(mk("span","tag tag-platzhalter doku-status","folgt"));
+    }
     ziel.appendChild(a);
   });
   var leer = mk("div","doku-leer","Keine Dokumente in dieser Kategorie."); leer.hidden = true; ziel.appendChild(leer);
+  el("filter").querySelectorAll("button[data-kat]").forEach(function(x){
+    var k = x.getAttribute("data-kat");
+    if(k && !DOKUMENTE.some(function(d){ return d.kat === k; })) x.hidden = true;
+  });
   el("filter").addEventListener("click", function(ev){
     var b = ev.target.closest("button[data-kat]"); if(!b) return;
     var kat = b.getAttribute("data-kat"), sichtbar = 0;
