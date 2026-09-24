@@ -26,5 +26,6 @@ window.DOBASKET_VEREINE_INFO = {
   "TVA Dortmund Wickede":      { pos: [51.53437, 7.61951], ort: "Wickede", logo: "img/vereine/tva-dortmund-wickede.png", web: "https://tva-do.de/basketball-91.html", insta: "https://www.instagram.com/tvawickedebasketball/" },          // Halle Bachschule, Dollersweg
   "TVE Dortmund Barop":        { pos: [51.51474, 7.41111], ort: "Wischlingen", logo: "img/vereine/tve-dortmund-barop.png", web: "https://www.tve-barop.de/basketball.html", insta: "https://www.instagram.com/tvebarop_basketball/" },   // Sporthalle Wischlingen, Hallerey 49 (Hendrik 24.09.)
   "TuS Wellinghofen":          { pos: [51.46697, 7.49221], ort: "Wellinghofen", logo: "img/vereine/tus-wellinghofen.png", web: "https://www.tus-wellinghofen.de/basketball_2021/", insta: "https://www.instagram.com/tus05wellinghofen/" },
+  "RBG Dortmund 51":           { pos: [51.50172, 7.40540], ort: "Dorstfeld", logo: "img/vereine/rbg-dortmund-51.png", web: "https://www.rbg-dortmund51.de/sportarten/rollstuhl-basketball", insta: "https://www.instagram.com/rbg_dortmund51/" },   // Rollstuhlbasketball; Heimspieltage in der Martin-Luther-King-Gesamtschule, Fine Frau 56-58 (24.09.)
   "TV Hörde":                  { pos: [51.48843, 7.49725], ort: "Hörde", logo: "img/vereine/tv-hoerde.png", web: "https://www.tvhoerde.de/" }
 };

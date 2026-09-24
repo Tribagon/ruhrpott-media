@@ -23,7 +23,7 @@
   --accent-cta:#cc4d00; --accent-cta-hover:#b84400; --on-accent:#ffffff;
   --ink-rgb:31,31,31; --accent-rgb:239,90,0; --ground-rgb:248,248,246;
   --herren:#2b3a44; --damen:#007fa3;
-  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200; --u10:#2a5bd7;
+  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200; --u10:#2a5bd7; --rolli:#0e7c6b;
   --schatten:0 1px 2px rgba(var(--ink-rgb),.06), 0 8px 24px -12px rgba(var(--ink-rgb),.18);
   --schatten-hoch:0 2px 4px rgba(var(--ink-rgb),.06), 0 24px 48px -20px rgba(var(--ink-rgb),.28);
   --f-display:"Archivo","Segoe UI",system-ui,sans-serif;
@@ -46,7 +46,7 @@
     --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
     --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
     --herren:#b9c4cb; --damen:#35a9cc;
-    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff;
+    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff; --rolli:#4cc9b0;
   }
 }
 :root[data-theme="dark"]{
@@ -59,7 +59,7 @@
   --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
   --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
   --herren:#b9c4cb; --damen:#35a9cc;
-  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff;
+  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff; --rolli:#4cc9b0;
 }
 /* Seiten-Tokens der Unterseiten (Kalender/Vereine) */
 :root{--gruen:#39b54a;--orange:#f47b20;--on-heat:#ffffff;--rot:#c62828}
@@ -771,7 +771,7 @@ var MON = ["Januar","Februar","März","April","Mai","Juni","Juli","August","Sept
 // Die Farbe steht nie allein -- daneben steht immer der Text-Chip.
 var FARBEN = {
   "Herren":"var(--herren)", "Damen":"var(--damen)",
-  "U18":"var(--u18)", "U16":"var(--u16)", "U14":"var(--u14)", "U12":"var(--u12)", "U10":"var(--u10)"
+  "U18":"var(--u18)", "U16":"var(--u16)", "U14":"var(--u14)", "U12":"var(--u12)", "U10":"var(--u10)", "Rollstuhl":"var(--rolli)"
 };
 function farbGruppe(alter){                      // "U16w" -> "U16", "Herren" -> "Herren"
   var m = /^U\d+/.exec(alter);
@@ -811,7 +811,7 @@ function ligaChip(li){
 // zuletzt), bei gleicher Liga nach Alter (Herren, Damen, dann U18->U12), zuletzt
 // nach Geschlecht.
 var _LVL = {RL:0,OL:1,LL:2,BL:3,LEI:3.5,KL:4,PK:5};
-var _ALT = {Herren:0,Damen:1,U18:2,U16:3,U14:4,U12:5,U10:6};
+var _ALT = {Herren:0,Damen:1,Rollstuhl:1.5,U18:2,U16:3,U14:4,U12:5,U10:6};
 var _GES = {"männlich":0,"weiblich":1,"offen":2,"":0};
 function ligaSortkey(li){
   var grp = farbGruppe(li.alter);
