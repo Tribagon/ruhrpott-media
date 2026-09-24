@@ -532,6 +532,9 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 }
 
 /* Spielfenster: Sprung zur Mannschaft auf der Vereinsseite (neu 24.09.) */
+.vergleich h3{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.vergleich h3 small{font-size:11px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--muted)}
+.vz-leer{margin:0;padding:10px 14px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 .zu-teams{display:flex;flex-direction:column;gap:10px}
 .zu-team{display:flex;align-items:center;gap:14px;min-height:56px;padding:10px 16px 10px 12px;border:1px solid var(--line-2);border-radius:14px;
   background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .15s,background .15s}
@@ -987,14 +990,32 @@ function hinspiel(s){
    Rueckzuege hat der Verband dort schon eingerechnet, wir wuerden sonst
    danebenliegen und es nicht merken. */
 function vergleichKasten(s){
-  var th = tabelle(s, s.h), tg = tabelle(s, s.g);   // liefert null, solange 0 Spiele
+  // Tabellenzeile auch mit 0 Spielen -- die Bilanz "0 Spiele" ist eine Aussage,
+  // anders als ein Tabellenplatz vor dem ersten Spieltag (siehe tabelle()).
+  var zeileVon = function(team){
+    var z = D.tabellen[s.sa + "|" + s.lnr] || [];
+    for(var i = 0; i < z.length; i++) if(z[i].t === team) return z[i];
+    return null;
+  };
+  var th = zeileVon(s.h), tg = zeileVon(s.g);
   var hin = hinspiel(s);
   if(!th && !tg && !hin) return null;
+  var leer = {sp:0, s:0, n:0, k:0, gk:0};
+  var gespielt = (th && th.sp > 0) || (tg && tg.sp > 0);
 
   var box = mk("div","vergleich");
-  box.appendChild(mk("h3", null, "Direktvergleich"));
+  var kopf = mk("h3", null, "Direktvergleich");
+  if(th || tg) kopf.appendChild(mk("small", null, "Saisonbilanz · Stand " + fmtKurz(HEUTE)));
+  box.appendChild(kopf);
 
-  if(th && tg){
+  if((th || tg) && !gespielt){
+    box.appendChild(mk("p","vz-leer","Beide Teams haben in dieser Saison noch nicht gespielt."));
+  }
+  if((th || tg) && gespielt){
+    th = th || leer; tg = tg || leer;
+    // "Besser" nur markieren, wenn BEIDE schon gespielt haben -- sonst gewaenne
+    // ein Team ohne Spiel die Zeile "Niederlagen" mit 0.
+    var fair = th.sp > 0 && tg.sp > 0;
     var proSpiel = function(t, feld){ return t.sp ? t[feld] / t.sp : null; };
     var zeilen = [
       ["Spiele",            th.sp, tg.sp, 0],
@@ -1011,9 +1032,9 @@ function vergleichKasten(s){
              : v.toFixed(1).replace(".", ",");
       };
       // richtung: 1 = groesser ist besser, -1 = kleiner ist besser, 0 = neutral
-      var besserH = richtung && a !== null && b !== null && a !== b &&
+      var besserH = fair && richtung && a !== null && b !== null && a !== b &&
                     (richtung > 0 ? a > b : a < b);
-      var besserG = richtung && a !== null && b !== null && a !== b &&
+      var besserG = fair && richtung && a !== null && b !== null && a !== b &&
                     (richtung > 0 ? b > a : b < a);
       var r = mk("div","vz");
       r.appendChild(mk("span","wert heim" + (besserH ? " besser" : ""), zahl(a)));
