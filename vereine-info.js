@@ -16,7 +16,7 @@ window.DOBASKET_VEREINE_INFO = {
   "SVD 49 Dortmund":           { pos: [51.51895, 7.47108], ort: "Innenstadt", logo: "img/vereine/svd-49-dortmund.png", web: "https://svd49-baskets.de/", insta: "https://www.instagram.com/svd49baskets/" },       // Brügmann-Sporthalle (Hendrik bestätigt 24.09.)
   "TSC E. Dortmund":           { pos: [51.49319, 7.46419], ort: "Innenstadt-Ost", logo: "img/vereine/tsc-eintracht-dortmund.png", web: "https://www.tsc-eintracht-dortmund.de/de/sportangebote/sportarten/basketball/", insta: "https://www.instagram.com/tsc.eintracht.dortmund/" },   // TSC-Sportzentrum Victor-Toyka-Str.
   "TSG Dortmund-Schüren": {
-    pos: [51.49585, 7.53225], ort: "Schüren",
+    pos: [51.49952, 7.53632], ort: "Schüren",   // Sporthalle Friedrich-Ebert-Grundschule, Bergmeisterstraße (Hendrik 24.09.)
     logo: "img/vereine/tsg-dortmund-schueren.png",
     web: "https://www.tsg1868.de/basketball",
     insta: "https://www.instagram.com/tsgschueren_basketball/"
