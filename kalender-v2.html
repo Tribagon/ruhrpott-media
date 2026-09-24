@@ -999,8 +999,18 @@ function vergleichKasten(s){
   };
   var th = zeileVon(s.h), tg = zeileVon(s.g);
   var hin = hinspiel(s);
-  if(!th && !tg && !hin) return null;
   var leer = {sp:0, s:0, n:0, k:0, gk:0};
+  // Kreisligen: der Verband veroeffentlicht VOR dem ersten Spieltag gar keine
+  // Tabelle (24.09.2026 geprueft). Hat dann noch keins der beiden Teams ein
+  // Ergebnis in dieser Liga, ist die Bilanz trotzdem bekannt: 0 Spiele.
+  // Pokal ausgenommen -- dort gibt es nie eine Tabelle.
+  var li = D.ligen[s.lk];
+  if(!th && !tg && !D.tabellen[s.sa + "|" + s.lnr] && li && li.ebene !== "PK" &&
+     !D.spiele.some(function(x){ return x.sa === s.sa && x.lnr === s.lnr && x.e &&
+        (x.h === s.h || x.g === s.h || x.h === s.g || x.g === s.g); })){
+    th = leer; tg = leer;
+  }
+  if(!th && !tg && !hin) return null;
   var gespielt = (th && th.sp > 0) || (tg && tg.sp > 0);
 
   var box = mk("div","vergleich");
