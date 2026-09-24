@@ -1399,7 +1399,6 @@ function spielOeffnen(s){
       a.appendChild(pf);
       zu.appendChild(a);
     });
-    if(zu.children.length) r.appendChild(zu);
 
     // Frueher stand hier ein Hinweis, dass noch keine Tabelle vorliegt. Raus
     // (Hendrik, 07.09.2026): Bei einem Pokal ist er schlicht falsch -- dort
@@ -1410,6 +1409,7 @@ function spielOeffnen(s){
     // Spiel, die Zahlen sind Beiwerk. Faellt weg, solange nichts gespielt ist.
     var v = vergleichKasten(s);
     if(v) r.appendChild(v);
+    if(zu.children.length) r.appendChild(zu);   // unter dem Direktvergleich (Hendrik 24.09.)
 
     blatt.appendChild(r);
   });
@@ -1508,6 +1508,7 @@ function filterBauen(){
     sa.appendChild(o);
   });
   sa.value = zustand.saison;
+  if(D.saisons.length < 2) sa.parentNode.style.display = "none";
   sa.addEventListener("change", function(){
     zustand.saison = sa.value;
     zustand.ziel = null;
