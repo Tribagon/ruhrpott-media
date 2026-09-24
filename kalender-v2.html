@@ -531,6 +531,17 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
   .maske>span,.sx-ein,[data-reveal]{animation:none!important;opacity:1!important;transform:none!important;transition:none!important}
 }
 
+/* Spielfenster: Sprung zur Mannschaft auf der Vereinsseite (neu 24.09.) */
+.zu-teams{display:flex;flex-direction:column;gap:10px}
+.zu-team{display:flex;align-items:center;gap:14px;min-height:56px;padding:10px 16px 10px 12px;border:1px solid var(--line-2);border-radius:14px;
+  background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .15s,background .15s}
+.zu-team:hover{border-color:var(--accent);background:var(--sunken)}
+.zu-team:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.zu-team img{width:34px;height:34px;object-fit:contain;flex:none}
+.zu-team span{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.zu-team b{font-weight:800;font-size:15px;line-height:1.25;overflow-wrap:anywhere}
+.zu-team small{font-size:13px;color:var(--muted)}
+.zu-team svg{width:18px;height:18px;flex:none;color:var(--accent)}
 /* =================== Kalender V2: Feinschliff nach DESIGN.md =================== */
 .wrap{max-width:1240px;padding:0 var(--rand) 0;gap:24px}
 .karte{border-radius:var(--r);box-shadow:var(--schatten)}
@@ -1368,6 +1379,27 @@ function spielOeffnen(s){
     zeile("Status", s.st);
     if(s.wertung) zeile("Hinweis", "Am grünen Tisch gewertet");
     r.appendChild(dl);
+
+    var zu = mk("div","zu-teams");
+    [["h","hv","ht"],["g","gv","gt"]].forEach(function(k){
+      var verein = s[k[1]]; if(!verein) return;
+      var tm = (D.teams || []).filter(function(x){ return x.id === s[k[2]]; })[0];
+      var laufend = s.sa === D.saison;          // die Vereinsseite zeigt nur die laufende Saison
+      var url = "vereine-v2.html?verein=" + encodeURIComponent(verein) +
+                (laufend ? "&liga=" + encodeURIComponent(s.lnr) + "&team=" + encodeURIComponent(s[k[0]]) : "");
+      var a = mk("a","zu-team"); a.href = url;
+      var info = (window.DOBASKET_VEREINE_INFO || {})[verein];
+      if(info && info.logo){ var im = document.createElement("img"); im.src = info.logo; im.alt = ""; a.appendChild(im); }
+      var tx = mk("span");
+      tx.appendChild(mk("b",null, verein));
+      tx.appendChild(mk("small",null, laufend && tm ? tm.label + " · zur Mannschaft" : "zur Vereinsseite"));
+      a.appendChild(tx);
+      var pf = document.createElementNS("http://www.w3.org/2000/svg","svg"); pf.setAttribute("aria-hidden","true");
+      var u = document.createElementNS("http://www.w3.org/2000/svg","use"); u.setAttribute("href","#i-pfeil"); pf.appendChild(u);
+      a.appendChild(pf);
+      zu.appendChild(a);
+    });
+    if(zu.children.length) r.appendChild(zu);
 
     // Frueher stand hier ein Hinweis, dass noch keine Tabelle vorliegt. Raus
     // (Hendrik, 07.09.2026): Bei einem Pokal ist er schlicht falsch -- dort

@@ -1004,6 +1004,22 @@ function pfadBauen(t){
 }
 
 // Klick auf eine Mannschaft: links ihre Spiele, rechts Tabelle bzw. Pokalweg.
+// Parameter VOR seiteBauen lesen: das schreibt die Adresse per replaceState auf ?verein= um.
+function teamAusUrl(such){
+  var q; try{ q=new URLSearchParams(such); }catch(e){ return; }
+  var liga=q.get("liga"), name=q.get("team"); if(!liga || !name) return;
+  var id=null;
+  D.spiele.some(function(s){
+    if(s.sa!==SA || s.lnr!==liga) return false;
+    if(s.h===name && s.ht){ id=s.ht; return true; }
+    if(s.g===name && s.gt){ id=s.gt; return true; }
+    return false;
+  });
+  var t=(D.teams||[]).filter(function(x){ return x.id===id && x.verein===aktuellerVerein; })[0];
+  if(!t) return;                                  // Mannschaft nicht (mehr) da: Vereinsseite reicht
+  var inf=teamInfo(t.id);
+  teamDetail(t, inf ? D.ligen[inf.lk] : null);
+}
 function teamDetail(t, li){
   el("td-team").textContent = aktuellerVerein;
   el("td-liga").textContent = li ? "· "+ligaLabel(li) : "";
@@ -1258,7 +1274,7 @@ function naheSuchen(){
   namen.forEach(function(n){ var o=mk("option",null,n); o.value=n; sel.appendChild(o); });
   var wunsch=null; try{ wunsch=new URLSearchParams(location.search).get("verein"); }catch(e){}
   sel.addEventListener("change",function(){ if(sel.value) seiteBauen(sel.value); else uebersichtBauen(namen); });
-  if(wunsch && namen.indexOf(wunsch)>=0){ sel.value=wunsch; seiteBauen(wunsch); }
+  if(wunsch && namen.indexOf(wunsch)>=0){ var such=location.search; sel.value=wunsch; seiteBauen(wunsch); teamAusUrl(such); }
   else { sel.value=""; uebersichtBauen(namen); }
 })();
 
