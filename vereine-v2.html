@@ -327,7 +327,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 [data-reveal].sichtbar{opacity:1;transform:none}
 
 .sx-fuss{background:var(--stage);color:var(--on-stage);padding:64px 0 30px;margin-top:clamp(56px,8vw,96px)}
-.sx-fuss-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.sx-fuss-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
 .sx-fuss .sx-marke{color:var(--on-stage)}
 .sx-fuss .sx-marke svg{height:auto;width:min(280px,100%)}
 .sx-fuss h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage-muted);margin:0 0 12px}
@@ -341,6 +341,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 .sx-fuss-insta svg{width:22px;height:22px}
 .sx-fuss-insta:hover{color:var(--accent)}
 @media (max-width:1024px){ .sx-links{display:none} .insta{margin-left:auto} .burger{display:inline-flex} }
+@media (max-width:1024px){ .sx-fuss-raster{grid-template-columns:1fr 1fr} }
 @media (max-width:760px){ .sx-fuss-raster{grid-template-columns:1fr} .sx-marke svg{height:38px} }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -635,6 +636,7 @@ a{color:var(--accent-ink)}
       </div>
       <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="startseite-vorschau.html#spieltag">Spieltag</a></li></ul></div>
       <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
+      <div><h4>Rechtliches</h4><ul><li><a href="impressum.html">Impressum</a></li><li><a href="https://www.dobasket.de/datenschutzerklarung" target="_blank" rel="noopener">Datenschutz</a></li><li><a href="startseite-vorschau.html#vorstand">Kontakt</a></li></ul></div>
     </div>
     <div class="sx-fuss-unten"><span id="fuss"></span><a href="startseite-vorschau.html" style="color:var(--accent);font-weight:700;text-decoration:none">Zur Startseite →</a></div>
   </div>

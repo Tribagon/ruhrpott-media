@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>dobasket Schiedsrichter</title>
-<meta name="description" content="Schiedsrichterwesen im Basketballkreis Dortmund: Ansprechpartner, Aus- und Fortbildung, Rookie-Schutz, Entgelte und Regeln.">
+<title>Impressum · dobasket</title>
+<meta name="description" content="Impressum des WBV-Kreis Dortmund e.V. (dobasket): Anbieter, Vertretung, Registereintrag und rechtliche Hinweise.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23ef5a00'/%3E%3C/svg%3E">
 <script>try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")document.documentElement.setAttribute("data-theme",g);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -206,142 +206,24 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
   .maske>span,.sx-ein,[data-reveal]{animation:none!important;opacity:1!important;transform:none!important;transition:none!important}
 }
 
-/* =================== Schiedsrichter: Seitenbausteine (DESIGN.md) =================== */
+/* =================== Impressum (DESIGN.md) =================== */
 [hidden]{display:none!important}
 h1,h2,h3,p{margin:0}
 .punkt{color:var(--accent)}
-.sr-hero{display:grid;grid-template-columns:1fr auto;gap:clamp(14px,4vw,64px);align-items:center}
-.sr-hero-text{display:flex;flex-direction:column;gap:18px;min-width:0}
-.sr-hero .sx-h1{font-size:clamp(30px,7.4vw,100px)}
-.sr-wappen{width:clamp(72px,19vw,230px);color:var(--ink)}
-.d-wappen{display:block;width:100%;height:auto;overflow:visible}
-.wappen-icon{color:var(--accent)}
-.sr-stats{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:10px;border-block:1px solid var(--line)}
-.sr-stat{display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:24px 28px 22px;border-left:1px solid var(--line)}
-.sr-stat:first-child{border-left:none;padding-left:0}
-.sr-stat b{font:700 clamp(56px,7vw,96px)/.95 var(--f-eng);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink)}
-.sr-stat b.sr-stat-wort{font:900 clamp(26px,3.2vw,44px)/1.02 var(--f-display);letter-spacing:-.03em}
-.sr-stat span{font-size:clamp(14.5px,1.3vw,16.5px);font-weight:600;color:var(--ink-2);max-width:32ch;line-height:1.4}
-.sr-abschnitt{padding:clamp(48px,7vw,96px) 0 0}
-.sr-kopf{display:flex;flex-direction:column;gap:16px;margin-bottom:36px;max-width:760px}
-.sr-kopf p{color:var(--ink-2);max-width:60ch}
-.karte{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--schatten);
-  transition:transform .22s var(--ease),border-color .22s,box-shadow .22s}
-.karte[data-spot]::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;
-  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(var(--accent-rgb),.12),transparent 60%)}
-.karte[data-spot]:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--schatten-hoch)}
-.karte[data-spot]:hover::before{opacity:1}
-.sr-amt{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink)}
-.sr-kontakt{display:grid;grid-template-columns:1.35fr 1fr;gap:24px}
-.sr-person{display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,32px);align-items:center;padding:clamp(22px,3vw,34px)}
-.sr-person-bild{width:clamp(76px,10vw,120px);color:var(--ink)}
-/* Platz fuer die Pfiff-Sprechblase (Easter Egg), sonst schneidet overflow:hidden sie ab */
-.sr-person{overflow:visible}
-.sr-person::before{border-radius:inherit}
-.sr-person-text{display:flex;flex-direction:column;gap:8px;min-width:0}
-.sr-person h3{font:900 clamp(26px,2.8vw,36px)/1.05 var(--f-display);letter-spacing:-.03em}
-.sr-person p{color:var(--ink-2);font-size:15.5px;max-width:48ch}
-.sr-person .link{align-self:flex-start;margin-top:6px;overflow-wrap:anywhere;min-height:44px}
-.sr-werben{background:var(--stage);color:var(--on-stage);border-color:var(--stage-2);padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:12px;justify-content:space-between}
-.sr-werben .sr-amt{color:var(--accent)}
-.sr-werben h3{font:900 clamp(28px,3vw,40px)/1.02 var(--f-display);letter-spacing:-.03em;margin:10px 0 12px}
-.sr-werben p{color:var(--on-stage-muted);font-size:15.5px}
-.sr-werben .btn{align-self:flex-start;margin-top:8px}
-.sr-karten{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.sr-karte{padding:28px 26px 26px;display:flex;flex-direction:column;gap:12px}
-.sr-karte-kopf{display:flex;justify-content:space-between;align-items:flex-start}
-.sr-icon{width:56px;height:56px;border-radius:15px;background:var(--accent-weich);color:var(--accent-ink);display:grid;place-items:center}
-.sr-icon svg{width:26px;height:26px}
-.sr-nr{font:700 40px/1 var(--f-eng);color:var(--line-2);font-variant-numeric:tabular-nums}
-.sr-karte h3{font-size:21px;font-weight:800;letter-spacing:-.015em;margin-top:6px}
-.sr-karte p{color:var(--ink-2);font-size:15.5px}
-.sr-buehne{background:var(--stage);color:var(--on-stage);margin-top:clamp(56px,8vw,112px);padding:clamp(56px,8vw,112px) 0;position:relative;overflow:hidden}
-.sr-buehne .eyebrow{color:var(--on-stage-muted)}
-.sr-buehne-inhalt{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(32px,5vw,72px);align-items:start}
-.sr-statement{font:900 clamp(32px,4.4vw,58px)/1.06 var(--f-display);letter-spacing:-.03em;margin:22px 0 18px;max-width:14ch}
-.sr-statement .akz{color:var(--accent)}
-.sr-buehne-text{color:var(--on-stage-muted);max-width:44ch;font-size:16px}
-.sr-regeln{list-style:none;margin:0;padding:0;counter-reset:regel;border-top:1px solid var(--stage-2)}
-.sr-regeln li{counter-increment:regel;display:grid;grid-template-columns:48px 1fr;gap:14px;padding:20px 0;border-bottom:1px solid var(--stage-2)}
-.sr-regeln li::before{content:counter(regel,decimal-leading-zero);font:700 22px/1.1 var(--f-eng);color:var(--accent)}
-.sr-regeln b{display:block;font-size:17px;font-weight:800;margin-bottom:4px}
-.sr-regeln span{color:var(--on-stage-muted);font-size:15px}
-.sr-tarife{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-block:1px solid var(--line)}
-.sr-tarif{padding:28px 24px 26px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
-.sr-tarif:first-child{border-left:none;padding-left:0}
-.sr-tarif b{font:700 clamp(48px,5.4vw,72px)/1 var(--f-eng);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.sr-tarif b small{font-size:.5em;margin-left:4px;color:var(--accent)}
-.sr-tarif strong{font-size:16px;font-weight:800;margin-top:6px}
-.sr-tarif span{color:var(--muted);font-size:14.5px;line-height:1.45}
-.sr-quelle{margin-top:14px;font-size:13px;color:var(--muted)}
-.sr-unten{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;align-items:start}
-.sr-doks{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--schatten)}
-.sr-dok{display:grid;grid-template-columns:40px 1fr 44px;gap:18px;align-items:center;padding:16px 22px;border-top:1px solid var(--line);color:inherit;text-decoration:none;transition:background .15s}
-.sr-dok:first-child{border-top:none}
-.sr-dok:hover{background:var(--sunken)}
-.sr-dok:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
-.sr-dok-icon{width:36px;height:44px;color:var(--ink-2)}
-.sr-dok-typ{font:800 9px/1 var(--f-ui);fill:var(--accent-ink);letter-spacing:.04em}
-.sr-dok-titel{font-weight:700;font-size:16px;line-height:1.3;min-width:0}
-.sr-dok-titel small{display:block;font-weight:500;font-size:13px;color:var(--muted);margin-top:2px}
-.sr-dok-los{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-2);transition:background .15s,color .15s,border-color .15s}
-.sr-dok-los svg{width:18px;height:18px;transform:rotate(-45deg)}
-.sr-dok:hover .sr-dok-los{background:var(--accent-cta);color:var(--on-accent);border-color:var(--accent-cta)}
-.sr-news{padding:26px 24px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit}
-.sr-news h3{font-size:20px;font-weight:800;letter-spacing:-.015em}
-.sr-news p{color:var(--ink-2);font-size:15px}
-.sr-news .weiter{margin-top:6px;font-weight:700;font-size:14.5px;color:var(--accent-ink);display:inline-flex;align-items:center;gap:8px}
-.sr-news .weiter svg{width:16px;height:16px;transition:transform .2s var(--ease)}
-.sr-news:hover .weiter svg{transform:translateX(4px)}
-.sr-news:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-@media (max-width:1024px){
-  .sr-kontakt,.sr-buehne-inhalt,.sr-unten{grid-template-columns:1fr}
-  .sr-karten{grid-template-columns:1fr 1fr}
-  .sr-tarife{grid-template-columns:1fr 1fr}
-  .sr-tarif:nth-child(odd){border-left:none;padding-left:0}
-  .sr-tarif:nth-child(n+3){border-top:1px solid var(--line)}
-}
-@media (max-width:640px){
-  .sr-stats{grid-template-columns:1fr}
-  .sr-stat{border-left:none;padding:20px 0}
-  .sr-stat+.sr-stat{border-top:1px solid var(--line)}
-  .sr-karten{grid-template-columns:1fr}
-  .sr-person{grid-template-columns:1fr}
-  .sr-person-bild{width:76px}
-  .sr-tarife{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .sr-tarif{padding:22px 14px 20px}
-  .sr-tarif strong{hyphens:auto;-webkit-hyphens:auto;overflow-wrap:anywhere}
-  .sr-dok{grid-template-columns:34px 1fr 44px;gap:14px;padding:14px 16px}
-}
-/* PFIFF */
-/* Easter Egg: dreimal schnell auf die Pfeife -> sie pfeift. Lautlos, als Comic. */
-.pfiff{position:relative}
-.pfiff-knopf{position:absolute;left:36%;top:22%;width:52%;height:50%;margin:0;padding:0;border:0;background:none;border-radius:50%;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.pfiff-knopf:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:50%}
-.pfiff .wappen-icon{transform-box:fill-box;transform-origin:40% 60%}
-.pfiff.tipp .wappen-icon{animation:pfiff-tipp .22s var(--ease)}
-.pfiff.pfeift .wappen-icon{animation:pfiff-wackeln .11s linear 14}
-@keyframes pfiff-tipp{50%{transform:scale(.88)}}
-@keyframes pfiff-wackeln{0%,100%{transform:none}25%{transform:rotate(-8deg) translateX(-3%)}75%{transform:rotate(8deg) translateX(3%)}}
-.pfiff-blase{position:absolute;left:42%;top:8%;z-index:5;transform:translate(-50%,-100%) rotate(-6deg);pointer-events:none;white-space:nowrap;
-  background:var(--accent-cta);color:var(--on-accent);font:900 clamp(15px,1.5vw,21px)/1 var(--f-display);letter-spacing:-.01em;
-  padding:8px 13px 9px;border-radius:14px;box-shadow:var(--schatten-hoch);animation:pfiff-blase 1.9s var(--ease) forwards}
-.pfiff-blase::after{content:"";position:absolute;left:28%;bottom:-8px;border:8px solid transparent;border-bottom:0;border-top-color:var(--accent-cta)}
-@keyframes pfiff-blase{0%{opacity:0;transform:translate(-50%,-70%) rotate(-6deg) scale(.4)}
-  12%{opacity:1;transform:translate(-50%,-100%) rotate(-6deg) scale(1.1)}22%{transform:translate(-50%,-100%) rotate(-6deg) scale(1)}
-  80%{opacity:1;transform:translate(-50%,-100%) rotate(-6deg)}100%{opacity:0;transform:translate(-50%,-118%) rotate(-6deg)}}
-.pfiff-wellen{position:absolute;left:64%;top:4%;width:34%;height:34%;overflow:visible;color:var(--accent);pointer-events:none}
-.pfiff-wellen path{fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;opacity:0;transform-box:view-box;transform-origin:0% 100%;
-  animation:pfiff-welle .55s ease-out 3}
-.pfiff-wellen path:nth-child(2){animation-delay:.12s}
-.pfiff-wellen path:nth-child(3){animation-delay:.24s}
-@keyframes pfiff-welle{0%{opacity:0;transform:scale(.55)}30%{opacity:1}100%{opacity:0;transform:scale(1.15)}}
-@media (prefers-reduced-motion:reduce){
-  .pfiff .wappen-icon,.pfiff-wellen path{animation:none!important}
-  .pfiff-wellen path{opacity:1}
-  .pfiff-blase{animation:none!important;opacity:1}
-}
-/* /PFIFF */
+.im-abschnitt{padding:clamp(40px,6vw,80px) 0 clamp(56px,8vw,110px)}
+.im-raster{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.im-karte{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--schatten);padding:clamp(22px,3vw,30px);
+  display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.55;color:var(--ink-2)}
+.im-karte h2{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:6px}
+.im-karte h2.im-zweit{margin-top:14px}
+.im-karte b{color:var(--ink);font-size:18px}
+.im-karte .link{align-self:flex-start;overflow-wrap:anywhere}
+.im-recht{margin-top:clamp(40px,6vw,72px);max-width:78ch;display:flex;flex-direction:column;gap:14px;font-size:15.5px;line-height:1.65;color:var(--ink-2)}
+.im-recht h2{font:900 clamp(24px,2.4vw,32px)/1.1 var(--f-display);letter-spacing:-.025em;color:var(--ink);margin-bottom:4px}
+.im-recht h3{font-size:17px;font-weight:800;color:var(--ink);margin-top:14px}
+.im-quelle{font-size:13.5px;color:var(--muted)}
+@media (max-width:960px){ .im-raster{grid-template-columns:1fr} }
+
 </style>
 </head>
 <body>
@@ -378,7 +260,7 @@ h1,h2,h3,p{margin:0}
           <div class="drop-liste" data-vereine-liste></div>
           <a class="drop-alle" href="vereine-v2.html">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
         </div>
-      </div><a href="schiedsrichter-v2.html" aria-current="page">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+      </div><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
     </nav>
     <a class="rund-knopf insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener" aria-label="dobasket auf Instagram"><svg><use href="#i-insta"/></svg></a>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
@@ -391,7 +273,7 @@ h1,h2,h3,p{margin:0}
     <span class="eyebrow"><span>Menü</span></span>
     <button class="rund-knopf" type="button" id="menue-zu" aria-label="Menü schließen"><svg><use href="#i-zu"/></svg></button>
   </div>
-  <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><a href="vereine-v2.html">Vereine</a><a href="schiedsrichter-v2.html" aria-current="page">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+  <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><a href="vereine-v2.html">Vereine</a><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
 </div>
 
 <main>
@@ -400,131 +282,53 @@ h1,h2,h3,p{margin:0}
   <script>(function(s){function f(){var r=s.getBoundingClientRect();if(r.width)s.classList.toggle("ist-hoch",Math.min(r.width/750,r.height/850)>Math.min(r.height/750,r.width/850));}f();if(window.ResizeObserver)new ResizeObserver(f).observe(s);})(document.currentScript.previousElementSibling);</script>
   <div class="sx-inhalt">
     <a class="sx-zurueck sx-ein" style="--d:0s" href="startseite-vorschau.html"><svg aria-hidden="true"><use href="#i-pfeil"/></svg>Zur Startseite</a>
-    <div class="sr-hero">
-      <div class="sr-hero-text">
-        <span class="eyebrow sx-ein" style="--d:.05s"><span>Schiedsrichterwesen · Basketballkreis Dortmund</span></span>
-        <h1 class="sx-h1"><span class="maske"><span>Schiedsrichter<span class="punkt">.</span></span></span></h1>
-        <p class="lead sx-ein" style="--d:.4s">68 Schiedsrichterinnen und Schiedsrichter pfeifen für den Kreis – von der Kreis- bis zur Regionalliga.</p>
+    <span class="eyebrow sx-ein" style="--d:.05s"><span>Angaben gemäß § 5 DDG</span></span>
+    <h1 class="sx-h1"><span class="maske"><span>Impressum<span class="punkt">.</span></span></span></h1>
+  </div>
+</section>
+
+<section class="im-abschnitt">
+  <div class="sx-inhalt">
+    <div class="im-raster" data-reveal>
+      <div class="im-karte">
+        <h2>Anbieter</h2>
+        <b>WBV-Kreis Dortmund e.V. (Dobasket)</b>
+        <span>An der Halde 5<br>44329 Dortmund</span>
+        <a class="link" href="mailto:vorsitz1@dobasket.de">vorsitz1@dobasket.de</a>
       </div>
-      <div class="sr-wappen sx-ein" style="--d:.3s"><svg class="d-wappen " viewBox="215 200 830 870" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M 246.0,230.0 L 243.0,235.0 L 243.0,1044.0 L 244.0,1046.0 L 248.0,1049.0 L 651.0,1049.0 L 652.0,1048.0 L 660.0,1049.0 L 661.0,1048.0 L 683.0,1048.0 L 684.0,1047.0 L 696.0,1047.0 L 697.0,1046.0 L 704.0,1046.0 L 705.0,1045.0 L 713.0,1045.0 L 714.0,1044.0 L 720.0,1044.0 L 721.0,1043.0 L 726.0,1043.0 L 727.0,1042.0 L 746.0,1039.0 L 762.0,1035.0 L 766.0,1033.0 L 769.0,1033.0 L 773.0,1031.0 L 776.0,1031.0 L 822.0,1013.0 L 852.0,997.0 L 872.0,984.0 L 888.0,972.0 L 910.0,953.0 L 939.0,921.0 L 963.0,886.0 L 980.0,854.0 L 980.0,852.0 L 986.0,841.0 L 993.0,821.0 L 995.0,818.0 L 1001.0,800.0 L 1002.0,793.0 L 1004.0,789.0 L 1010.0,765.0 L 1010.0,761.0 L 1014.0,745.0 L 1014.0,740.0 L 1015.0,739.0 L 1015.0,734.0 L 1016.0,733.0 L 1016.0,726.0 L 1017.0,725.0 L 1018.0,710.0 L 1019.0,709.0 L 1019.0,698.0 L 1020.0,697.0 L 1020.0,640.0 L 1019.0,639.0 L 1019.0,628.0 L 1018.0,627.0 L 1018.0,618.0 L 1017.0,617.0 L 1015.0,594.0 L 1014.0,593.0 L 1013.0,580.0 L 1012.0,579.0 L 1012.0,574.0 L 1011.0,573.0 L 1011.0,568.0 L 1010.0,567.0 L 1010.0,562.0 L 1009.0,561.0 L 1006.0,542.0 L 1004.0,537.0 L 1004.0,533.0 L 997.0,505.0 L 985.0,467.0 L 971.0,432.0 L 954.0,398.0 L 934.0,367.0 L 908.0,335.0 L 890.0,317.0 L 871.0,301.0 L 850.0,286.0 L 830.0,274.0 L 802.0,260.0 L 800.0,260.0 L 785.0,253.0 L 777.0,251.0 L 774.0,249.0 L 765.0,247.0 L 758.0,244.0 L 751.0,243.0 L 747.0,241.0 L 725.0,237.0 L 724.0,236.0 L 719.0,236.0 L 718.0,235.0 L 696.0,233.0 L 695.0,232.0 L 686.0,232.0 L 685.0,231.0 L 671.0,231.0 L 670.0,230.0 Z  M 292.0,959.0 L 323.0,944.0 L 358.0,932.0 L 384.0,926.0 L 389.0,926.0 L 390.0,925.0 L 426.0,923.0 L 427.0,924.0 L 442.0,924.0 L 443.0,925.0 L 459.0,926.0 L 460.0,927.0 L 470.0,928.0 L 490.0,933.0 L 534.0,948.0 L 590.0,971.0 L 621.0,981.0 L 642.0,985.0 L 643.0,986.0 L 655.0,987.0 L 656.0,988.0 L 664.0,988.0 L 665.0,989.0 L 704.0,990.0 L 705.0,989.0 L 731.0,988.0 L 732.0,987.0 L 751.0,985.0 L 756.0,983.0 L 758.0,983.0 L 759.0,985.0 L 749.0,989.0 L 746.0,989.0 L 739.0,992.0 L 736.0,992.0 L 732.0,994.0 L 716.0,998.0 L 701.0,1000.0 L 700.0,1001.0 L 694.0,1001.0 L 693.0,1002.0 L 687.0,1002.0 L 686.0,1003.0 L 668.0,1004.0 L 667.0,1005.0 L 293.0,1005.0 L 292.0,1004.0 Z  M 293.0,275.0 L 667.0,275.0 L 668.0,276.0 L 678.0,276.0 L 679.0,277.0 L 686.0,277.0 L 687.0,278.0 L 706.0,280.0 L 732.0,286.0 L 757.0,294.0 L 772.0,300.0 L 783.0,306.0 L 785.0,306.0 L 802.0,315.0 L 818.0,325.0 L 842.0,343.0 L 873.0,373.0 L 898.0,405.0 L 913.0,430.0 L 932.0,470.0 L 945.0,507.0 L 945.0,510.0 L 948.0,517.0 L 956.0,549.0 L 956.0,553.0 L 960.0,569.0 L 960.0,574.0 L 961.0,575.0 L 961.0,580.0 L 962.0,581.0 L 962.0,586.0 L 963.0,587.0 L 963.0,593.0 L 964.0,594.0 L 965.0,610.0 L 966.0,611.0 L 966.0,622.0 L 967.0,623.0 L 967.0,640.0 L 968.0,641.0 L 968.0,674.0 L 967.0,675.0 L 967.0,693.0 L 966.0,694.0 L 965.0,714.0 L 964.0,715.0 L 961.0,739.0 L 952.0,776.0 L 941.0,809.0 L 922.0,849.0 L 913.0,864.0 L 893.0,892.0 L 882.0,905.0 L 868.0,919.0 L 840.0,935.0 L 838.0,935.0 L 821.0,943.0 L 800.0,950.0 L 774.0,956.0 L 762.0,957.0 L 761.0,958.0 L 753.0,958.0 L 752.0,959.0 L 709.0,959.0 L 708.0,958.0 L 698.0,958.0 L 697.0,957.0 L 683.0,956.0 L 682.0,955.0 L 667.0,953.0 L 647.0,948.0 L 604.0,933.0 L 575.0,920.0 L 530.0,902.0 L 509.0,895.0 L 506.0,895.0 L 502.0,893.0 L 482.0,888.0 L 472.0,887.0 L 466.0,885.0 L 460.0,885.0 L 459.0,884.0 L 453.0,884.0 L 452.0,883.0 L 444.0,883.0 L 443.0,882.0 L 397.0,882.0 L 396.0,883.0 L 387.0,883.0 L 386.0,884.0 L 367.0,886.0 L 339.0,893.0 L 319.0,900.0 L 294.0,912.0 L 292.0,911.0 L 292.0,276.0 Z  M 635.0,924.0 L 657.0,931.0 L 678.0,935.0 L 679.0,936.0 L 683.0,936.0 L 684.0,937.0 L 690.0,937.0 L 691.0,938.0 L 713.0,939.0 L 714.0,940.0 L 737.0,940.0 L 738.0,939.0 L 757.0,938.0 L 758.0,937.0 L 770.0,936.0 L 796.0,930.0 L 823.0,921.0 L 838.0,914.0 L 840.0,914.0 L 868.0,900.0 L 879.0,892.0 L 875.0,886.0 L 869.0,880.0 L 858.0,874.0 L 850.0,872.0 L 835.0,873.0 L 829.0,875.0 L 819.0,881.0 L 811.0,864.0 L 804.0,855.0 L 793.0,845.0 L 787.0,841.0 L 772.0,834.0 L 764.0,832.0 L 759.0,832.0 L 758.0,831.0 L 744.0,831.0 L 725.0,836.0 L 717.0,840.0 L 707.0,847.0 L 699.0,855.0 L 694.0,862.0 L 689.0,872.0 L 687.0,881.0 L 685.0,884.0 L 671.0,884.0 L 659.0,888.0 L 650.0,894.0 L 642.0,903.0 L 637.0,913.0 Z  M 423.0,710.0 L 418.0,716.0 L 418.0,863.0 L 436.0,863.0 L 436.0,716.0 L 431.0,710.0 Z  M 423.0,304.0 L 420.0,306.0 L 418.0,310.0 L 418.0,398.0 L 417.0,399.0 L 405.0,399.0 L 400.0,402.0 L 397.0,407.0 L 397.0,463.0 L 399.0,467.0 L 404.0,471.0 L 417.0,471.0 L 418.0,472.0 L 418.0,479.0 L 417.0,480.0 L 392.0,480.0 L 388.0,482.0 L 384.0,488.0 L 384.0,534.0 L 386.0,538.0 L 390.0,541.0 L 393.0,542.0 L 403.0,542.0 L 404.0,543.0 L 403.0,569.0 L 402.0,570.0 L 402.0,582.0 L 401.0,583.0 L 401.0,594.0 L 400.0,595.0 L 400.0,605.0 L 399.0,606.0 L 399.0,617.0 L 398.0,618.0 L 398.0,630.0 L 397.0,631.0 L 394.0,678.0 L 393.0,679.0 L 393.0,689.0 L 392.0,690.0 L 392.0,701.0 L 391.0,702.0 L 391.0,712.0 L 390.0,713.0 L 386.0,777.0 L 383.0,778.0 L 380.0,775.0 L 367.0,770.0 L 350.0,770.0 L 344.0,772.0 L 334.0,778.0 L 324.0,791.0 L 321.0,801.0 L 321.0,812.0 L 320.0,813.0 L 308.0,814.0 L 300.0,819.0 L 298.0,823.0 L 298.0,887.0 L 299.0,888.0 L 317.0,880.0 L 355.0,869.0 L 376.0,866.0 L 377.0,865.0 L 399.0,863.0 L 400.0,860.0 L 400.0,847.0 L 401.0,846.0 L 401.0,833.0 L 402.0,832.0 L 402.0,820.0 L 403.0,819.0 L 403.0,808.0 L 404.0,807.0 L 404.0,795.0 L 405.0,794.0 L 405.0,782.0 L 406.0,781.0 L 406.0,770.0 L 407.0,769.0 L 407.0,756.0 L 408.0,755.0 L 408.0,743.0 L 409.0,742.0 L 412.0,690.0 L 413.0,689.0 L 413.0,678.0 L 414.0,677.0 L 414.0,665.0 L 415.0,664.0 L 415.0,650.0 L 416.0,649.0 L 417.0,620.0 L 418.0,619.0 L 418.0,605.0 L 419.0,604.0 L 420.0,580.0 L 421.0,579.0 L 421.0,568.0 L 422.0,567.0 L 422.0,556.0 L 423.0,555.0 L 423.0,543.0 L 424.0,542.0 L 429.0,542.0 L 431.0,544.0 L 431.0,557.0 L 432.0,558.0 L 434.0,597.0 L 435.0,598.0 L 435.0,612.0 L 436.0,613.0 L 437.0,639.0 L 438.0,640.0 L 438.0,654.0 L 439.0,655.0 L 439.0,668.0 L 440.0,669.0 L 440.0,683.0 L 441.0,684.0 L 441.0,694.0 L 442.0,695.0 L 444.0,734.0 L 445.0,735.0 L 447.0,771.0 L 448.0,772.0 L 448.0,783.0 L 449.0,784.0 L 449.0,795.0 L 450.0,796.0 L 450.0,809.0 L 451.0,810.0 L 451.0,822.0 L 452.0,823.0 L 452.0,835.0 L 453.0,836.0 L 453.0,848.0 L 454.0,849.0 L 454.0,863.0 L 455.0,864.0 L 468.0,865.0 L 469.0,866.0 L 488.0,869.0 L 504.0,873.0 L 508.0,875.0 L 511.0,875.0 L 524.0,880.0 L 527.0,880.0 L 530.0,882.0 L 559.0,892.0 L 564.0,895.0 L 566.0,895.0 L 571.0,898.0 L 573.0,898.0 L 578.0,901.0 L 608.0,913.0 L 612.0,904.0 L 612.0,889.0 L 611.0,885.0 L 605.0,874.0 L 597.0,866.0 L 588.0,861.0 L 576.0,858.0 L 568.0,858.0 L 565.0,847.0 L 559.0,836.0 L 548.0,825.0 L 542.0,821.0 L 526.0,815.0 L 519.0,815.0 L 518.0,814.0 L 505.0,815.0 L 486.0,823.0 L 475.0,833.0 L 472.0,831.0 L 472.0,817.0 L 471.0,816.0 L 471.0,804.0 L 470.0,803.0 L 470.0,792.0 L 469.0,791.0 L 469.0,780.0 L 468.0,779.0 L 468.0,768.0 L 467.0,767.0 L 467.0,756.0 L 466.0,755.0 L 464.0,716.0 L 463.0,715.0 L 460.0,668.0 L 459.0,667.0 L 456.0,622.0 L 455.0,621.0 L 455.0,610.0 L 454.0,609.0 L 454.0,598.0 L 453.0,597.0 L 453.0,586.0 L 452.0,585.0 L 450.0,551.0 L 449.0,550.0 L 449.0,543.0 L 450.0,542.0 L 460.0,542.0 L 463.0,541.0 L 469.0,535.0 L 470.0,532.0 L 470.0,490.0 L 468.0,485.0 L 462.0,480.0 L 437.0,480.0 L 436.0,479.0 L 436.0,472.0 L 437.0,471.0 L 448.0,471.0 L 452.0,469.0 L 456.0,464.0 L 456.0,406.0 L 452.0,401.0 L 448.0,399.0 L 437.0,399.0 L 436.0,398.0 L 436.0,310.0 L 431.0,304.0 Z  M 402.0,499.0 L 403.0,498.0 L 450.0,498.0 L 451.0,499.0 L 451.0,523.0 L 450.0,524.0 L 403.0,524.0 L 402.0,523.0 Z  M 418.0,417.0 L 435.0,417.0 L 437.0,419.0 L 437.0,452.0 L 435.0,454.0 L 418.0,454.0 L 417.0,453.0 L 417.0,418.0 Z"/><use href="#i-pfeife" x="529.5" y="413.5" width="400" height="400" class="wappen-icon"/></svg></div>
-    </div>
-    <div class="sr-stats sx-ein" style="--d:.55s">
-      <div class="sr-stat"><b>68</b><span>Schiedsrichterinnen und Schiedsrichter im Kader des Kreises</span></div>
-      <div class="sr-stat"><b class="sr-stat-wort">Kreisliga<br>bis Regionalliga</b><span>So weit reichen die Einsätze unserer Schiris</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="sr-abschnitt" id="kontakt">
-  <div class="sx-inhalt">
-    <div class="sr-kopf" data-reveal>
-      <span class="eyebrow"><span>Ansprechpartner</span></span>
-      <h2 class="h2">Dein Draht zum Schiriwesen<span class="punkt">.</span></h2>
-    </div>
-    <div class="sr-kontakt">
-      <article class="karte sr-person" data-spot data-reveal>
-        <div class="sr-person-bild"><svg class="d-wappen " viewBox="215 200 830 870" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M 246.0,230.0 L 243.0,235.0 L 243.0,1044.0 L 244.0,1046.0 L 248.0,1049.0 L 651.0,1049.0 L 652.0,1048.0 L 660.0,1049.0 L 661.0,1048.0 L 683.0,1048.0 L 684.0,1047.0 L 696.0,1047.0 L 697.0,1046.0 L 704.0,1046.0 L 705.0,1045.0 L 713.0,1045.0 L 714.0,1044.0 L 720.0,1044.0 L 721.0,1043.0 L 726.0,1043.0 L 727.0,1042.0 L 746.0,1039.0 L 762.0,1035.0 L 766.0,1033.0 L 769.0,1033.0 L 773.0,1031.0 L 776.0,1031.0 L 822.0,1013.0 L 852.0,997.0 L 872.0,984.0 L 888.0,972.0 L 910.0,953.0 L 939.0,921.0 L 963.0,886.0 L 980.0,854.0 L 980.0,852.0 L 986.0,841.0 L 993.0,821.0 L 995.0,818.0 L 1001.0,800.0 L 1002.0,793.0 L 1004.0,789.0 L 1010.0,765.0 L 1010.0,761.0 L 1014.0,745.0 L 1014.0,740.0 L 1015.0,739.0 L 1015.0,734.0 L 1016.0,733.0 L 1016.0,726.0 L 1017.0,725.0 L 1018.0,710.0 L 1019.0,709.0 L 1019.0,698.0 L 1020.0,697.0 L 1020.0,640.0 L 1019.0,639.0 L 1019.0,628.0 L 1018.0,627.0 L 1018.0,618.0 L 1017.0,617.0 L 1015.0,594.0 L 1014.0,593.0 L 1013.0,580.0 L 1012.0,579.0 L 1012.0,574.0 L 1011.0,573.0 L 1011.0,568.0 L 1010.0,567.0 L 1010.0,562.0 L 1009.0,561.0 L 1006.0,542.0 L 1004.0,537.0 L 1004.0,533.0 L 997.0,505.0 L 985.0,467.0 L 971.0,432.0 L 954.0,398.0 L 934.0,367.0 L 908.0,335.0 L 890.0,317.0 L 871.0,301.0 L 850.0,286.0 L 830.0,274.0 L 802.0,260.0 L 800.0,260.0 L 785.0,253.0 L 777.0,251.0 L 774.0,249.0 L 765.0,247.0 L 758.0,244.0 L 751.0,243.0 L 747.0,241.0 L 725.0,237.0 L 724.0,236.0 L 719.0,236.0 L 718.0,235.0 L 696.0,233.0 L 695.0,232.0 L 686.0,232.0 L 685.0,231.0 L 671.0,231.0 L 670.0,230.0 Z  M 292.0,959.0 L 323.0,944.0 L 358.0,932.0 L 384.0,926.0 L 389.0,926.0 L 390.0,925.0 L 426.0,923.0 L 427.0,924.0 L 442.0,924.0 L 443.0,925.0 L 459.0,926.0 L 460.0,927.0 L 470.0,928.0 L 490.0,933.0 L 534.0,948.0 L 590.0,971.0 L 621.0,981.0 L 642.0,985.0 L 643.0,986.0 L 655.0,987.0 L 656.0,988.0 L 664.0,988.0 L 665.0,989.0 L 704.0,990.0 L 705.0,989.0 L 731.0,988.0 L 732.0,987.0 L 751.0,985.0 L 756.0,983.0 L 758.0,983.0 L 759.0,985.0 L 749.0,989.0 L 746.0,989.0 L 739.0,992.0 L 736.0,992.0 L 732.0,994.0 L 716.0,998.0 L 701.0,1000.0 L 700.0,1001.0 L 694.0,1001.0 L 693.0,1002.0 L 687.0,1002.0 L 686.0,1003.0 L 668.0,1004.0 L 667.0,1005.0 L 293.0,1005.0 L 292.0,1004.0 Z  M 293.0,275.0 L 667.0,275.0 L 668.0,276.0 L 678.0,276.0 L 679.0,277.0 L 686.0,277.0 L 687.0,278.0 L 706.0,280.0 L 732.0,286.0 L 757.0,294.0 L 772.0,300.0 L 783.0,306.0 L 785.0,306.0 L 802.0,315.0 L 818.0,325.0 L 842.0,343.0 L 873.0,373.0 L 898.0,405.0 L 913.0,430.0 L 932.0,470.0 L 945.0,507.0 L 945.0,510.0 L 948.0,517.0 L 956.0,549.0 L 956.0,553.0 L 960.0,569.0 L 960.0,574.0 L 961.0,575.0 L 961.0,580.0 L 962.0,581.0 L 962.0,586.0 L 963.0,587.0 L 963.0,593.0 L 964.0,594.0 L 965.0,610.0 L 966.0,611.0 L 966.0,622.0 L 967.0,623.0 L 967.0,640.0 L 968.0,641.0 L 968.0,674.0 L 967.0,675.0 L 967.0,693.0 L 966.0,694.0 L 965.0,714.0 L 964.0,715.0 L 961.0,739.0 L 952.0,776.0 L 941.0,809.0 L 922.0,849.0 L 913.0,864.0 L 893.0,892.0 L 882.0,905.0 L 868.0,919.0 L 840.0,935.0 L 838.0,935.0 L 821.0,943.0 L 800.0,950.0 L 774.0,956.0 L 762.0,957.0 L 761.0,958.0 L 753.0,958.0 L 752.0,959.0 L 709.0,959.0 L 708.0,958.0 L 698.0,958.0 L 697.0,957.0 L 683.0,956.0 L 682.0,955.0 L 667.0,953.0 L 647.0,948.0 L 604.0,933.0 L 575.0,920.0 L 530.0,902.0 L 509.0,895.0 L 506.0,895.0 L 502.0,893.0 L 482.0,888.0 L 472.0,887.0 L 466.0,885.0 L 460.0,885.0 L 459.0,884.0 L 453.0,884.0 L 452.0,883.0 L 444.0,883.0 L 443.0,882.0 L 397.0,882.0 L 396.0,883.0 L 387.0,883.0 L 386.0,884.0 L 367.0,886.0 L 339.0,893.0 L 319.0,900.0 L 294.0,912.0 L 292.0,911.0 L 292.0,276.0 Z  M 635.0,924.0 L 657.0,931.0 L 678.0,935.0 L 679.0,936.0 L 683.0,936.0 L 684.0,937.0 L 690.0,937.0 L 691.0,938.0 L 713.0,939.0 L 714.0,940.0 L 737.0,940.0 L 738.0,939.0 L 757.0,938.0 L 758.0,937.0 L 770.0,936.0 L 796.0,930.0 L 823.0,921.0 L 838.0,914.0 L 840.0,914.0 L 868.0,900.0 L 879.0,892.0 L 875.0,886.0 L 869.0,880.0 L 858.0,874.0 L 850.0,872.0 L 835.0,873.0 L 829.0,875.0 L 819.0,881.0 L 811.0,864.0 L 804.0,855.0 L 793.0,845.0 L 787.0,841.0 L 772.0,834.0 L 764.0,832.0 L 759.0,832.0 L 758.0,831.0 L 744.0,831.0 L 725.0,836.0 L 717.0,840.0 L 707.0,847.0 L 699.0,855.0 L 694.0,862.0 L 689.0,872.0 L 687.0,881.0 L 685.0,884.0 L 671.0,884.0 L 659.0,888.0 L 650.0,894.0 L 642.0,903.0 L 637.0,913.0 Z  M 423.0,710.0 L 418.0,716.0 L 418.0,863.0 L 436.0,863.0 L 436.0,716.0 L 431.0,710.0 Z  M 423.0,304.0 L 420.0,306.0 L 418.0,310.0 L 418.0,398.0 L 417.0,399.0 L 405.0,399.0 L 400.0,402.0 L 397.0,407.0 L 397.0,463.0 L 399.0,467.0 L 404.0,471.0 L 417.0,471.0 L 418.0,472.0 L 418.0,479.0 L 417.0,480.0 L 392.0,480.0 L 388.0,482.0 L 384.0,488.0 L 384.0,534.0 L 386.0,538.0 L 390.0,541.0 L 393.0,542.0 L 403.0,542.0 L 404.0,543.0 L 403.0,569.0 L 402.0,570.0 L 402.0,582.0 L 401.0,583.0 L 401.0,594.0 L 400.0,595.0 L 400.0,605.0 L 399.0,606.0 L 399.0,617.0 L 398.0,618.0 L 398.0,630.0 L 397.0,631.0 L 394.0,678.0 L 393.0,679.0 L 393.0,689.0 L 392.0,690.0 L 392.0,701.0 L 391.0,702.0 L 391.0,712.0 L 390.0,713.0 L 386.0,777.0 L 383.0,778.0 L 380.0,775.0 L 367.0,770.0 L 350.0,770.0 L 344.0,772.0 L 334.0,778.0 L 324.0,791.0 L 321.0,801.0 L 321.0,812.0 L 320.0,813.0 L 308.0,814.0 L 300.0,819.0 L 298.0,823.0 L 298.0,887.0 L 299.0,888.0 L 317.0,880.0 L 355.0,869.0 L 376.0,866.0 L 377.0,865.0 L 399.0,863.0 L 400.0,860.0 L 400.0,847.0 L 401.0,846.0 L 401.0,833.0 L 402.0,832.0 L 402.0,820.0 L 403.0,819.0 L 403.0,808.0 L 404.0,807.0 L 404.0,795.0 L 405.0,794.0 L 405.0,782.0 L 406.0,781.0 L 406.0,770.0 L 407.0,769.0 L 407.0,756.0 L 408.0,755.0 L 408.0,743.0 L 409.0,742.0 L 412.0,690.0 L 413.0,689.0 L 413.0,678.0 L 414.0,677.0 L 414.0,665.0 L 415.0,664.0 L 415.0,650.0 L 416.0,649.0 L 417.0,620.0 L 418.0,619.0 L 418.0,605.0 L 419.0,604.0 L 420.0,580.0 L 421.0,579.0 L 421.0,568.0 L 422.0,567.0 L 422.0,556.0 L 423.0,555.0 L 423.0,543.0 L 424.0,542.0 L 429.0,542.0 L 431.0,544.0 L 431.0,557.0 L 432.0,558.0 L 434.0,597.0 L 435.0,598.0 L 435.0,612.0 L 436.0,613.0 L 437.0,639.0 L 438.0,640.0 L 438.0,654.0 L 439.0,655.0 L 439.0,668.0 L 440.0,669.0 L 440.0,683.0 L 441.0,684.0 L 441.0,694.0 L 442.0,695.0 L 444.0,734.0 L 445.0,735.0 L 447.0,771.0 L 448.0,772.0 L 448.0,783.0 L 449.0,784.0 L 449.0,795.0 L 450.0,796.0 L 450.0,809.0 L 451.0,810.0 L 451.0,822.0 L 452.0,823.0 L 452.0,835.0 L 453.0,836.0 L 453.0,848.0 L 454.0,849.0 L 454.0,863.0 L 455.0,864.0 L 468.0,865.0 L 469.0,866.0 L 488.0,869.0 L 504.0,873.0 L 508.0,875.0 L 511.0,875.0 L 524.0,880.0 L 527.0,880.0 L 530.0,882.0 L 559.0,892.0 L 564.0,895.0 L 566.0,895.0 L 571.0,898.0 L 573.0,898.0 L 578.0,901.0 L 608.0,913.0 L 612.0,904.0 L 612.0,889.0 L 611.0,885.0 L 605.0,874.0 L 597.0,866.0 L 588.0,861.0 L 576.0,858.0 L 568.0,858.0 L 565.0,847.0 L 559.0,836.0 L 548.0,825.0 L 542.0,821.0 L 526.0,815.0 L 519.0,815.0 L 518.0,814.0 L 505.0,815.0 L 486.0,823.0 L 475.0,833.0 L 472.0,831.0 L 472.0,817.0 L 471.0,816.0 L 471.0,804.0 L 470.0,803.0 L 470.0,792.0 L 469.0,791.0 L 469.0,780.0 L 468.0,779.0 L 468.0,768.0 L 467.0,767.0 L 467.0,756.0 L 466.0,755.0 L 464.0,716.0 L 463.0,715.0 L 460.0,668.0 L 459.0,667.0 L 456.0,622.0 L 455.0,621.0 L 455.0,610.0 L 454.0,609.0 L 454.0,598.0 L 453.0,597.0 L 453.0,586.0 L 452.0,585.0 L 450.0,551.0 L 449.0,550.0 L 449.0,543.0 L 450.0,542.0 L 460.0,542.0 L 463.0,541.0 L 469.0,535.0 L 470.0,532.0 L 470.0,490.0 L 468.0,485.0 L 462.0,480.0 L 437.0,480.0 L 436.0,479.0 L 436.0,472.0 L 437.0,471.0 L 448.0,471.0 L 452.0,469.0 L 456.0,464.0 L 456.0,406.0 L 452.0,401.0 L 448.0,399.0 L 437.0,399.0 L 436.0,398.0 L 436.0,310.0 L 431.0,304.0 Z  M 402.0,499.0 L 403.0,498.0 L 450.0,498.0 L 451.0,499.0 L 451.0,523.0 L 450.0,524.0 L 403.0,524.0 L 402.0,523.0 Z  M 418.0,417.0 L 435.0,417.0 L 437.0,419.0 L 437.0,452.0 L 435.0,454.0 L 418.0,454.0 L 417.0,453.0 L 417.0,418.0 Z"/><use href="#i-pfeife" x="529.5" y="413.5" width="400" height="400" class="wappen-icon"/></svg></div>
-        <div class="sr-person-text">
-          <span class="sr-amt">Schiedsrichterwart</span>
-          <h3>Milenko Aleksic</h3>
-          <p>Federführend in der Schiedsrichterausbildung: Aus- und Weiterbildung, Be- und Umbesetzung, Betreuung.</p>
-          <a class="link" href="mailto:schiedsrichter@dobasket.de"><svg aria-hidden="true"><use href="#i-mail"/></svg>schiedsrichter@dobasket.de</a>
-        </div>
-      </article>
-      <article class="karte sr-werben" data-reveal>
-        <div>
-          <span class="sr-amt">Schiri werden</span>
-          <h3>Du willst pfeifen?</h3>
-          <p>Die Ausbildung neuer Schiedsrichter:innen organisiert der DBB. Wie du einsteigst, erfährst du beim Schiedsrichterwart.</p>
-        </div>
-        <a class="btn btn-primaer" href="mailto:schiedsrichter@dobasket.de?subject=Schiedsrichter%20werden">Jetzt melden <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="sr-abschnitt" id="ausbildung">
-  <div class="sx-inhalt">
-    <div class="sr-kopf" data-reveal>
-      <span class="eyebrow"><span>Aus- und Fortbildung</span></span>
-      <h2 class="h2">Immer besser pfeifen<span class="punkt">.</span></h2>
-      <p>Stetig wird versucht, die Qualität durch individuelles Coaching zu verbessern.</p>
-    </div>
-    <div class="sr-karten">
-      <article class="karte sr-karte" data-spot data-reveal style="--i:0">
-        <div class="sr-karte-kopf"><span class="sr-icon"><svg aria-hidden="true"><use href="#i-team"/></svg></span><span class="sr-nr">01</span></div>
-        <h3>Ausbildung</h3>
-        <p>Die Ausbildung neuer Schiedsrichter:innen organisiert federführend der Deutsche Basketball Bund. Weitere Infos gibt es beim Schiedsrichterwart.</p>
-      </article>
-      <article class="karte sr-karte" data-spot data-reveal style="--i:1">
-        <div class="sr-karte-kopf"><span class="sr-icon"><svg aria-hidden="true"><use href="#i-kalender"/></svg></span><span class="sr-nr">02</span></div>
-        <h3>Fortbildung</h3>
-        <p>Kostenlose Fortbildungen finden in der Sommerpause zwischen den Saisons statt. Wer die Regeltermine nicht wahrnehmen konnte, kann bei Bedarf eine kostenpflichtige Notfortbildung besuchen.</p>
-      </article>
-      <article class="karte sr-karte" data-spot data-reveal style="--i:2">
-        <div class="sr-karte-kopf"><span class="sr-icon"><svg aria-hidden="true"><use href="#i-pfeife"/></svg></span><span class="sr-nr">03</span></div>
-        <h3>Tutorenprogramm</h3>
-        <p>Im Tutorenprogramm werden junge und talentierte Schiedsrichter:innen für die WBV-Ligen gecoacht und geschult.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="sr-buehne" id="rookies">
-  <div class="sx-inhalt sr-buehne-inhalt">
-    <div data-reveal>
-      <span class="eyebrow"><span>Rookie-Schutz</span></span>
-      <p class="sr-statement">Rookies pfeifen bei uns unter <span class="akz">besonderem Schutz.</span></p>
-      <p class="sr-buehne-text">Junge und neu ausgebildete Schiedsrichter:innen genießen im Kreisligaspiel besonderen Schutz. Das ist durch die FIBA-Regeln abgedeckt und keine neue Regelung.</p>
-    </div>
-    <ol class="sr-regeln" data-reveal>
-      <li><div><b>Keine negativen Ansprachen</b><span>Kein Spielbeteiligter spricht Rookies in negativer Form an – es sei denn, die Kommunikation geht vom Schiedsrichter selbst aus.</span></div></li>
-      <li><div><b>Nur über den 1. Schiedsrichter</b><span>Notwendige Kommunikation zwischen Trainern und Spielern einerseits und dem SR-Team andererseits erfolgt nur über den 1. Schiedsrichter.</span></div></li>
-      <li><div><b>Technisches Foul bei Verstoß</b><span>Ein Verstoß gegen diese Regel kann und soll mit einem Technischen Foul bestraft werden.</span></div></li>
-      <li><div><b>Freiwillig</b><span>Das Konzept gilt auf freiwilliger Basis: Jeder Rookie kann auf den Schutz verzichten, auch im Laufe der Saison.</span></div></li>
-    </ol>
-  </div>
-</section>
-
-<section class="sr-abschnitt" id="entgelte">
-  <div class="sx-inhalt">
-    <div class="sr-kopf" data-reveal>
-      <span class="eyebrow"><span>Entgelte</span></span>
-      <h2 class="h2">Was ein Einsatz bringt<span class="punkt">.</span></h2>
-    </div>
-    <div class="sr-tarife" data-reveal>
-      <div class="sr-tarif"><b>23<small>€</small></b><strong>Schiedsrichtergebühr</strong><span>je Spiel</span></div>
-      <div class="sr-tarif"><b>7<small>€</small></b><strong>Fahrtkostenpauschale</strong><span>zusätzlich zur Gebühr</span></div>
-      <div class="sr-tarif"><b>+5<small>€</small></b><strong>Verpflegungsgeld</strong><span>bei zwei Spielen hintereinander – auch bei zufälligen Spielkopplungen</span></div>
-      <div class="sr-tarif"><b>35<small>€</small></b><strong>Allein geleitet</strong><span>Schiedsrichtergebühr, wenn ein Schiri das Spiel allein leitet</span></div>
-    </div>
-    <p class="sr-quelle">Gemäß Kreisschiedsrichterordnung, Stand 19.09.2024.</p>
-  </div>
-</section>
-
-<section class="sr-abschnitt" id="links">
-  <div class="sx-inhalt">
-    <div class="sr-kopf" data-reveal>
-      <span class="eyebrow"><span>Regeln &amp; Formulare</span></span>
-      <h2 class="h2">Zum Nachschlagen<span class="punkt">.</span></h2>
-    </div>
-    <div class="sr-unten">
-      <div class="sr-doks" data-reveal>
-        <a class="sr-dok" href="https://www.basketball-bund.de/dbb/downloads/?filter_type=all" target="_blank" rel="noopener"><svg class="sr-dok-icon" viewBox="0 0 40 48" aria-hidden="true"><path d="M6 2h20l10 10v32a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M26 2v10h10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><text x="20" y="36" text-anchor="middle" class="sr-dok-typ">WEB</text></svg><span class="sr-dok-titel">DBB-Regeln<small>Offizielle Regeln und Downloads · basketball-bund.de</small></span><span class="sr-dok-los" aria-hidden="true"><svg><use href="#i-pfeil"/></svg></span></a>
-        <a class="sr-dok" href="https://cdn.prod.website-files.com/5c72fa332d05cefb7398ce65/5d9b3733574a7d0c8731b49d_mini_regeln_2019_wbv.pdf" target="_blank" rel="noopener"><svg class="sr-dok-icon" viewBox="0 0 40 48" aria-hidden="true"><path d="M6 2h20l10 10v32a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M26 2v10h10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><text x="20" y="36" text-anchor="middle" class="sr-dok-typ">PDF</text></svg><span class="sr-dok-titel">Miniregeln WBV<small>Regeln für den Minibasketball</small></span><span class="sr-dok-los" aria-hidden="true"><svg><use href="#i-pfeil"/></svg></span></a>
-        <a class="sr-dok" href="https://www.basketball.nrw/images/Amtliches/Formulare/WBV-Spielberichtsblock_Minis_WBV.pdf" target="_blank" rel="noopener"><svg class="sr-dok-icon" viewBox="0 0 40 48" aria-hidden="true"><path d="M6 2h20l10 10v32a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M26 2v10h10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><text x="20" y="36" text-anchor="middle" class="sr-dok-typ">PDF</text></svg><span class="sr-dok-titel">Mini-Spielberichtsbogen WBV<small>Spielberichtsblock für Minis</small></span><span class="sr-dok-los" aria-hidden="true"><svg><use href="#i-pfeil"/></svg></span></a>
+      <div class="im-karte">
+        <h2>Vertreten durch</h2>
+        <b>Dirk Weber</b>
+        <span>1. Vorsitzender</span>
+        <h2 class="im-zweit">Registereintrag</h2>
+        <span>Eingetragen im Vereinsregister<br>Registergericht: Amtsgericht Dortmund<br>Registernummer: VR 5650</span>
       </div>
-      <a class="karte sr-news" href="startseite-vorschau.html#news" data-spot data-reveal>
-        <span class="sr-amt">Aktuelles</span>
-        <h3>Termine &amp; Infos</h3>
-        <p>Aktuelle Termine und Informationen rund um das Schiedsrichterwesen im Kreis Dortmund kündigen wir in den News an.</p>
-        <span class="weiter">Zu den News <svg aria-hidden="true"><use href="#i-pfeil"/></svg></span>
-      </a>
+      <div class="im-karte">
+        <h2>Verantwortlich für den Inhalt</h2>
+        <span>gemäß § 18 Abs. 2 MStV</span>
+        <b>Michael Mazur</b>
+        <span>WBV-Kreis Dortmund e.V.<br>An der Halde 5, 44329 Dortmund</span>
+        <a class="link" href="mailto:vorsitz2@dobasket.de">vorsitz2@dobasket.de</a>
+      </div>
+    </div>
+
+    <div class="im-recht" data-reveal>
+      <h2>Disclaimer – rechtliche Hinweise<span class="punkt">.</span></h2>
+      <h3>§ 1 Warnhinweis zu Inhalten</h3>
+      <p>Die kostenlosen und frei zugänglichen Inhalte dieser Webseite wurden mit größtmöglicher Sorgfalt erstellt. Der Anbieter dieser Webseite übernimmt jedoch keine Gewähr für die Richtigkeit und Aktualität der bereitgestellten kostenlosen und frei zugänglichen journalistischen Ratgeber und Nachrichten. Namentlich gekennzeichnete Beiträge geben die Meinung des jeweiligen Autors und nicht immer die Meinung des Anbieters wieder. Allein durch den Aufruf der kostenlosen und frei zugänglichen Inhalte kommt keinerlei Vertragsverhältnis zwischen dem Nutzer und dem Anbieter zustande, insoweit fehlt es am Rechtsbindungswillen des Anbieters.</p>
+      <h3>§ 2 Externe Links</h3>
+      <p>Diese Website enthält Verknüpfungen zu Websites Dritter („externe Links“). Diese Websites unterliegen der Haftung der jeweiligen Betreiber. Der Anbieter hat bei der erstmaligen Verknüpfung der externen Links die fremden Inhalte daraufhin überprüft, ob etwaige Rechtsverstöße bestehen. Zu dem Zeitpunkt waren keine Rechtsverstöße ersichtlich. Der Anbieter hat keinerlei Einfluss auf die aktuelle und zukünftige Gestaltung und auf die Inhalte der verknüpften Seiten. Das Setzen von externen Links bedeutet nicht, dass sich der Anbieter die hinter dem Verweis oder Link liegenden Inhalte zu Eigen macht. Eine ständige Kontrolle der externen Links ist für den Anbieter ohne konkrete Hinweise auf Rechtsverstöße nicht zumutbar. Bei Kenntnis von Rechtsverstößen werden jedoch derartige externe Links unverzüglich gelöscht.</p>
+      <h3>§ 3 Urheber- und Leistungsschutzrechte</h3>
+      <p>Die auf dieser Website veröffentlichten Inhalte unterliegen dem deutschen Urheber- und Leistungsschutzrecht. Jede vom deutschen Urheber- und Leistungsschutzrecht nicht zugelassene Verwertung bedarf der vorherigen schriftlichen Zustimmung des Anbieters oder jeweiligen Rechteinhabers. Dies gilt insbesondere für Vervielfältigung, Bearbeitung, Übersetzung, Einspeicherung, Verarbeitung bzw. Wiedergabe von Inhalten in Datenbanken oder anderen elektronischen Medien und Systemen. Inhalte und Rechte Dritter sind dabei als solche gekennzeichnet. Die unerlaubte Vervielfältigung oder Weitergabe einzelner Inhalte oder kompletter Seiten ist nicht gestattet und strafbar. Lediglich die Herstellung von Kopien und Downloads für den persönlichen, privaten und nicht kommerziellen Gebrauch ist erlaubt.</p>
+      <p>Die Darstellung dieser Website in fremden Frames ist nur mit schriftlicher Erlaubnis zulässig.</p>
+      <h3>§ 4 Besondere Nutzungsbedingungen</h3>
+      <p>Soweit besondere Bedingungen für einzelne Nutzungen dieser Website von den vorgenannten Paragraphen abweichen, wird an entsprechender Stelle ausdrücklich darauf hingewiesen. In diesem Falle gelten im jeweiligen Einzelfall die besonderen Nutzungsbedingungen.</p>
+      <p class="im-quelle">Quelle: Impressum-Vorlage von JuraForum.de</p>
     </div>
   </div>
 </section>
-
 </main>
+
 <footer class="sx-fuss">
   <div class="sx-inhalt">
     <div class="sx-fuss-raster">
@@ -537,7 +341,7 @@ h1,h2,h3,p{margin:0}
       <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
       <div><h4>Rechtliches</h4><ul><li><a href="impressum.html">Impressum</a></li><li><a href="https://www.dobasket.de/datenschutzerklarung" target="_blank" rel="noopener">Datenschutz</a></li><li><a href="startseite-vorschau.html#vorstand">Kontakt</a></li></ul></div>
     </div>
-    <div class="sx-fuss-unten"><span>Inhalte übernommen von dobasket.de/schiedsrichter</span><a href="startseite-vorschau.html" style="color:var(--accent);font-weight:700;text-decoration:none">Zur Startseite →</a></div>
+    <div class="sx-fuss-unten"><span>Impressum</span><a href="startseite-vorschau.html" style="color:var(--accent);font-weight:700;text-decoration:none">Zur Startseite →</a></div>
   </div>
 </footer>
 
@@ -615,48 +419,6 @@ if(!ruhig && matchMedia("(hover: hover) and (pointer: fine)").matches){
     var r = k.getBoundingClientRect(); k.style.setProperty("--mx", (letztes.clientX - r.left) + "px"); k.style.setProperty("--my", (letztes.clientY - r.top) + "px");
   }); } }, {passive:true});
 }
-})();
-</script>
-<script>
-(function(){
-"use strict";
-/* PFIFF */
-// Easter Egg: dreimal schnell (innerhalb 1,2 s) auf die Pfeife -> sie pfeift.
-// Kein Ton -- die Pfeife wackelt, Schallwellen gehen raus, Comic-Blase "TRRRIIIT!".
-function pfiffVerdrahten(wrap){
-  var NS = "http://www.w3.org/2000/svg";
-  wrap.classList.add("pfiff");
-  var knopf = document.createElement("button");
-  knopf.type = "button"; knopf.className = "pfiff-knopf"; knopf.setAttribute("aria-label","Pfeife");
-  wrap.appendChild(knopf);
-  var klicks = [], laeuft = false;
-  knopf.addEventListener("click", function(){
-    var jetzt = Date.now();
-    klicks = klicks.filter(function(z){ return jetzt - z < 1200; });
-    klicks.push(jetzt);
-    wrap.classList.remove("tipp"); void wrap.offsetWidth; wrap.classList.add("tipp");
-    if(klicks.length < 3 || laeuft) return;
-    klicks = []; laeuft = true;
-    var wellen = document.createElementNS(NS,"svg");
-    wellen.setAttribute("class","pfiff-wellen"); wellen.setAttribute("viewBox","0 0 40 40"); wellen.setAttribute("aria-hidden","true");
-    [11,20,29].forEach(function(r){
-      var b = document.createElementNS(NS,"path");
-      b.setAttribute("d","M0 " + (40 - r) + "A" + r + " " + r + " 0 0 1 " + r + " 40");
-      wellen.appendChild(b);
-    });
-    var blase = document.createElement("span");
-    blase.className = "pfiff-blase"; blase.setAttribute("role","status"); blase.textContent = "TRRRIIIT!";
-    wrap.appendChild(wellen); wrap.appendChild(blase); wrap.classList.add("pfeift");
-    setTimeout(function(){
-      wrap.classList.remove("pfeift");
-      if(wellen.parentNode) wellen.parentNode.removeChild(wellen);
-      if(blase.parentNode) blase.parentNode.removeChild(blase);
-      laeuft = false;
-    }, 1900);
-  });
-}
-/* /PFIFF */
-document.querySelectorAll(".sr-wappen,.sr-person-bild").forEach(pfiffVerdrahten);
 })();
 </script>
 
