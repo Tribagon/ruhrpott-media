@@ -746,7 +746,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
         <p style="margin:16px 0 0;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
         <a class="sx-fuss-insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-insta"/></svg>@dobasket</a>
       </div>
-      <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="startseite-vorschau.html#spieltag">Spieltag</a></li></ul></div>
+      <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="hallen-v2.html">Hallen</a></li><li><a href="startseite-vorschau.html#spieltag">Spieltag</a></li></ul></div>
       <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
       <div><h4>Rechtliches</h4><ul><li><a href="impressum.html">Impressum</a></li><li><a href="https://www.dobasket.de/datenschutzerklarung" target="_blank" rel="noopener">Datenschutz</a></li><li><a href="startseite-vorschau.html#vorstand">Kontakt</a></li></ul></div>
     </div>
@@ -756,6 +756,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 
 <script src="vereine-info.js"></script>
 <script src="kalender/daten.js"></script>
+<script src="hallen.js"></script>
 <script>
 
 (function(){
@@ -1405,6 +1406,9 @@ function spielOeffnen(s){
     }
     zeile("Liga", l.name);
     zeile("Halle", s.halle, "steht noch nicht fest");
+    var hEintrag = s.halle && window.DOBASKET_HALLEN && DOBASKET_HALLEN.finde(s.halle, s.adr);
+    if(hEintrag){ var hDd = dl.lastChild.querySelector("dd"), hA = mk("a","link", s.halle);
+      hA.href = "hallen-v2.html?halle=" + encodeURIComponent(hEintrag.id); hDd.textContent = ""; hDd.appendChild(hA); }
     zeile("Adresse", s.adr, "nicht hinterlegt");
     zeile("Anwurf", s.t ? s.t + " Uhr" : null, "noch nicht angesetzt");
     zeile("Status", s.st);

@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hallen · dobasket</title>
+<meta name="description" content="Hallenverzeichnis des Basketballkreises Dortmund: alle Sporthallen mit Adresse, Route, Heimteams und nächstem Spiel.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%23ef5a00'/%3E%3C/svg%3E">
+<script>try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")document.documentElement.setAttribute("data-theme",g);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+:root{
+  color-scheme:light;
+  --ground:#f8f8f6; --surface:#ffffff; --sunken:#eef1ef;
+  --stage:#151616; --stage-2:#202324;
+  --line:#e4e7e4; --line-2:#d2d7d3;
+  --ink:#1f1f1f; --ink-2:#3a4650; --muted:#6a7480;
+  --on-stage:#f4f2ee; --on-stage-muted:#a3a9ad;
+  --accent:#ef5a00; --accent-hover:#d94f00; --accent-weich:#ffe7db; --accent-ink:#b8420a;
+  --accent-cta:#cc4d00; --accent-cta-hover:#b84400; --on-accent:#ffffff;
+  --ink-rgb:31,31,31; --accent-rgb:239,90,0; --ground-rgb:248,248,246;
+  --herren:#2b3a44; --damen:#007fa3;
+  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200; --u10:#2a5bd7; --rolli:#0e7c6b;
+  --schatten:0 1px 2px rgba(var(--ink-rgb),.06), 0 8px 24px -12px rgba(var(--ink-rgb),.18);
+  --schatten-hoch:0 2px 4px rgba(var(--ink-rgb),.06), 0 24px 48px -20px rgba(var(--ink-rgb),.28);
+  --f-display:"Archivo","Segoe UI",system-ui,sans-serif;
+  --f-ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-eng:"Archivo Narrow","Archivo",system-ui,sans-serif;
+  --f-hand:"Caveat","Segoe Print",cursive;
+  --r:18px;
+  --rand:clamp(16px,4vw,40px);
+  --abschnitt:clamp(72px,10vw,128px);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#14181b; --surface:#1d2226; --sunken:#262c31;
+    --stage:#0c0e0f; --stage-2:#171a1c;
+    --line:#2c343a; --line-2:#3b444b;
+    --ink:#f1f2ef; --ink-2:#c6ccd0; --muted:#8b959c;
+    --accent:#ff7d3f; --accent-hover:#ff9258; --accent-weich:#3a1f10; --accent-ink:#ffb184;
+    --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
+    --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
+    --herren:#b9c4cb; --damen:#35a9cc;
+    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff; --rolli:#4cc9b0;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#14181b; --surface:#1d2226; --sunken:#262c31;
+  --stage:#0c0e0f; --stage-2:#171a1c;
+  --line:#2c343a; --line-2:#3b444b;
+  --ink:#f1f2ef; --ink-2:#c6ccd0; --muted:#8b959c;
+  --accent:#ff7d3f; --accent-hover:#ff9258; --accent-weich:#3a1f10; --accent-ink:#ffb184;
+  --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
+  --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
+  --herren:#b9c4cb; --damen:#35a9cc;
+  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff; --rolli:#4cc9b0;
+}
+/* Seiten-Tokens der Unterseiten (Kalender/Vereine) */
+:root{--gruen:#39b54a;--orange:#f47b20;--on-heat:#ffffff;--rot:#c62828}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--gruen:#5cc274;--orange:#ff9247;--rot:#ff7b7b}}
+:root[data-theme="dark"]{--gruen:#5cc274;--orange:#ff9247;--rot:#ff7b7b}
+
+/* ---------- Typo-Bausteine ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.eyebrow::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--accent)}
+.h2{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,4.6vw,58px);line-height:1;letter-spacing:-.03em}
+.lead{font-size:clamp(18px,1.6vw,21px);font-weight:500;line-height:1.5;color:var(--ink-2);max-width:40ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;
+  font:800 16px/1 var(--f-ui);letter-spacing:-.005em;text-decoration:none;cursor:pointer;border:2px solid transparent;
+  transition:background .18s,color .18s,border-color .18s,transform .18s var(--ease)}
+.btn-primaer{background:var(--accent-cta);color:var(--on-accent)}
+.btn-primaer:hover{background:var(--accent-cta-hover)}
+.btn-sekundaer{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-sekundaer:hover{background:var(--ink);color:var(--ground)}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:999px}
+.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.btn svg{width:18px;height:18px;transition:transform .18s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.magnet{will-change:transform}
+.link{color:var(--ink);font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 2px no-repeat;transition:background-size .25s var(--ease);padding:4px 0}
+.link:hover,.link:focus-visible{background-size:100% 2px}
+.link svg{width:16px;height:16px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;
+  font:700 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;background:var(--sunken);color:var(--ink-2);white-space:nowrap}
+.tag-akzent{background:var(--accent-weich);color:var(--accent-ink)}
+.tag-platzhalter{border:1px dashed var(--line-2);background:transparent;color:var(--muted)}
+button.tag{min-height:44px;padding:0 18px;font-size:12px;transition:background .15s,color .15s}
+button.tag:hover{background:var(--line)}
+button.tag[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+button.tag:focus-visible{border-radius:999px}
+
+.rund-knopf{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;
+  border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);flex:none;transition:background .15s,color .15s,border-color .15s}
+.rund-knopf:hover{background:var(--sunken);color:var(--ink);border-color:var(--accent)}
+.rund-knopf:focus-visible{border-radius:999px}
+.rund-knopf svg{width:19px;height:19px}
+.burger{display:none;margin-left:auto}
+.insta{text-decoration:none}
+.menue{position:fixed;inset:0;z-index:70;background:var(--ground);padding:22px var(--rand);display:flex;flex-direction:column;gap:8px;
+  opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .2s,transform .2s var(--ease),visibility 0s .2s}
+.menue.offen{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .2s var(--ease)}
+.menue-kopf{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.menue a{font:900 34px/1.15 var(--f-display);letter-spacing:-.03em;text-decoration:none;color:var(--ink);padding:8px 0;border-bottom:1px solid var(--line)}
+.menue a:hover{color:var(--accent-ink)}
+/* Vereine-Dropdown (Hover + Tastatur ueber :focus-within) */
+.drop{position:relative}
+.drop-link svg{display:inline-block;width:14px;height:14px;margin-left:4px;vertical-align:-2px;transition:transform .2s var(--ease)}
+.drop:hover .drop-link svg,.drop:focus-within .drop-link svg{transform:rotate(180deg)}
+.drop-panel{position:absolute;top:100%;left:50%;z-index:65;width:min(580px,92vw);margin-top:10px;padding:12px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--schatten-hoch);opacity:0;visibility:hidden;transform:translate(-50%,8px);
+  transition:opacity .18s,transform .18s var(--ease),visibility 0s .18s}
+.drop-panel::before{content:"";position:absolute;left:0;right:0;top:-16px;height:16px}
+.drop:hover .drop-panel,.drop:focus-within .drop-panel{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .18s,transform .18s var(--ease)}
+.drop-kopf{padding:4px 10px 10px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.drop-liste{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.drop-panel a{display:flex!important;align-items:center;gap:11px;min-height:48px;padding:7px 10px!important;border-radius:12px!important;
+  color:var(--ink)!important;font-size:14.5px!important;font-weight:600;text-decoration:none;box-shadow:none!important;background:transparent}
+.drop-panel a:hover,.drop-panel a:focus-visible{background:var(--sunken)!important}
+.drop-panel a::after{content:none!important}
+.drop-mono{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--accent-weich);color:var(--accent-ink);
+  font:900 11px/1 var(--f-display);letter-spacing:-.02em}
+.drop-mono.mit-logo{background:transparent}
+.drop-mono img{width:100%;height:100%;object-fit:contain}
+.drop-name{min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.drop-name small{color:var(--muted);font-size:12px;font-weight:500}
+.drop-alle{justify-content:center;margin-top:8px;border-top:1px solid var(--line);border-radius:0 0 12px 12px!important;color:var(--accent-ink)!important;font-weight:700!important}
+.drop-alle svg{width:16px;height:16px}
+
+
+/* =================== dobasket Shell (DESIGN.md) =================== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);font-size:15.5px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+.sx-inhalt{max-width:1240px;margin:0 auto;padding:0 var(--rand)}
+.sx-nav{position:sticky;top:0;z-index:60;transition:background .25s,box-shadow .25s}
+.sx-nav.gescrollt{background:rgba(var(--ground-rgb),.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.sx-nav-innen{display:flex;align-items:center;gap:20px;height:76px;transition:height .25s var(--ease)}
+.sx-nav.gescrollt .sx-nav-innen{height:64px}
+.sx-marke{display:block;color:var(--ink);border-radius:8px;flex:none}
+.sx-marke svg{display:block;height:44px;width:auto;transition:height .25s var(--ease)}
+.sx-nav.gescrollt .sx-marke svg{height:38px}
+.sx-links{display:flex;align-items:center;gap:2px;margin-left:auto}
+.sx-links a{color:var(--ink-2);font-weight:600;font-size:15px;text-decoration:none;padding:10px 13px;border-radius:999px;transition:background .15s,color .15s}
+.sx-links a:hover{color:var(--ink);background:var(--sunken)}
+.sx-links a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent);border-radius:0}
+.sx-links a:focus-visible{border-radius:999px}
+.rund-knopf svg{display:block}
+.burger{display:none}
+
+.sx-kopf{position:relative;overflow:hidden;isolation:isolate;padding:clamp(24px,4vw,56px) 0 clamp(32px,4vw,52px)}
+.sx-linien{position:absolute;inset:clamp(10px,1.6vw,24px);z-index:-1;width:calc(100% - 2*clamp(10px,1.6vw,24px));height:calc(100% - 2*clamp(10px,1.6vw,24px));color:var(--line-2);opacity:.5}
+.sx-linien *{vector-effect:non-scaling-stroke}
+.sx-linien .feld-hoch,.sx-linien.ist-hoch .feld-quer{display:none}
+.sx-linien.ist-hoch .feld-hoch{display:inline}
+.sx-kopf .sx-inhalt{display:flex;flex-direction:column;gap:18px}
+.sx-zurueck{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px 0 12px;margin-bottom:4px;
+  border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:700;font-size:14.5px;
+  text-decoration:none;transition:border-color .15s,background .15s}
+.sx-zurueck svg{width:18px;height:18px;transform:scaleX(-1);color:var(--accent);transition:transform .2s var(--ease)}
+.sx-zurueck:hover{border-color:var(--ink);background:var(--sunken)}
+.sx-zurueck:hover svg{transform:scaleX(-1) translateX(4px)}
+.sx-zurueck:focus-visible{border-radius:999px}
+.sx-h1{font-family:var(--f-display);font-weight:900;font-size:clamp(46px,7vw,100px);line-height:.95;letter-spacing:-.035em;margin:0}
+.sx-h1 .punkt,.sx-punkt::after{color:var(--accent)}
+.sx-punkt::after{content:"."}
+.maske{display:block;overflow:hidden;padding:0 .04em .07em 0;margin-bottom:-.07em;white-space:nowrap}
+.maske>span{display:block;transform:translateY(105%);animation:sx-hoch .95s var(--ease) forwards}
+@keyframes sx-hoch{to{transform:none}}
+.sx-ein{opacity:0;transform:translateY(14px);animation:sx-ein .7s var(--d,.35s) var(--ease) forwards}
+@keyframes sx-ein{to{opacity:1;transform:none}}
+.sx-stats{display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:6px;border-top:1px solid var(--line);padding-top:18px}
+.sx-stats span{font-size:14px;color:var(--muted);font-weight:600}
+.sx-stats b{display:block;font:700 clamp(30px,3.4vw,44px)/1 var(--f-eng);color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+[data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+[data-reveal].sichtbar{opacity:1;transform:none}
+
+.sx-fuss{background:var(--stage);color:var(--on-stage);padding:64px 0 30px;margin-top:clamp(56px,8vw,96px)}
+.sx-fuss-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+.sx-fuss .sx-marke{color:var(--on-stage)}
+.sx-fuss .sx-marke svg{height:auto;width:min(280px,100%)}
+.sx-fuss h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage-muted);margin:0 0 12px}
+.sx-fuss ul{list-style:none;margin:0;padding:0}
+.sx-fuss ul a{color:var(--on-stage);text-decoration:none;display:inline-block;padding:8px 0;opacity:.85;font-weight:500;transition:opacity .15s,color .15s}
+.sx-fuss ul a:hover{opacity:1;color:var(--accent)}
+.sx-fuss-unten{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--stage-2);font-size:13px;color:var(--on-stage-muted)}
+
+.insta{text-decoration:none}
+.sx-fuss-insta{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:14px;color:var(--on-stage);font-weight:700;text-decoration:none;transition:color .15s}
+.sx-fuss-insta svg{width:22px;height:22px}
+.sx-fuss-insta:hover{color:var(--accent)}
+@media (max-width:1024px){ .sx-links{display:none} .insta{margin-left:auto} .burger{display:inline-flex} }
+@media (max-width:1024px){ .sx-fuss-raster{grid-template-columns:1fr 1fr} }
+@media (max-width:760px){ .sx-fuss-raster{grid-template-columns:1fr} .sx-marke svg{height:38px} }
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .maske>span,.sx-ein,[data-reveal]{animation:none!important;opacity:1!important;transform:none!important;transition:none!important}
+}
+
+/* =================== Vereinskarte (Uebersicht) =================== */
+.v-karte-box{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--schatten)}
+.v-karte{height:clamp(380px,58vh,580px);background:var(--sunken);z-index:0}
+.v-karte-leiste{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 18px;border-top:1px solid var(--line)}
+.v-nahe{display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:0 18px 0 14px;border-radius:999px;border:0;cursor:pointer;
+  background:var(--accent-cta);color:var(--on-accent);font:800 14.5px/1 var(--f-ui);transition:background .15s,transform .15s var(--ease)}
+.v-nahe:hover{background:var(--accent-cta-hover)}
+.v-nahe:active{transform:scale(.97)}
+.v-nahe:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.v-nahe svg{width:18px;height:18px}
+.v-nahe[aria-busy="true"]{opacity:.7;pointer-events:none}
+.v-nahe-status{font-size:14px;color:var(--ink-2)}
+.v-nahe-status b{color:var(--ink)}
+.v-ueb-dist{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--accent-weich);color:var(--accent-ink);font:700 11.5px/1.4 var(--f-eng)}
+/* Marker: rundes Badge mit Logo bzw. Kuerzel; Hover/Fokus vergroessert */
+/* Stilisierte Karte ohne Kacheln: Flaechen/Linien kommen als Vektoren (Farben per JS aus den Tokens) */
+.v-karte.leaflet-container{background:var(--sunken);font-family:var(--f-ui)}
+.k-bezirk{background:none;border:0;pointer-events:none}
+.k-bezirk span{position:absolute;left:0;top:0;transform:translate(-50%,-50%);white-space:nowrap;transition:opacity .2s;
+  font:700 10.5px/1 var(--f-ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.v-karte.klein .k-bezirk span{font-size:7.5px;letter-spacing:.1em}
+.k-mark{background:none;border:0;pointer-events:none;color:var(--ink-2)}
+.k-mark svg{display:block;width:100%;height:100%}
+.k-mark span{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:2px;white-space:nowrap;
+  font:600 10px/1 var(--f-ui);letter-spacing:.04em;color:var(--muted)}
+.v-karte.klein .k-mark span{display:none}
+/* Nur das sichtbare Badge ist klickbar -- die Leaflet-Box bleibt an der echten
+   Position und wuerde beim Auffaechern sonst den Nachbarn verdecken. */
+.k-marker{background:none;border:0;pointer-events:none!important}
+.k-pin{pointer-events:auto;cursor:pointer}
+.k-versatz{display:grid;place-items:center;width:46px;height:46px;transition:transform .25s var(--ease)}
+.v-karte.klein .k-pin{width:32px;height:32px;border-width:1.5px}
+.v-karte.klein .k-pin img{width:24px;height:24px}
+.v-karte.klein .k-pin span{font-size:9px}
+.k-pin{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--surface);border:2px solid var(--ink);
+  box-shadow:0 3px 10px -2px rgba(var(--ink-rgb),.45);transition:transform .2s var(--ease),border-color .2s;transform-origin:50% 50%;overflow:hidden}
+.k-pin img{width:34px;height:34px;object-fit:contain}
+.k-pin span{font:900 12px/1 var(--f-display);letter-spacing:-.03em;color:var(--accent-ink)}
+.k-pin.leise{border-style:dashed;border-color:var(--muted)}
+.k-pin.leise span{color:var(--muted)}
+.k-marker:hover .k-pin,.k-marker:focus .k-pin,.k-marker.aktiv .k-pin{transform:scale(1.5);border-color:var(--accent)}
+.k-marker:focus{outline:none}
+.k-marker:focus-visible .k-pin{outline:3px solid var(--accent);outline-offset:2px}
+.k-ich{display:block;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);box-shadow:0 0 0 6px rgba(var(--accent-rgb),.25)}
+/* Leaflet an das Design anpassen */
+.v-karte .leaflet-tooltip{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:var(--schatten-hoch);
+  padding:8px 12px;font:600 13px/1.35 var(--f-ui)}
+.v-karte .leaflet-tooltip b{display:block;font-size:14.5px;font-weight:800}
+.v-karte .leaflet-tooltip small{color:var(--muted);font-size:12.5px}
+.v-karte .leaflet-tooltip-top::before{border-top-color:var(--surface)}
+.v-karte .leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.v-karte .leaflet-bar a:hover{background:var(--sunken)}
+.v-karte .leaflet-control-attribution{background:transparent;color:var(--muted);font-size:10px}
+.v-karte .leaflet-control-attribution a{color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){ .k-pin,.k-versatz{transition:none} }
+@media (max-width:640px){ .v-karte{height:420px} .v-karte-leiste{padding:12px 14px} }
+
+/* =================== Hallen (DESIGN.md) =================== */
+[hidden]{display:none!important}
+h1,h2,h3,p{margin:0}
+.punkt{color:var(--accent)}
+.sx-kopf .lead{max-width:54ch}
+.h-abschnitt .sx-inhalt{display:flex;flex-direction:column;gap:20px}
+.h-legende{display:flex;flex-wrap:wrap;gap:6px 16px;margin-left:auto;font-size:13px;color:var(--ink-2)}
+.h-legende i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px;background:var(--surface);border:2px solid var(--ink-2)}
+.h-legende i.b{background:var(--accent);border-color:var(--accent)}
+.h-mark{background:none;border:0;display:grid;place-items:center}
+.h-punkt{display:block;width:14px;height:14px;border-radius:50%;background:var(--surface);border:2.5px solid var(--ink-2);
+  box-shadow:0 2px 6px -1px rgba(var(--ink-rgb),.35);transition:transform .2s var(--ease),border-color .2s,opacity .2s}
+.h-mark.bespielt .h-punkt{width:18px;height:18px;background:var(--accent);border-color:var(--surface)}
+.h-mark:hover .h-punkt,.h-mark.aktiv .h-punkt{transform:scale(1.5);border-color:var(--accent)}
+.h-mark.bespielt:hover .h-punkt,.h-mark.bespielt.aktiv .h-punkt{border-color:var(--ink)}
+.h-mark.aus .h-punkt{opacity:.22}
+.h-mark:focus{outline:none}
+.h-mark:focus-visible .h-punkt{outline:3px solid var(--accent);outline-offset:3px}
+.h-werkzeug{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 18px;margin-top:12px}
+.h-suche{position:relative;flex:1 1 320px;max-width:520px}
+.h-suche svg{position:absolute;left:17px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.h-suche input{width:100%;min-height:48px;padding:0 18px 0 46px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);
+  color:var(--ink);font:500 15px/1.2 var(--f-ui);transition:border-color .15s}
+.h-suche input::placeholder{color:var(--muted)}
+.h-suche input:hover{border-color:var(--ink)}
+.h-suche input:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-color:var(--ink)}
+.h-filter{display:flex;flex-wrap:wrap;gap:8px}
+.h-chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 17px;border-radius:999px;border:1px solid var(--line-2);
+  background:var(--surface);color:var(--ink-2);font:700 14px/1 var(--f-ui);cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.h-chip span{font:700 13px/1 var(--f-eng);color:var(--muted)}
+.h-chip:hover{border-color:var(--ink);color:var(--ink)}
+.h-chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.h-chip[aria-pressed="true"] span{color:inherit;opacity:.75}
+.h-chip:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.h-liste{display:flex;flex-direction:column;gap:30px;margin-top:6px}
+.h-gruppe{display:flex;flex-direction:column;gap:14px}
+.h-gruppe-titel{display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+.h-gruppe-titel::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--accent)}
+.h-gruppe-titel small{font:700 12px/1 var(--f-eng);letter-spacing:0;color:var(--muted)}
+.h-raster{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,350px),1fr));gap:18px}
+.h-karte{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:20px 22px 18px;scroll-margin-top:96px;
+  background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--line-2);border-radius:var(--r);box-shadow:var(--schatten);
+  transition:transform .22s var(--ease),border-color .22s,box-shadow .22s}
+.h-karte.bespielt{border-left-color:var(--accent)}
+.h-karte::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;
+  background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(var(--accent-rgb),.10),transparent 60%)}
+.h-karte:hover{transform:translateY(-3px);box-shadow:var(--schatten-hoch)}
+.h-karte:hover::before{opacity:1}
+.h-karte:focus{outline:none}
+.h-karte.aktiv{animation:h-blink 1.8s var(--ease)}
+@keyframes h-blink{0%,45%{box-shadow:0 0 0 4px rgba(var(--accent-rgb),.5),var(--schatten-hoch)}100%{box-shadow:var(--schatten)}}
+.h-name{font-size:18px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.h-adr{color:var(--ink-2);font-size:14.5px;line-height:1.45}
+.h-adr small{display:block;margin-top:2px;color:var(--muted);font-size:13px}
+.h-felder{display:flex;flex-wrap:wrap;gap:6px}
+.h-feld{display:inline-flex;align-items:baseline;gap:6px;padding:5px 10px;border-radius:999px;background:var(--sunken);color:var(--ink-2);font:600 12.5px/1.3 var(--f-ui)}
+.h-feld abbr,.h-adr abbr{font:600 12px/1 var(--f-eng);color:var(--muted);text-decoration:none}
+.h-teams{display:flex;flex-direction:column;gap:5px;padding-top:12px;border-top:1px solid var(--line)}
+.h-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.h-verein{font-size:14.5px;line-height:1.45;color:var(--ink-2)}
+.h-verein a{color:var(--ink);font-weight:700;text-decoration:none;background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 2px no-repeat;transition:background-size .2s var(--ease)}
+.h-verein a:hover,.h-verein a:focus-visible{background-size:100% 2px}
+.h-naechstes{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;padding:11px 14px;border-radius:12px;background:var(--sunken);
+  color:var(--ink);text-decoration:none;transition:background .15s}
+.h-naechstes:hover{background:var(--accent-weich)}
+.h-naechstes:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.h-naechstes b{font:700 15px/1.3 var(--f-eng)}
+.h-naechstes span:not(.h-label){grid-column:1;font-size:13.5px;color:var(--ink-2);line-height:1.35}
+.h-naechstes svg{grid-column:2;grid-row:1/span 3;width:18px;height:18px;color:var(--accent);transition:transform .2s var(--ease)}
+.h-naechstes:hover svg{transform:translateX(4px)}
+.h-fuss{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:2px}
+.h-knopf{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 13px;border:1px solid var(--line-2);border-radius:999px;
+  background:var(--surface);color:var(--ink);font:700 14px/1 var(--f-ui);text-decoration:none;cursor:pointer;transition:border-color .15s,background .15s}
+.h-knopf svg{width:17px;height:17px;color:var(--accent)}
+.h-knopf:hover{border-color:var(--accent);background:var(--sunken)}
+.h-knopf:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.h-leer{padding:28px;border:1px dashed var(--line-2);border-radius:var(--r);color:var(--ink-2);text-align:center}
+.h-quelle{margin-top:14px;max-width:80ch;font-size:13.5px;color:var(--muted)}
+@media (max-width:640px){
+  .h-legende{margin-left:0}
+  .h-karte{padding:18px 18px 16px}
+  .h-filter{width:100%}
+  .h-chip{flex:1;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){ .h-punkt,.h-karte{transition:none} .h-karte.aktiv{animation:none;box-shadow:0 0 0 4px rgba(var(--accent-rgb),.5)} }
+
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<g id="wortmarke" shape-rendering="geometricPrecision"><path d="M 1505,657 L 1505,701 L 1526,701 L 1534,698 L 1540,692 L 1543,683 L 1543,674 L 1539,664 L 1533,659 L 1528,657 Z M 1515,664 L 1527,665 L 1533,672 L 1534,676 L 1533,685 L 1531,689 L 1525,693 L 1515,693 L 1514,692 L 1514,665 Z M 1438,657 L 1438,701 L 1447,701 L 1447,675 L 1448,674 L 1452,678 L 1466,701 L 1475,701 L 1475,657 L 1466,657 L 1466,681 L 1465,682 L 1462,680 L 1448,657 Z M 1373,657 L 1373,689 L 1376,696 L 1381,700 L 1390,702 L 1402,699 L 1406,695 L 1409,687 L 1409,657 L 1400,657 L 1400,686 L 1399,689 L 1393,694 L 1386,693 L 1383,690 L 1382,687 L 1382,657 Z M 1299,656 L 1299,701 L 1307,701 L 1307,677 L 1308,676 L 1311,679 L 1316,694 L 1317,695 L 1325,695 L 1333,675 L 1335,676 L 1335,701 L 1343,701 L 1343,656 L 1336,656 L 1332,658 L 1322,682 L 1319,681 L 1310,658 L 1308,656 Z M 1239,656 L 1238,657 L 1238,664 L 1249,664 L 1250,665 L 1250,700 L 1251,701 L 1259,701 L 1259,665 L 1260,664 L 1271,664 L 1271,656 Z M 1182,656 L 1181,657 L 1181,700 L 1182,701 L 1189,701 L 1190,700 L 1190,686 L 1192,684 L 1195,684 L 1198,687 L 1201,694 L 1206,701 L 1215,701 L 1213,696 L 1206,686 L 1206,683 L 1212,678 L 1214,672 L 1213,664 L 1209,659 L 1201,656 Z M 1190,665 L 1191,664 L 1200,664 L 1202,665 L 1205,669 L 1204,674 L 1200,677 L 1192,677 L 1190,675 Z M 1048,656 L 1048,700 L 1071,700 L 1078,697 L 1082,693 L 1086,683 L 1086,674 L 1083,665 L 1077,659 L 1068,656 Z M 1058,664 L 1068,664 L 1072,666 L 1076,672 L 1077,682 L 1075,687 L 1070,692 L 1067,693 L 1058,693 L 1057,692 L 1057,665 Z M 912,656 L 912,700 L 921,700 L 921,656 Z M 855,656 L 855,700 L 884,700 L 884,693 L 883,692 L 882,693 L 874,693 L 864,691 L 864,682 L 865,681 L 881,681 L 882,676 L 881,674 L 865,674 L 864,673 L 864,665 L 866,663 L 884,663 L 884,656 Z M 794,656 L 794,700 L 802,700 L 803,685 L 804,684 L 808,684 L 810,686 L 817,700 L 828,700 L 818,684 L 824,678 L 826,673 L 826,666 L 823,660 L 816,656 Z M 803,664 L 804,663 L 813,664 L 817,668 L 816,673 L 813,676 L 804,676 L 803,675 Z M 1130,655 L 1123,657 L 1116,663 L 1112,671 L 1111,681 L 1113,689 L 1119,697 L 1127,701 L 1137,701 L 1145,698 L 1150,693 L 1153,686 L 1154,675 L 1152,667 L 1147,660 L 1140,656 Z M 1130,663 L 1138,664 L 1144,672 L 1143,687 L 1137,693 L 1133,694 L 1128,693 L 1123,688 L 1121,684 L 1122,670 L 1126,665 Z M 961,655 L 953,660 L 951,664 L 951,672 L 953,676 L 957,679 L 970,683 L 973,686 L 973,690 L 970,693 L 963,693 L 956,687 L 950,693 L 954,698 L 958,700 L 970,701 L 976,699 L 982,692 L 982,683 L 976,676 L 963,672 L 960,669 L 960,666 L 963,663 L 969,663 L 975,667 L 981,662 L 973,656 Z M 732,655 L 731,656 L 731,700 L 740,700 L 740,686 L 744,682 L 746,683 L 756,700 L 767,700 L 751,676 L 752,673 L 766,656 L 755,656 L 745,670 L 741,673 L 740,672 L 740,656 L 733,656 Z M 677,656 L 677,700 L 704,700 L 704,692 L 687,692 L 686,691 L 686,680 L 685,679 L 686,676 L 685,657 L 686,656 L 685,655 L 684,656 Z M 623,655 L 622,656 L 622,700 L 649,700 L 649,692 L 632,692 L 631,691 L 631,655 Z M 570,655 L 554,700 L 563,700 L 567,691 L 582,691 L 584,693 L 586,700 L 595,700 L 580,656 L 579,655 Z M 574,667 L 576,668 L 580,681 L 579,683 L 570,683 L 569,682 Z M 497,655 L 496,656 L 496,700 L 519,700 L 526,697 L 529,693 L 530,689 L 529,682 L 523,677 L 528,668 L 526,660 L 520,656 L 515,655 Z M 505,682 L 506,681 L 517,681 L 521,685 L 521,688 L 515,693 L 506,693 L 505,692 Z M 505,664 L 506,663 L 515,663 L 518,666 L 518,670 L 515,673 L 506,673 L 505,672 Z M 436,655 L 436,663 L 447,663 L 448,664 L 448,700 L 457,700 L 457,664 L 458,663 L 469,663 L 469,656 L 468,655 Z M 381,655 L 381,700 L 410,700 L 410,692 L 391,692 L 390,691 L 390,682 L 391,681 L 407,681 L 407,673 L 391,673 L 390,672 L 390,664 L 391,663 L 409,663 L 409,655 Z M 319,655 L 318,656 L 318,672 L 319,673 L 318,678 L 318,690 L 319,691 L 318,699 L 319,700 L 327,700 L 327,686 L 332,682 L 339,694 L 344,700 L 354,700 L 338,676 L 339,673 L 352,658 L 353,655 L 343,655 L 329,673 L 327,672 L 327,655 Z M 206,655 L 190,700 L 199,700 L 201,693 L 203,691 L 219,691 L 222,700 L 232,700 L 216,655 Z M 210,668 L 213,670 L 216,680 L 215,683 L 206,683 L 205,682 Z M 132,655 L 132,676 L 131,677 L 132,700 L 155,700 L 160,698 L 164,694 L 166,688 L 164,681 L 159,677 L 159,675 L 163,671 L 163,663 L 161,659 L 152,655 Z M 140,682 L 141,681 L 153,681 L 156,684 L 156,689 L 153,692 L 150,693 L 142,693 L 140,691 Z M 140,664 L 141,663 L 151,663 L 154,666 L 154,670 L 151,673 L 141,673 L 140,672 Z M 273,654 L 265,656 L 261,659 L 259,662 L 258,670 L 259,673 L 264,678 L 278,683 L 281,688 L 276,693 L 270,693 L 263,687 L 257,691 L 257,693 L 262,698 L 266,700 L 276,701 L 283,699 L 287,696 L 289,693 L 290,685 L 289,681 L 284,676 L 272,672 L 267,668 L 267,666 L 271,662 L 276,662 L 281,667 L 288,662 L 284,657 L 280,655 Z M 1005,378 L 1004,379 L 988,380 L 972,385 L 958,393 L 947,404 L 940,416 L 937,426 L 937,432 L 936,433 L 937,450 L 939,457 L 944,467 L 956,480 L 965,486 L 983,494 L 1006,500 L 1022,506 L 1028,512 L 1029,519 L 1027,523 L 1020,528 L 1012,530 L 1002,530 L 983,525 L 960,512 L 934,548 L 949,559 L 963,566 L 975,570 L 991,573 L 1015,574 L 1016,573 L 1026,573 L 1027,572 L 1037,571 L 1049,567 L 1065,558 L 1074,549 L 1081,537 L 1085,523 L 1085,504 L 1083,495 L 1079,486 L 1075,480 L 1066,471 L 1041,458 L 1002,447 L 994,440 L 993,437 L 994,432 L 999,427 L 1009,424 L 1017,424 L 1033,428 L 1043,433 L 1053,440 L 1075,411 L 1079,404 L 1061,391 L 1045,384 L 1023,379 Z M 783,395 L 771,407 L 763,420 L 764,423 L 805,447 L 807,447 L 810,442 L 822,430 L 834,425 L 848,425 L 857,429 L 864,437 L 866,443 L 866,453 L 861,455 L 831,457 L 805,462 L 787,469 L 775,477 L 768,484 L 760,498 L 757,509 L 757,530 L 760,541 L 768,555 L 774,561 L 788,569 L 798,572 L 812,573 L 813,574 L 829,573 L 844,569 L 854,564 L 865,555 L 867,556 L 868,569 L 929,569 L 928,554 L 927,553 L 927,541 L 926,540 L 926,445 L 921,423 L 918,416 L 910,404 L 901,395 L 888,387 L 875,382 L 861,379 L 853,379 L 852,378 L 833,378 L 832,379 L 818,380 L 801,385 Z M 866,492 L 866,512 L 863,518 L 854,527 L 841,532 L 830,532 L 824,530 L 817,524 L 815,520 L 815,511 L 817,507 L 825,500 L 835,496 L 845,494 L 850,494 L 863,491 Z M 1510,331 L 1451,345 L 1451,383 L 1450,384 L 1430,384 L 1430,429 L 1429,430 L 1427,429 L 1423,420 L 1416,410 L 1405,399 L 1397,393 L 1383,386 L 1370,382 L 1359,381 L 1358,380 L 1338,380 L 1337,381 L 1326,382 L 1308,388 L 1298,393 L 1288,400 L 1275,413 L 1266,427 L 1258,448 L 1255,464 L 1255,491 L 1259,511 L 1267,529 L 1276,542 L 1287,553 L 1300,562 L 1322,571 L 1338,574 L 1352,574 L 1355,575 L 1356,574 L 1372,574 L 1373,573 L 1385,572 L 1405,566 L 1418,559 L 1432,547 L 1402,514 L 1393,520 L 1377,527 L 1368,529 L 1351,529 L 1343,527 L 1333,522 L 1321,509 L 1317,497 L 1318,496 L 1436,496 L 1437,466 L 1436,465 L 1435,451 L 1429,431 L 1430,430 L 1450,430 L 1451,431 L 1451,520 L 1455,537 L 1462,551 L 1470,560 L 1477,565 L 1485,569 L 1499,573 L 1508,573 L 1509,574 L 1527,573 L 1548,568 L 1547,523 L 1534,526 L 1524,525 L 1518,522 L 1513,517 L 1510,509 L 1510,431 L 1511,430 L 1547,430 L 1547,384 L 1511,384 L 1510,383 Z M 1317,454 L 1322,441 L 1329,433 L 1340,427 L 1354,426 L 1365,430 L 1372,436 L 1377,444 L 1380,457 L 1379,458 L 1318,458 Z M 1092,310 L 1092,570 L 1151,570 L 1151,514 L 1163,501 L 1167,504 L 1209,570 L 1281,570 L 1207,463 L 1209,458 L 1267,397 L 1278,384 L 1206,384 L 1156,446 L 1152,449 L 1151,448 L 1151,311 L 1150,310 Z M 542,305 L 542,568 L 674,568 L 693,564 L 707,559 L 715,555 L 728,546 L 736,538 L 744,527 L 748,519 L 753,501 L 752,475 L 749,465 L 745,457 L 738,447 L 732,441 L 725,436 L 712,430 L 713,427 L 722,422 L 733,412 L 740,402 L 746,386 L 747,381 L 746,356 L 744,349 L 735,333 L 723,321 L 715,316 L 698,309 L 684,306 L 678,306 L 677,305 Z M 604,460 L 605,459 L 661,459 L 669,461 L 676,465 L 681,470 L 685,477 L 686,481 L 685,497 L 677,508 L 673,511 L 663,515 L 658,515 L 657,516 L 605,516 L 604,515 Z M 604,358 L 605,357 L 660,357 L 670,361 L 678,370 L 680,376 L 680,387 L 678,393 L 674,399 L 669,403 L 659,407 L 605,407 L 604,406 Z M 135,217 L 131,222 L 131,613 L 133,618 L 140,622 L 148,622 L 149,621 L 154,622 L 343,622 L 344,621 L 358,621 L 359,620 L 365,620 L 381,617 L 406,609 L 432,596 L 455,579 L 471,563 L 481,550 L 490,536 L 500,516 L 509,491 L 513,475 L 515,458 L 516,457 L 516,450 L 517,449 L 517,437 L 518,436 L 517,391 L 516,390 L 516,383 L 515,382 L 513,365 L 508,346 L 501,327 L 493,310 L 480,289 L 467,273 L 449,256 L 426,240 L 396,226 L 370,219 L 358,218 L 357,217 L 347,217 L 346,216 L 137,216 Z M 155,579 L 177,569 L 196,564 L 209,563 L 210,562 L 234,562 L 264,568 L 326,589 L 341,592 L 365,593 L 366,595 L 351,598 L 156,598 L 155,597 Z M 213,345 L 215,343 L 237,343 L 239,345 L 239,355 L 238,356 L 214,356 L 213,355 Z M 222,305 L 230,305 L 231,306 L 231,321 L 230,322 L 222,322 L 221,321 L 221,306 Z M 156,240 L 341,240 L 342,241 L 361,243 L 388,251 L 406,259 L 433,277 L 452,295 L 467,315 L 476,332 L 485,357 L 492,391 L 492,399 L 493,400 L 493,441 L 492,442 L 492,451 L 486,482 L 478,505 L 468,525 L 455,543 L 447,536 L 440,533 L 431,533 L 425,536 L 422,536 L 417,527 L 409,519 L 402,515 L 395,513 L 380,513 L 374,515 L 364,521 L 357,530 L 355,538 L 353,540 L 344,540 L 336,544 L 330,551 L 328,560 L 336,563 L 356,567 L 369,567 L 370,568 L 390,567 L 414,562 L 446,549 L 447,551 L 440,558 L 430,566 L 401,575 L 391,576 L 390,577 L 359,577 L 329,571 L 265,548 L 239,544 L 238,543 L 198,544 L 180,548 L 165,553 L 158,557 L 155,556 L 155,548 L 168,542 L 188,536 L 205,534 L 206,533 L 213,533 L 217,472 L 218,471 L 218,460 L 219,459 L 219,446 L 220,445 L 220,433 L 221,432 L 221,419 L 222,418 L 224,371 L 226,365 L 228,366 L 228,371 L 229,372 L 229,390 L 230,391 L 230,403 L 231,404 L 231,418 L 232,419 L 234,460 L 235,461 L 235,472 L 236,473 L 240,534 L 252,535 L 273,540 L 291,546 L 315,556 L 318,555 L 319,551 L 319,545 L 315,536 L 311,532 L 305,529 L 296,528 L 294,522 L 290,516 L 283,510 L 275,507 L 265,507 L 259,509 L 253,513 L 251,512 L 245,436 L 244,435 L 243,415 L 242,414 L 242,405 L 241,404 L 241,395 L 240,394 L 240,385 L 239,384 L 239,375 L 238,374 L 238,366 L 239,365 L 245,365 L 248,362 L 248,338 L 245,335 L 239,335 L 231,333 L 232,330 L 238,330 L 241,326 L 241,301 L 238,297 L 231,295 L 231,255 L 229,252 L 224,252 L 222,255 L 222,295 L 221,296 L 216,296 L 212,299 L 212,327 L 214,330 L 220,330 L 222,333 L 220,335 L 207,335 L 204,339 L 204,362 L 207,365 L 213,365 L 215,367 L 214,380 L 213,381 L 213,391 L 212,392 L 212,402 L 211,403 L 211,413 L 210,414 L 210,424 L 209,425 L 209,435 L 208,436 L 207,454 L 206,455 L 205,475 L 204,476 L 204,486 L 202,487 L 195,483 L 181,484 L 177,486 L 171,492 L 167,505 L 160,506 L 157,508 L 155,507 L 155,241 Z M 225,452 L 222,455 L 222,533 L 231,533 L 230,454 L 228,452 Z M 366,298 L 365,299 L 349,300 L 327,307 L 312,315 L 293,331 L 278,352 L 273,362 L 268,377 L 267,387 L 266,388 L 266,414 L 269,428 L 278,450 L 289,466 L 306,482 L 320,491 L 340,499 L 356,502 L 378,502 L 379,501 L 390,500 L 406,495 L 424,486 L 437,476 L 446,467 L 458,450 L 464,437 L 469,420 L 470,407 L 471,406 L 471,395 L 470,394 L 469,380 L 462,359 L 452,342 L 437,325 L 421,313 L 407,306 L 387,300 Z M 358,307 L 379,307 L 397,311 L 415,319 L 427,327 L 443,343 L 451,355 L 458,370 L 463,391 L 463,408 L 460,424 L 451,446 L 442,459 L 428,473 L 413,483 L 393,491 L 377,494 L 357,494 L 342,491 L 333,488 L 319,481 L 309,474 L 293,458 L 285,446 L 279,433 L 274,413 L 274,390 L 275,389 L 276,379 L 285,356 L 296,340 L 307,329 L 323,318 L 339,311 Z" fill="currentColor" fill-rule="evenodd"/><path d="M 449,622 L 1537,623 L 1542,621 L 1547,616 L 1549,608 L 1547,602 L 1540,596 L 973,596 L 972,595 L 971,596 L 968,595 L 964,596 L 960,595 L 951,595 L 950,596 L 797,596 L 796,595 L 792,596 L 772,596 L 771,595 L 768,596 L 766,595 L 763,596 L 516,596 L 515,595 L 511,596 L 485,596 L 484,595 L 465,611 Z M 363,308 L 362,309 L 354,309 L 344,311 L 332,315 L 322,320 L 310,328 L 295,343 L 287,355 L 278,377 L 276,386 L 276,393 L 275,394 L 275,409 L 278,425 L 286,445 L 293,456 L 306,470 L 318,479 L 334,487 L 347,491 L 352,491 L 359,493 L 373,493 L 374,492 L 388,491 L 404,486 L 422,476 L 438,462 L 446,452 L 456,432 L 460,419 L 461,398 L 462,397 L 461,396 L 460,382 L 456,368 L 444,346 L 429,330 L 416,321 L 401,314 L 382,309 Z M 385,409 L 385,413 L 382,423 L 377,433 L 370,443 L 356,457 L 345,465 L 334,471 L 328,472 L 316,464 L 304,452 L 296,440 L 297,436 L 305,436 L 322,431 L 360,414 L 383,408 Z M 405,406 L 406,407 L 406,423 L 402,443 L 397,457 L 385,479 L 381,481 L 374,481 L 373,482 L 362,482 L 361,481 L 353,481 L 345,479 L 343,476 L 352,471 L 366,460 L 381,443 L 385,437 L 392,421 L 394,408 L 397,406 Z M 433,405 L 436,406 L 450,406 L 451,407 L 447,427 L 443,434 L 440,432 L 436,423 L 432,408 Z M 422,405 L 424,407 L 424,413 L 429,429 L 437,444 L 437,446 L 417,466 L 400,475 L 399,472 L 407,456 L 412,440 L 414,430 L 414,422 L 415,421 L 415,406 L 416,405 Z M 439,363 L 441,363 L 443,365 L 449,381 L 450,392 L 451,393 L 450,397 L 447,396 L 433,396 L 432,395 L 433,380 L 436,369 Z M 286,410 L 286,391 L 288,381 L 293,367 L 296,364 L 308,361 L 327,361 L 350,368 L 368,379 L 378,389 L 382,395 L 381,400 L 372,401 L 356,406 L 324,421 L 301,428 L 292,428 L 290,426 Z M 380,320 L 391,322 L 408,329 L 421,338 L 433,350 L 434,354 L 431,359 L 426,373 L 423,387 L 423,395 L 422,396 L 415,396 L 414,395 L 412,379 L 406,360 L 395,340 L 389,332 L 379,322 Z M 302,352 L 314,339 L 332,327 L 349,321 L 363,320 L 380,335 L 393,353 L 403,378 L 405,388 L 405,396 L 404,397 L 395,397 L 393,398 L 388,388 L 381,379 L 372,371 L 356,361 L 343,356 L 330,353 L 316,352 L 315,353 L 305,353 L 303,354 Z" style="fill:var(--accent)" fill-rule="evenodd"/></g>
+<symbol id="i-pfeil" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-mond" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+<symbol id="i-sonne" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></symbol>
+<symbol id="i-menue" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-zu" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="i-runter" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-pfeife" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="14" r="5"/><path d="M13 11l8-3v4l-6 2M3 6l2 2M8 3v3"/></g></symbol>
+<symbol id="i-kalender" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></g></symbol>
+<symbol id="i-team" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></g></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></g></symbol>
+<symbol id="i-euro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6.5A7 7 0 1 0 18 17.5"/><path d="M4 10h9M4 14h9"/></g></symbol>
+<symbol id="i-laden" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-blatt" viewBox="0 0 40 48"><path d="M4 4a3 3 0 0 1 3-3h19l11 11v32a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><path d="M26 1v8a3 3 0 0 0 3 3h8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+<symbol id="i-insta" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></g></symbol>
+<symbol id="i-web" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></g></symbol>
+</defs></svg>
+
+<header class="sx-nav" id="sx-nav">
+  <div class="sx-inhalt sx-nav-innen">
+    <a class="sx-marke" href="startseite-vorschau.html" aria-label="dobasket – Basketballkreis Dortmund, zur Startseite">
+      <svg viewBox="116 201 1448 430" aria-hidden="true"><use href="#wortmarke"/></svg>
+    </a>
+    <nav class="sx-links" aria-label="Hauptnavigation">
+      <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><div class="drop">
+        <a href="vereine-v2.html" class="drop-link">Vereine<svg aria-hidden="true"><use href="#i-runter"/></svg></a>
+        <div class="drop-panel">
+          <div class="drop-kopf">Vereine im Kreis</div>
+          <div class="drop-liste" data-vereine-liste></div>
+          <a class="drop-alle" href="vereine-v2.html">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
+        </div>
+      </div><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+    </nav>
+    <a class="rund-knopf insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener" aria-label="dobasket auf Instagram"><svg><use href="#i-insta"/></svg></a>
+    <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
+    <button class="rund-knopf burger" type="button" id="burger" aria-expanded="false" aria-controls="menue" aria-label="Menü öffnen"><svg><use href="#i-menue"/></svg></button>
+  </div>
+</header>
+
+<div class="menue" id="menue" role="dialog" aria-modal="true" aria-label="Menü">
+  <div class="menue-kopf">
+    <span class="eyebrow"><span>Menü</span></span>
+    <button class="rund-knopf" type="button" id="menue-zu" aria-label="Menü schließen"><svg><use href="#i-zu"/></svg></button>
+  </div>
+  <a href="startseite-vorschau.html">Startseite</a><a href="kalender-v2.html">Kalender</a><a href="vereine-v2.html">Vereine</a><a href="schiedsrichter-v2.html">Schiedsrichter</a><a href="startseite-vorschau.html#news">News</a><a href="startseite-vorschau.html#vorstand">Vorstand</a><a href="startseite-vorschau.html#dokumente">Dokumente</a>
+</div>
+
+<main>
+<section class="sx-kopf">
+  <svg class="sx-linien feld" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2"><g class="feld-quer"><rect width="100%" height="100%"/><line x1="50%" y1="0" x2="50%" y2="100%"/><svg x="0" y="0" width="50%" height="100%" viewBox="0 0 425 750" preserveAspectRatio="xMinYMid meet" overflow="visible"><path d="M0 252.5H290V497.5H0"/><circle cx="290" cy="375.0" r="90"/><path d="M0 45H149.5A337.5 337.5 0 0 1 149.5 705H0"/><path d="M60 330.0V420.0"/><circle cx="78.75" cy="375.0" r="11"/></svg><svg x="50%" y="0" width="50%" height="100%" viewBox="975 0 425 750" preserveAspectRatio="xMaxYMid meet" overflow="visible"><path d="M1400 252.5H1110V497.5H1400"/><circle cx="1110" cy="375.0" r="90"/><path d="M1400 45H1250.5A337.5 337.5 0 0 0 1250.5 705H1400"/><path d="M1340 330.0V420.0"/><circle cx="1321.25" cy="375.0" r="11"/></svg><svg x="0" y="0" width="100%" height="100%" viewBox="610.0 0 180 750" preserveAspectRatio="xMidYMid meet" overflow="visible"><circle cx="700.0" cy="375.0" r="90"/></svg></g><g class="feld-hoch"><rect width="100%" height="100%"/><line x1="0" y1="50%" x2="100%" y2="50%"/><svg x="0" y="0" width="100%" height="50%" viewBox="0 0 750 425" preserveAspectRatio="xMidYMin meet" overflow="visible"><g transform="matrix(0 1 1 0 0 0)"><path d="M0 252.5H290V497.5H0"/><circle cx="290" cy="375.0" r="90"/><path d="M0 45H149.5A337.5 337.5 0 0 1 149.5 705H0"/><path d="M60 330.0V420.0"/><circle cx="78.75" cy="375.0" r="11"/></g></svg><svg x="0" y="50%" width="100%" height="50%" viewBox="0 975 750 425" preserveAspectRatio="xMidYMax meet" overflow="visible"><g transform="matrix(0 1 1 0 0 0)"><path d="M1400 252.5H1110V497.5H1400"/><circle cx="1110" cy="375.0" r="90"/><path d="M1400 45H1250.5A337.5 337.5 0 0 0 1250.5 705H1400"/><path d="M1340 330.0V420.0"/><circle cx="1321.25" cy="375.0" r="11"/></g></svg><svg x="0" y="0" width="100%" height="100%" viewBox="0 610.0 750 180" preserveAspectRatio="xMidYMid meet" overflow="visible"><g transform="matrix(0 1 1 0 0 0)"><circle cx="700.0" cy="375.0" r="90"/></g></svg></g></g></svg>
+  <script>(function(s){function f(){var r=s.getBoundingClientRect();if(r.width)s.classList.toggle("ist-hoch",Math.min(r.width/750,r.height/850)>Math.min(r.height/750,r.width/850));}f();if(window.ResizeObserver)new ResizeObserver(f).observe(s);})(document.currentScript.previousElementSibling);</script>
+  <div class="sx-inhalt">
+    <a class="sx-zurueck sx-ein" style="--d:0s" href="startseite-vorschau.html"><svg aria-hidden="true"><use href="#i-pfeil"/></svg>Zur Startseite</a>
+    <span class="eyebrow sx-ein" style="--d:.05s"><span>Spielbetrieb · Saison <span id="h-saison">–</span></span></span>
+    <h1 class="sx-h1"><span class="maske"><span>Hallen<span class="punkt">.</span></span></span></h1>
+    <p class="lead sx-ein" style="--d:.4s">Wo in Dortmund Basketball gespielt wird – mit Adresse, Route und den Mannschaften, die dort ihre Heimspiele haben.</p>
+    <div class="sx-stats sx-ein" style="--d:.55s" id="h-stats"></div>
+  </div>
+</section>
+
+<section class="h-abschnitt">
+  <div class="sx-inhalt">
+    <div class="v-karte-box" id="h-karte-box" data-reveal>
+      <div class="v-karte" id="h-karte" role="region" aria-label="Karte der Hallen in Dortmund"></div>
+      <div class="v-karte-leiste">
+        <button class="v-nahe" type="button" id="h-nahe"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7.5"/></g></svg>Hallen in meiner Nähe</button>
+        <span class="v-nahe-status" id="h-nahe-status" role="status">Tipp: Ein Punkt auf der Karte springt zur Halle in der Liste.</span>
+        <span class="h-legende" aria-hidden="true"><span><i class="b"></i>mit Spielen <span data-saison-kurz></span></span><span><i></i>weitere Hallen</span></span>
+      </div>
+    </div>
+
+    <div class="h-werkzeug">
+      <label class="h-suche"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></g></svg><input type="search" id="h-suche" placeholder="Halle, Straße, Stadtteil oder Verein" aria-label="Hallen durchsuchen" autocomplete="off"></label>
+      <div class="h-filter" role="group" aria-label="Hallen filtern" id="h-filter">
+        <button class="h-chip" type="button" data-f="spiele" aria-pressed="true">Mit Spielen <span id="h-zahl-spiele"></span></button>
+        <button class="h-chip" type="button" data-f="alle" aria-pressed="false">Alle Hallen <span id="h-zahl-alle"></span></button>
+      </div>
+    </div>
+    <div class="h-liste" id="h-liste" aria-live="polite"></div>
+    <p class="h-quelle">Hallen aus dem Verzeichnis des Basketballkreises, Heimspiele und Termine aus dem Spielplan (basketball-bund.net).
+      Fehlt eine Halle oder stimmt eine Adresse nicht? Schreib an <a class="link" href="mailto:vorsitz2@dobasket.de">vorsitz2@dobasket.de</a>.</p>
+  </div>
+</section>
+</main>
+
+<footer class="sx-fuss">
+  <div class="sx-inhalt">
+    <div class="sx-fuss-raster">
+      <div>
+        <a class="sx-marke" href="startseite-vorschau.html" aria-label="dobasket Startseite"><svg viewBox="116 201 1448 516" aria-hidden="true"><use href="#wortmarke"/></svg></a>
+        <p style="margin:16px 0 0;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
+        <a class="sx-fuss-insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-insta"/></svg>@dobasket</a>
+      </div>
+      <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="hallen-v2.html">Hallen</a></li><li><a href="startseite-vorschau.html#spieltag">Spieltag</a></li></ul></div>
+      <div><h4>Der Kreis</h4><ul><li><a href="startseite-vorschau.html#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="startseite-vorschau.html#vorstand">Vorstand</a></li><li><a href="startseite-vorschau.html#dokumente">Dokumente</a></li></ul></div>
+      <div><h4>Rechtliches</h4><ul><li><a href="impressum.html">Impressum</a></li><li><a href="https://www.dobasket.de/datenschutzerklarung" target="_blank" rel="noopener">Datenschutz</a></li><li><a href="startseite-vorschau.html#vorstand">Kontakt</a></li></ul></div>
+    </div>
+    <div class="sx-fuss-unten"><span>Spieldaten: basketball-bund.net · Hallenliste: Basketballkreis Dortmund</span><a href="startseite-vorschau.html" style="color:var(--accent);font-weight:700;text-decoration:none">Zur Startseite →</a></div>
+  </div>
+</footer>
+
+<script src="vereine-info.js"></script>
+<script src="kalender/daten.js"></script>
+<script src="hallen.js"></script>
+
+<script>
+/* dobasket Shell: Theme, Menue, Nav-Zustand, Reveal, Spotlight (DESIGN.md Abschnitt 7) */
+(function(){
+"use strict";
+/* VEREINSMENUE */
+function vereinsKuerzel(name){
+  var w = name.replace(/e\.?\s?V\.?/gi,"").trim().split(/[\s\-]+/).filter(Boolean);
+  if(w[0] && w[0].length <= 4 && w[0] === w[0].toUpperCase()) return w[0];
+  return w.slice(0,3).map(function(x){ return x[0]; }).join("").toUpperCase();
+}
+function vereinsMenue(){
+  var DV = window.DOBASKET_DATEN;
+  document.querySelectorAll("[data-vereine-liste]").forEach(function(ziel){
+    if(!DV || !DV.vereine || !DV.vereine.length){ ziel.parentNode.querySelector(".drop-kopf").textContent = "Vereinsliste gerade nicht verfügbar"; return; }
+    var teams = {};
+    (DV.teams || []).forEach(function(t){ if(t.sa === DV.saison) teams[t.verein] = (teams[t.verein] || 0) + 1; });
+    // inkl. der beim WBV gemeldeten Vereine ohne Mannschaft (TuS Wellinghofen, TV Hoerde)
+    DV.vereine.concat(DV.vereine_ohne_team || []).map(function(v){ return v.name; }).sort(function(a,b){ return a.localeCompare(b,"de"); }).forEach(function(n){
+      var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
+      var m = document.createElement("span"); m.className = "drop-mono"; m.setAttribute("aria-hidden","true");
+      var info = (window.DOBASKET_VEREINE_INFO || {})[n];
+      if(info && info.logo){ var bild = document.createElement("img"); bild.src = info.logo; bild.alt = ""; bild.loading = "lazy"; m.appendChild(bild); m.classList.add("mit-logo"); }
+      else m.textContent = vereinsKuerzel(n);
+      var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
+      var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z ? z + (z === 1 ? " Mannschaft" : " Mannschaften") : "aktuell ohne Mannschaft";
+      t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
+    });
+  });
+}
+/* /VEREINSMENUE */
+vereinsMenue();
+var wurzel = document.documentElement, ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
+var knopf = document.querySelector(".thema");
+function istDunkel(){ var g = wurzel.getAttribute("data-theme"); return g ? g === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+function malen(){ var d = istDunkel(); knopf.querySelector("use").setAttribute("href", d ? "#i-sonne" : "#i-mond");
+  knopf.setAttribute("aria-label", d ? "Helles Design einschalten" : "Dunkles Design einschalten"); }
+knopf.addEventListener("click", function(){ var neu = istDunkel() ? "light" : "dark"; wurzel.setAttribute("data-theme", neu);
+  try{ localStorage.setItem("dobasket-thema", neu); }catch(e){} malen(); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", malen);
+malen();
+
+var m = document.getElementById("menue"), b = document.getElementById("burger");
+function setze(offen){ m.classList.toggle("offen", offen); b.setAttribute("aria-expanded", String(offen));
+  document.body.style.overflow = offen ? "hidden" : ""; (offen ? document.getElementById("menue-zu") : b).focus(); }
+b.addEventListener("click", function(){ setze(true); });
+document.getElementById("menue-zu").addEventListener("click", function(){ setze(false); });
+m.addEventListener("click", function(ev){ if(ev.target.closest("a")){ m.classList.remove("offen"); b.setAttribute("aria-expanded","false"); document.body.style.overflow = ""; } });
+document.addEventListener("keydown", function(ev){
+  if(!m.classList.contains("offen")) return;
+  if(ev.key === "Escape"){ setze(false); return; }
+  if(ev.key !== "Tab") return;
+  var f = m.querySelectorAll("a,button"), erst = f[0], letzt = f[f.length-1];
+  if(ev.shiftKey && document.activeElement === erst){ ev.preventDefault(); letzt.focus(); }
+  else if(!ev.shiftKey && document.activeElement === letzt){ ev.preventDefault(); erst.focus(); }
+});
+
+var nav = document.getElementById("sx-nav"), geplant = false;
+function tick(){ geplant = false; nav.classList.toggle("gescrollt", scrollY > 12); }
+addEventListener("scroll", function(){ if(!geplant){ geplant = true; requestAnimationFrame(tick); } }, {passive:true});
+tick();
+
+var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("sichtbar"); io.unobserve(e.target); } }); }, {rootMargin:"0px 0px -8% 0px"});
+document.querySelectorAll("[data-reveal]").forEach(function(n){ io.observe(n); });
+
+if(!ruhig && matchMedia("(hover: hover) and (pointer: fine)").matches){
+  var letztes = null, gp = false;
+  document.addEventListener("pointermove", function(e){ letztes = e; if(!gp){ gp = true; requestAnimationFrame(function(){
+    gp = false; var k = letztes.target.closest && letztes.target.closest("[data-spot]"); if(!k) return;
+    var r = k.getBoundingClientRect(); k.style.setProperty("--mx", (letztes.clientX - r.left) + "px"); k.style.setProperty("--my", (letztes.clientY - r.top) + "px");
+  }); } }, {passive:true});
+}
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var D = window.DOBASKET_DATEN, H = window.DOBASKET_HALLEN, NS = "http://www.w3.org/2000/svg";
+var ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function el(i){ return document.getElementById(i); }
+function mk(t, k, x){ var e = document.createElement(t); if(k) e.className = k; if(x != null) e.textContent = x; return e; }
+function leer(e){ while(e.firstChild) e.removeChild(e.firstChild); return e; }
+function svgUse(id){ var s = document.createElementNS(NS, "svg"); s.setAttribute("aria-hidden", "true");
+  var u = document.createElementNS(NS, "use"); u.setAttribute("href", "#" + id); s.appendChild(u); return s; }
+if(!H){ el("h-liste").appendChild(mk("p", "h-leer", "Das Hallenverzeichnis ist gerade nicht erreichbar.")); return; }
+var SA = D ? D.saison : "";
+el("h-saison").textContent = SA || "–";
+document.querySelectorAll("[data-saison-kurz]").forEach(function(n){ n.textContent = SA; });
+var BEZIRKE = {"bezirke":[{"n":"Lütgendortmund","r":[[7.3837,51.4769],[7.3808,51.4788],[7.3805,51.4782],[7.3798,51.4779],[7.3776,51.478],[7.3716,51.4764],[7.371,51.4784],[7.3716,51.4804],[7.3727,51.4802],[7.3713,51.4827],[7.3673,51.482],[7.3676,51.4815],[7.3613,51.48],[7.3613,51.4805],[7.3599,51.4805],[7.3592,51.4809],[7.3579,51.4807],[7.3561,51.4823],[7.3546,51.482],[7.354,51.4826],[7.3537,51.4843],[7.353,51.4843],[7.3529,51.4837],[7.3513,51.4836],[7.3513,51.4823],[7.3488,51.482],[7.3481,51.4832],[7.3476,51.4831],[7.3479,51.4839],[7.3475,51.4843],[7.3425,51.4835],[7.3402,51.4864],[7.3404,51.4873],[7.3411,51.4876],[7.3413,51.4889],[7.3425,51.4887],[7.3437,51.4915],[7.3426,51.4917],[7.3429,51.4931],[7.3397,51.4932],[7.3404,51.4953],[7.3376,51.496],[7.3369,51.4955],[7.3362,51.4961],[7.3342,51.4957],[7.3341,51.4965],[7.3306,51.4965],[7.3305,51.4946],[7.3314,51.4946],[7.3316,51.4931],[7.3298,51.4931],[7.3282,51.49],[7.3274,51.4901],[7.3268,51.4891],[7.3252,51.4891],[7.325,51.4898],[7.3236,51.4896],[7.3235,51.4889],[7.3229,51.4905],[7.3233,51.4905],[7.323,51.4927],[7.3233,51.4927],[7.3225,51.4945],[7.3174,51.4939],[7.3162,51.4963],[7.3158,51.4964],[7.316,51.4972],[7.3167,51.4973],[7.3163,51.4983],[7.3189,51.499],[7.3183,51.4993],[7.3193,51.4996],[7.3194,51.5],[7.3179,51.5032],[7.3173,51.506],[7.3152,51.5058],[7.3154,51.5055],[7.3148,51.5048],[7.3135,51.5042],[7.3038,51.5045],[7.3043,51.506],[7.3024,51.5077],[7.3027,51.5084],[7.3026,51.5123],[7.3038,51.5154],[7.3035,51.5157],[7.3052,51.5177],[7.3065,51.518],[7.3069,51.5178],[7.3082,51.5185],[7.3075,51.5188],[7.3123,51.5213],[7.3138,51.5215],[7.3139,51.5211],[7.3157,51.5225],[7.3161,51.5219],[7.3195,51.523],[7.3197,51.5225],[7.3236,51.5235],[7.3232,51.5236],[7.3236,51.524],[7.3244,51.5236],[7.3247,51.5226],[7.3274,51.5222],[7.3301,51.5208],[7.3325,51.521],[7.3338,51.5203],[7.3347,51.5202],[7.337,51.5212],[7.34,51.5217],[7.3414,51.5234],[7.3433,51.5243],[7.3435,51.5233],[7.3448,51.5232],[7.3465,51.5241],[7.3467,51.5234],[7.3461,51.5226],[7.3463,51.5223],[7.3498,51.5233],[7.3537,51.5237],[7.3549,51.5209],[7.3571,51.5213],[7.3583,51.5201],[7.3587,51.5195],[7.3574,51.5192],[7.3582,51.5182],[7.3577,51.5182],[7.3583,51.5167],[7.3595,51.5165],[7.3601,51.5141],[7.3593,51.514],[7.3603,51.5129],[7.3602,51.5118],[7.3609,51.5111],[7.3629,51.5109],[7.3617,51.5104],[7.3616,51.5054],[7.3633,51.5062],[7.3662,51.5084],[7.3648,51.5087],[7.3656,51.5088],[7.3685,51.5111],[7.3694,51.5113],[7.3751,51.5156],[7.3761,51.5154],[7.3778,51.5167],[7.3835,51.5174],[7.387,51.5169],[7.388,51.5174],[7.3905,51.5136],[7.3936,51.5148],[7.3931,51.5153],[7.3934,51.5154],[7.3939,51.5148],[7.394,51.516],[7.3931,51.5166],[7.3943,51.5161],[7.3971,51.5175],[7.399,51.5117],[7.3907,51.5091],[7.3913,51.5083],[7.3898,51.5079],[7.3894,51.5073],[7.3924,51.5032],[7.3948,51.503],[7.3972,51.5001],[7.3966,51.4998],[7.3991,51.4978],[7.3976,51.4977],[7.3981,51.4965],[7.4014,51.4959],[7.4013,51.4948],[7.3991,51.494],[7.4014,51.4944],[7.4016,51.4856],[7.3983,51.4828],[7.3937,51.4824],[7.3909,51.4828],[7.3909,51.481],[7.387,51.4802],[7.3876,51.479],[7.3884,51.4786],[7.3837,51.4769]]},{"n":"Mengede","r":[[7.372,51.535],[7.373,51.535],[7.3747,51.5335],[7.3787,51.5348],[7.3838,51.5376],[7.3858,51.5383],[7.386,51.5378],[7.3891,51.5383],[7.3942,51.5432],[7.4017,51.5466],[7.4004,51.548],[7.402,51.5466],[7.4082,51.5489],[7.408,51.5492],[7.4099,51.5502],[7.4146,51.5504],[7.4111,51.5509],[7.4143,51.5506],[7.4193,51.5511],[7.42,51.5515],[7.4192,51.5536],[7.4153,51.5585],[7.4197,51.558],[7.4256,51.5553],[7.426,51.5564],[7.4292,51.5564],[7.4298,51.5553],[7.4359,51.5555],[7.4348,51.5602],[7.4297,51.5699],[7.4286,51.5712],[7.4266,51.5727],[7.4222,51.5747],[7.4212,51.5776],[7.4236,51.5785],[7.4237,51.5781],[7.425,51.578],[7.4264,51.5785],[7.427,51.5775],[7.4272,51.5775],[7.4296,51.5782],[7.4295,51.5791],[7.4316,51.5818],[7.4364,51.5812],[7.4367,51.5816],[7.4275,51.5839],[7.4179,51.585],[7.421,51.5873],[7.4234,51.5902],[7.4227,51.5904],[7.4228,51.5907],[7.4255,51.5919],[7.4237,51.5937],[7.426,51.5946],[7.4226,51.5976],[7.4234,51.598],[7.4213,51.5995],[7.419,51.6],[7.4148,51.598],[7.4146,51.5973],[7.4133,51.5962],[7.4062,51.5942],[7.4003,51.5934],[7.3997,51.5926],[7.3996,51.5912],[7.3981,51.5885],[7.3957,51.5872],[7.392,51.5876],[7.3905,51.587],[7.382,51.5883],[7.38,51.5882],[7.3782,51.589],[7.3762,51.5892],[7.3718,51.5907],[7.3719,51.5899],[7.3683,51.5825],[7.3632,51.5836],[7.3608,51.583],[7.3607,51.5822],[7.3582,51.5818],[7.3571,51.5822],[7.3569,51.5835],[7.3559,51.5837],[7.3547,51.5853],[7.3538,51.5855],[7.3534,51.5835],[7.3523,51.5829],[7.3513,51.5828],[7.3502,51.582],[7.3487,51.5819],[7.3497,51.5811],[7.3429,51.579],[7.3426,51.5784],[7.3385,51.5768],[7.3445,51.5712],[7.3464,51.5719],[7.3477,51.571],[7.3503,51.5674],[7.3492,51.567],[7.3538,51.5652],[7.3514,51.5632],[7.351,51.5597],[7.3518,51.5597],[7.3513,51.5602],[7.3519,51.5608],[7.3547,51.5582],[7.3553,51.5569],[7.3565,51.556],[7.3553,51.5555],[7.3548,51.5546],[7.3529,51.5542],[7.3532,51.5539],[7.3511,51.5526],[7.3519,51.5519],[7.3526,51.552],[7.3536,51.5506],[7.3511,51.5497],[7.3523,51.549],[7.3498,51.5473],[7.3489,51.5473],[7.3484,51.5465],[7.3496,51.5468],[7.3499,51.5463],[7.3505,51.5463],[7.3474,51.5454],[7.3494,51.5431],[7.3487,51.5428],[7.35,51.5405],[7.3497,51.5405],[7.3498,51.5393],[7.3529,51.5379],[7.3535,51.5382],[7.3535,51.5389],[7.3546,51.5388],[7.3555,51.5368],[7.3572,51.5357],[7.357,51.5353],[7.3575,51.5346],[7.3572,51.5345],[7.3578,51.5337],[7.3598,51.5339],[7.3597,51.5347],[7.3617,51.5356],[7.3631,51.5356],[7.3652,51.5349],[7.3668,51.5352],[7.3686,51.5344],[7.372,51.535]]},{"n":"Huckarde","r":[[7.3557,51.5249],[7.354,51.525],[7.3542,51.5238],[7.3537,51.5237],[7.3549,51.5209],[7.3571,51.5213],[7.358,51.5206],[7.3587,51.5195],[7.3574,51.5192],[7.3582,51.5182],[7.3577,51.5182],[7.3583,51.5166],[7.3595,51.5165],[7.3601,51.5141],[7.3593,51.514],[7.3603,51.5129],[7.3602,51.5118],[7.3609,51.5111],[7.3629,51.5109],[7.3617,51.5104],[7.3616,51.5054],[7.3633,51.5062],[7.3662,51.5084],[7.3648,51.5087],[7.3656,51.5088],[7.3685,51.5111],[7.3694,51.5113],[7.3751,51.5156],[7.3761,51.5154],[7.3778,51.5167],[7.3835,51.5174],[7.387,51.5169],[7.388,51.5174],[7.3905,51.5136],[7.3936,51.5148],[7.3931,51.5153],[7.3934,51.5154],[7.3939,51.5148],[7.394,51.516],[7.3931,51.5166],[7.3934,51.5168],[7.3943,51.5161],[7.3971,51.5175],[7.3975,51.5172],[7.399,51.518],[7.3999,51.5176],[7.4036,51.5184],[7.4056,51.5174],[7.4096,51.5195],[7.4136,51.5189],[7.411,51.5226],[7.4208,51.5222],[7.4234,51.5212],[7.4248,51.5217],[7.4242,51.5225],[7.4259,51.5227],[7.4268,51.5224],[7.4299,51.5231],[7.4304,51.5234],[7.4243,51.5292],[7.4237,51.5299],[7.4241,51.5303],[7.423,51.5322],[7.4237,51.5326],[7.4234,51.5329],[7.4246,51.5334],[7.4251,51.5344],[7.4311,51.5339],[7.4337,51.5346],[7.4336,51.5399],[7.4351,51.5473],[7.4349,51.5486],[7.4364,51.5526],[7.4359,51.5555],[7.4298,51.5553],[7.4292,51.5564],[7.426,51.5564],[7.4256,51.5553],[7.4197,51.558],[7.4153,51.5585],[7.4192,51.5536],[7.42,51.5515],[7.4193,51.5511],[7.4143,51.5506],[7.4111,51.5509],[7.4146,51.5504],[7.4099,51.5502],[7.408,51.5492],[7.4082,51.5489],[7.402,51.5466],[7.4004,51.548],[7.4017,51.5466],[7.3942,51.5432],[7.3891,51.5383],[7.386,51.5378],[7.3858,51.5383],[7.3838,51.5376],[7.3787,51.5348],[7.3747,51.5335],[7.373,51.535],[7.3686,51.5344],[7.3668,51.5352],[7.3652,51.5349],[7.3631,51.5356],[7.3606,51.5353],[7.3597,51.5346],[7.3598,51.5339],[7.3614,51.5341],[7.3619,51.5332],[7.3606,51.533],[7.3614,51.5312],[7.3618,51.5313],[7.362,51.5308],[7.3639,51.5298],[7.3628,51.5294],[7.364,51.5281],[7.3626,51.5271],[7.3614,51.5283],[7.3603,51.528],[7.3562,51.5261],[7.3557,51.5249]]},{"n":"Innenstadt-West","r":[[7.4304,51.5234],[7.4332,51.5204],[7.4368,51.5185],[7.4422,51.5169],[7.4471,51.5163],[7.4464,51.5169],[7.4506,51.5181],[7.45,51.5183],[7.4503,51.5184],[7.457,51.519],[7.4645,51.5186],[7.4719,51.5195],[7.4737,51.5201],[7.4746,51.5179],[7.474,51.514],[7.4742,51.5089],[7.4604,51.5068],[7.4585,51.5043],[7.4595,51.4945],[7.4593,51.4915],[7.4583,51.4887],[7.4596,51.4866],[7.4574,51.4865],[7.4528,51.488],[7.4484,51.4883],[7.4466,51.4902],[7.4452,51.4909],[7.4389,51.4921],[7.4385,51.4927],[7.4389,51.4952],[7.4376,51.4963],[7.4344,51.4977],[7.433,51.4978],[7.4327,51.4974],[7.431,51.4978],[7.4232,51.4975],[7.4058,51.4953],[7.4021,51.4955],[7.3981,51.4965],[7.3976,51.4977],[7.3991,51.4978],[7.3966,51.4998],[7.3972,51.5001],[7.3948,51.503],[7.3934,51.5029],[7.3929,51.5034],[7.3924,51.5032],[7.3894,51.5073],[7.3898,51.5079],[7.3913,51.5083],[7.3907,51.5091],[7.399,51.5117],[7.3971,51.5175],[7.3975,51.5172],[7.399,51.518],[7.3999,51.5176],[7.4036,51.5184],[7.4056,51.5174],[7.4096,51.5195],[7.4136,51.5189],[7.411,51.5226],[7.4208,51.5222],[7.4234,51.5212],[7.4248,51.5217],[7.4242,51.5225],[7.4279,51.5225],[7.4304,51.5234]]},{"n":"Innenstadt-Ost","r":[[7.4596,51.4866],[7.4617,51.4877],[7.4682,51.4903],[7.4744,51.4902],[7.4768,51.4909],[7.4772,51.4915],[7.48,51.4913],[7.4847,51.4936],[7.4861,51.4932],[7.4872,51.4921],[7.4902,51.4912],[7.4932,51.4949],[7.4937,51.4969],[7.4932,51.4998],[7.5026,51.4976],[7.5056,51.4965],[7.5062,51.5003],[7.5056,51.501],[7.506,51.5012],[7.5083,51.4997],[7.5134,51.4989],[7.5131,51.4984],[7.5135,51.4989],[7.52,51.4976],[7.5209,51.4997],[7.5206,51.5013],[7.522,51.5021],[7.5237,51.5052],[7.5207,51.5154],[7.5205,51.5156],[7.5108,51.5121],[7.5131,51.5141],[7.5131,51.5162],[7.5122,51.5183],[7.5097,51.522],[7.5058,51.5264],[7.4986,51.5237],[7.494,51.5224],[7.4739,51.5195],[7.4746,51.5179],[7.474,51.514],[7.4742,51.5089],[7.4604,51.5068],[7.4585,51.5043],[7.4595,51.4945],[7.4593,51.4915],[7.4583,51.4887],[7.4596,51.4866]]},{"n":"Innenstadt-Nord","r":[[7.4304,51.5234],[7.4332,51.5204],[7.4368,51.5185],[7.4422,51.5169],[7.4471,51.5163],[7.4464,51.5169],[7.4506,51.5181],[7.45,51.5183],[7.4503,51.5184],[7.457,51.519],[7.4645,51.5186],[7.4719,51.5195],[7.4736,51.5201],[7.4742,51.5196],[7.494,51.5224],[7.4986,51.5237],[7.5058,51.5264],[7.506,51.5268],[7.5056,51.5274],[7.5156,51.5312],[7.5148,51.532],[7.5136,51.5317],[7.5143,51.534],[7.5142,51.535],[7.5134,51.5362],[7.5116,51.5373],[7.5118,51.5377],[7.5102,51.5409],[7.511,51.5455],[7.5108,51.5464],[7.5092,51.5466],[7.5113,51.5474],[7.5098,51.5471],[7.5094,51.5483],[7.5115,51.5485],[7.5117,51.5501],[7.5105,51.5506],[7.5091,51.5506],[7.509,51.5519],[7.5039,51.5517],[7.5042,51.5522],[7.5039,51.5522],[7.5038,51.5516],[7.4978,51.5511],[7.4978,51.5518],[7.4978,51.551],[7.495,51.5511],[7.4939,51.5502],[7.4925,51.5501],[7.4879,51.5467],[7.4854,51.5454],[7.4857,51.5431],[7.48,51.5415],[7.4805,51.5413],[7.4801,51.5411],[7.4795,51.5414],[7.4796,51.541],[7.4766,51.5403],[7.4758,51.5396],[7.4685,51.5391],[7.4687,51.5399],[7.4683,51.5394],[7.4635,51.5398],[7.463,51.5391],[7.4568,51.5366],[7.4566,51.5371],[7.4548,51.5373],[7.4538,51.5399],[7.4451,51.5393],[7.4447,51.5405],[7.4396,51.5413],[7.4367,51.5409],[7.4382,51.5426],[7.4378,51.5434],[7.4358,51.5419],[7.434,51.5418],[7.4334,51.539],[7.4336,51.5345],[7.4311,51.5339],[7.4251,51.5344],[7.4246,51.5334],[7.4234,51.5329],[7.4237,51.5326],[7.423,51.5322],[7.4241,51.5303],[7.4237,51.5299],[7.4243,51.5292],[7.4304,51.5234]]},{"n":"Hombruch","r":[[7.4668,51.4345],[7.4626,51.4339],[7.4615,51.4363],[7.4584,51.4359],[7.4558,51.4363],[7.4526,51.4361],[7.4437,51.4346],[7.442,51.4347],[7.4386,51.4357],[7.4298,51.4339],[7.4235,51.4317],[7.4225,51.4342],[7.4221,51.4371],[7.4187,51.4404],[7.4184,51.4421],[7.4185,51.4447],[7.4169,51.4449],[7.4151,51.4468],[7.4141,51.4482],[7.4142,51.4501],[7.4132,51.4509],[7.412,51.4512],[7.4124,51.4517],[7.4114,51.452],[7.4116,51.4523],[7.4111,51.4524],[7.4114,51.4528],[7.4088,51.4536],[7.4083,51.4548],[7.405,51.4549],[7.4004,51.4581],[7.3986,51.4576],[7.3938,51.4577],[7.3938,51.4592],[7.3926,51.4592],[7.3928,51.4609],[7.3919,51.461],[7.3891,51.4626],[7.3903,51.4636],[7.3912,51.4653],[7.3911,51.4659],[7.3885,51.4663],[7.3887,51.4669],[7.3882,51.4672],[7.3887,51.4705],[7.3898,51.4728],[7.389,51.473],[7.3894,51.4741],[7.3871,51.4744],[7.3837,51.4769],[7.3884,51.4786],[7.3876,51.479],[7.387,51.4802],[7.3909,51.481],[7.3909,51.4828],[7.3937,51.4824],[7.3983,51.4828],[7.4005,51.4845],[7.4016,51.4856],[7.4014,51.4944],[7.3991,51.494],[7.4011,51.4947],[7.4013,51.4956],[7.4058,51.4953],[7.4232,51.4975],[7.431,51.4978],[7.4327,51.4974],[7.433,51.4978],[7.4344,51.4977],[7.4376,51.4963],[7.4389,51.4952],[7.4385,51.4927],[7.4389,51.4921],[7.4452,51.4909],[7.4466,51.4902],[7.4484,51.4883],[7.4528,51.488],[7.4557,51.4869],[7.4589,51.4863],[7.4669,51.4897],[7.4669,51.4873],[7.4685,51.4849],[7.4775,51.4813],[7.4793,51.4797],[7.4759,51.4799],[7.476,51.4786],[7.4739,51.4788],[7.4738,51.4782],[7.4731,51.478],[7.471,51.4781],[7.4704,51.4771],[7.4706,51.476],[7.472,51.4739],[7.4764,51.4748],[7.478,51.4697],[7.481,51.4701],[7.4844,51.4611],[7.4832,51.4551],[7.4839,51.454],[7.4868,51.4522],[7.4883,51.4495],[7.487,51.4458],[7.4865,51.4457],[7.4844,51.4417],[7.4834,51.4407],[7.4845,51.4398],[7.4774,51.4373],[7.4761,51.4375],[7.4695,51.4351],[7.4668,51.4345]]},{"n":"Hörde","r":[[7.5424,51.461],[7.5449,51.4608],[7.545,51.46],[7.5494,51.4576],[7.5508,51.456],[7.5526,51.4551],[7.5443,51.4526],[7.5416,51.4512],[7.5386,51.4489],[7.5362,51.4448],[7.5327,51.4358],[7.5318,51.4348],[7.5307,51.4344],[7.5283,51.4345],[7.5231,51.4368],[7.5201,51.4353],[7.5118,51.4334],[7.5113,51.4311],[7.5105,51.4296],[7.5088,51.4286],[7.5085,51.4278],[7.5047,51.4269],[7.5058,51.4261],[7.5058,51.425],[7.505,51.4248],[7.5073,51.423],[7.5072,51.4212],[7.5082,51.4211],[7.5088,51.4194],[7.5118,51.4181],[7.5108,51.4178],[7.5063,51.4185],[7.501,51.4184],[7.4963,51.4171],[7.493,51.4157],[7.4918,51.4165],[7.4864,51.4179],[7.4759,51.4177],[7.4651,51.4168],[7.464,51.418],[7.4636,51.4242],[7.4649,51.426],[7.4648,51.4274],[7.4653,51.429],[7.4676,51.4313],[7.4668,51.4345],[7.4695,51.4351],[7.4761,51.4375],[7.4774,51.4373],[7.4845,51.4398],[7.4834,51.4407],[7.4844,51.4417],[7.4865,51.4457],[7.487,51.4458],[7.4883,51.4495],[7.4868,51.4522],[7.4839,51.454],[7.4832,51.4551],[7.4844,51.4611],[7.481,51.4701],[7.478,51.4697],[7.4764,51.4748],[7.472,51.4739],[7.4706,51.476],[7.4704,51.4771],[7.471,51.4781],[7.4731,51.478],[7.4738,51.4782],[7.4739,51.4788],[7.476,51.4786],[7.4759,51.4799],[7.4793,51.4797],[7.4775,51.4813],[7.4685,51.4849],[7.4669,51.4873],[7.4669,51.4897],[7.4689,51.4904],[7.4744,51.4902],[7.4768,51.4909],[7.4774,51.4915],[7.48,51.4913],[7.4847,51.4936],[7.4861,51.4932],[7.4872,51.4921],[7.4902,51.4912],[7.4932,51.4949],[7.4937,51.4969],[7.4932,51.4998],[7.5026,51.4976],[7.5056,51.4965],[7.5062,51.5003],[7.5056,51.501],[7.506,51.5012],[7.5083,51.4997],[7.5134,51.4989],[7.5131,51.4984],[7.5135,51.4989],[7.5199,51.4977],[7.5188,51.4938],[7.5196,51.4937],[7.5195,51.4929],[7.5191,51.4926],[7.5201,51.4928],[7.5189,51.4913],[7.5196,51.49],[7.5201,51.4904],[7.5209,51.4891],[7.5237,51.4887],[7.5272,51.4899],[7.5282,51.4874],[7.5266,51.4867],[7.5281,51.4873],[7.5281,51.4854],[7.5272,51.4855],[7.5255,51.4848],[7.5226,51.4847],[7.5223,51.4844],[7.5204,51.4848],[7.5207,51.4857],[7.5203,51.4858],[7.5198,51.4849],[7.5187,51.4852],[7.519,51.4859],[7.5177,51.486],[7.5174,51.4853],[7.5184,51.4849],[7.5181,51.4839],[7.5215,51.4836],[7.5221,51.483],[7.5226,51.4817],[7.5203,51.4815],[7.5152,51.4822],[7.5155,51.4813],[7.5163,51.4815],[7.5166,51.4803],[7.5179,51.4798],[7.518,51.4791],[7.5177,51.4792],[7.517,51.4781],[7.5172,51.4767],[7.5164,51.4765],[7.5163,51.4758],[7.5174,51.4746],[7.5177,51.4734],[7.5185,51.4729],[7.5219,51.4729],[7.5222,51.4724],[7.5234,51.4722],[7.5262,51.4672],[7.5273,51.4643],[7.529,51.4631],[7.5325,51.4593],[7.5371,51.4595],[7.5424,51.461]]},{"n":"Aplerbeck","r":[[7.5978,51.5079],[7.5965,51.5076],[7.597,51.5057],[7.5973,51.5005],[7.5982,51.4969],[7.5964,51.4959],[7.5975,51.496],[7.5987,51.4951],[7.5983,51.495],[7.5998,51.4912],[7.6008,51.491],[7.601,51.4904],[7.6022,51.4907],[7.6083,51.4797],[7.6095,51.4802],[7.6097,51.4798],[7.6057,51.4772],[7.6003,51.4718],[7.5971,51.4694],[7.5907,51.4663],[7.5841,51.4643],[7.5836,51.4645],[7.583,51.4661],[7.583,51.4688],[7.5816,51.4692],[7.5794,51.4715],[7.5774,51.4707],[7.5739,51.4745],[7.5716,51.475],[7.5702,51.4746],[7.5668,51.4722],[7.566,51.4725],[7.5645,51.4715],[7.5617,51.4705],[7.5539,51.4695],[7.5461,51.4665],[7.5458,51.4645],[7.5433,51.4631],[7.5424,51.4617],[7.5424,51.461],[7.5371,51.4595],[7.5325,51.4593],[7.529,51.4631],[7.5273,51.4643],[7.5262,51.4672],[7.5234,51.4722],[7.5222,51.4724],[7.5219,51.4729],[7.5181,51.473],[7.5177,51.4734],[7.5174,51.4746],[7.5164,51.4756],[7.5164,51.4765],[7.5172,51.4767],[7.517,51.4781],[7.5177,51.4792],[7.518,51.4791],[7.5179,51.4798],[7.5166,51.4803],[7.5163,51.4815],[7.5155,51.4813],[7.5152,51.4822],[7.5203,51.4815],[7.5226,51.4817],[7.5221,51.483],[7.5215,51.4836],[7.5181,51.4839],[7.5184,51.4849],[7.5174,51.4853],[7.5177,51.486],[7.519,51.4859],[7.5187,51.4852],[7.5198,51.4849],[7.5203,51.4858],[7.5207,51.4857],[7.5204,51.4848],[7.5223,51.4844],[7.5226,51.4847],[7.5255,51.4848],[7.5272,51.4855],[7.5281,51.4854],[7.5281,51.4873],[7.5266,51.4867],[7.5282,51.4874],[7.5272,51.4899],[7.5238,51.4887],[7.5211,51.489],[7.5201,51.4904],[7.5196,51.49],[7.5189,51.4913],[7.5201,51.4928],[7.5191,51.4926],[7.5195,51.4929],[7.5196,51.4937],[7.5188,51.4938],[7.5209,51.4997],[7.5206,51.5013],[7.522,51.5021],[7.5237,51.5057],[7.5512,51.51],[7.5598,51.5093],[7.5714,51.5072],[7.5848,51.5059],[7.5892,51.5061],[7.5892,51.5063],[7.5909,51.5066],[7.5907,51.5071],[7.5935,51.5074],[7.5947,51.5084],[7.5955,51.5082],[7.5957,51.5076],[7.5978,51.5079]]},{"n":"Brackel","r":[[7.6057,51.5513],[7.6065,51.5519],[7.608,51.5509],[7.6065,51.5501],[7.608,51.5485],[7.6107,51.5492],[7.6121,51.5491],[7.6118,51.5494],[7.6122,51.5495],[7.6201,51.5503],[7.6261,51.5523],[7.6293,51.5504],[7.6326,51.5497],[7.6323,51.548],[7.6335,51.5457],[7.6294,51.543],[7.6288,51.5416],[7.6326,51.5419],[7.6327,51.541],[7.6309,51.5404],[7.6312,51.5395],[7.6347,51.532],[7.6359,51.532],[7.6364,51.5302],[7.6367,51.5302],[7.6381,51.5276],[7.6347,51.5265],[7.6363,51.5234],[7.6306,51.5219],[7.6328,51.5192],[7.6188,51.5172],[7.6076,51.5119],[7.5978,51.5079],[7.5957,51.5076],[7.5955,51.5082],[7.5947,51.5084],[7.5935,51.5074],[7.5907,51.5071],[7.5909,51.5066],[7.5892,51.5063],[7.5892,51.5061],[7.5848,51.5059],[7.5714,51.5072],[7.5598,51.5093],[7.5512,51.51],[7.5237,51.5057],[7.5205,51.5156],[7.5108,51.5121],[7.5131,51.5141],[7.5131,51.5162],[7.5122,51.5183],[7.5097,51.522],[7.5056,51.5267],[7.506,51.5268],[7.5056,51.5274],[7.5156,51.5312],[7.5148,51.532],[7.5216,51.5351],[7.5282,51.5367],[7.5325,51.537],[7.5338,51.5375],[7.5327,51.5383],[7.5374,51.5389],[7.5392,51.5397],[7.5391,51.5402],[7.5401,51.539],[7.5426,51.5404],[7.5631,51.5483],[7.5644,51.5459],[7.5689,51.543],[7.5696,51.5404],[7.5687,51.5383],[7.5692,51.5365],[7.5735,51.5374],[7.5788,51.5377],[7.5788,51.5384],[7.5805,51.5383],[7.5826,51.5416],[7.5858,51.5411],[7.5858,51.5408],[7.5861,51.542],[7.5872,51.5422],[7.587,51.543],[7.5953,51.5441],[7.5958,51.5429],[7.6027,51.5494],[7.6057,51.5513]]},{"n":"Scharnhorst","r":[[7.5025,51.5798],[7.5028,51.5791],[7.5162,51.5786],[7.516,51.5781],[7.5172,51.5786],[7.5264,51.5781],[7.5268,51.5782],[7.5259,51.5786],[7.5327,51.5797],[7.5319,51.5792],[7.5521,51.5851],[7.563,51.5868],[7.5637,51.5849],[7.5703,51.5858],[7.5699,51.5841],[7.5774,51.5835],[7.5774,51.5831],[7.5815,51.5837],[7.5822,51.5812],[7.5903,51.5832],[7.5909,51.5819],[7.5927,51.5797],[7.5938,51.5788],[7.5962,51.5778],[7.5963,51.5764],[7.5972,51.5762],[7.5963,51.574],[7.593,51.5735],[7.5907,51.5722],[7.5906,51.57],[7.5938,51.5686],[7.593,51.5683],[7.5921,51.5663],[7.5907,51.5659],[7.5921,51.5652],[7.5941,51.5648],[7.5994,51.5649],[7.6009,51.5653],[7.6005,51.5678],[7.6063,51.5685],[7.6067,51.5659],[7.6057,51.5648],[7.6059,51.5641],[7.604,51.5624],[7.6041,51.5595],[7.6037,51.5592],[7.604,51.5584],[7.6035,51.5577],[7.6045,51.557],[7.6064,51.5569],[7.607,51.555],[7.603,51.5547],[7.6057,51.5513],[7.6027,51.5494],[7.5958,51.5429],[7.5953,51.5441],[7.587,51.543],[7.5872,51.5422],[7.5861,51.542],[7.5858,51.5408],[7.5858,51.5411],[7.5826,51.5416],[7.5805,51.5383],[7.5788,51.5384],[7.5788,51.5377],[7.5735,51.5374],[7.5692,51.5365],[7.5687,51.5383],[7.5696,51.5404],[7.5689,51.543],[7.5644,51.5459],[7.5631,51.5483],[7.5426,51.5404],[7.5401,51.539],[7.5389,51.5401],[7.5392,51.5397],[7.5374,51.5389],[7.5327,51.5383],[7.5338,51.5375],[7.5325,51.537],[7.5282,51.5367],[7.5216,51.5351],[7.5138,51.5315],[7.5142,51.535],[7.5134,51.5362],[7.5116,51.5373],[7.5118,51.5377],[7.5102,51.5409],[7.5102,51.5422],[7.511,51.5451],[7.5108,51.5464],[7.5092,51.5466],[7.5113,51.5474],[7.5098,51.5471],[7.5094,51.5483],[7.5115,51.5485],[7.5117,51.5501],[7.5105,51.5506],[7.5091,51.5506],[7.509,51.5519],[7.5039,51.5517],[7.5042,51.5522],[7.5039,51.5522],[7.5038,51.5516],[7.4978,51.5511],[7.4975,51.5522],[7.4966,51.5528],[7.4976,51.5605],[7.4979,51.5609],[7.4949,51.561],[7.4949,51.5625],[7.5011,51.5626],[7.5021,51.5647],[7.5008,51.5654],[7.5012,51.5667],[7.5009,51.5678],[7.5,51.5693],[7.4997,51.5692],[7.498,51.5725],[7.4951,51.5763],[7.493,51.5765],[7.4908,51.5773],[7.4907,51.5781],[7.4914,51.5784],[7.4917,51.5797],[7.4915,51.5805],[7.4927,51.5809],[7.4939,51.5798],[7.4953,51.5798],[7.4972,51.5791],[7.4999,51.5792],[7.5001,51.5799],[7.5014,51.5794],[7.5025,51.5798]]},{"n":"Eving","r":[[7.4549,51.5372],[7.4566,51.5371],[7.4568,51.5366],[7.463,51.5391],[7.4635,51.5398],[7.4683,51.5394],[7.4687,51.5399],[7.4685,51.5391],[7.4758,51.5396],[7.4766,51.5403],[7.4796,51.541],[7.4795,51.5414],[7.4801,51.5411],[7.4805,51.5413],[7.48,51.5415],[7.4857,51.5431],[7.4854,51.5454],[7.4879,51.5467],[7.4925,51.5501],[7.4939,51.5502],[7.495,51.5511],[7.4978,51.551],[7.4975,51.5522],[7.4966,51.5528],[7.4976,51.5605],[7.4979,51.5609],[7.4949,51.561],[7.4949,51.5625],[7.5011,51.5626],[7.5021,51.5647],[7.5008,51.5654],[7.5012,51.5667],[7.5009,51.5678],[7.4953,51.5761],[7.4947,51.5765],[7.493,51.5765],[7.4909,51.5772],[7.4907,51.5781],[7.4914,51.5784],[7.4915,51.5805],[7.4927,51.5809],[7.4939,51.5798],[7.4953,51.5798],[7.4972,51.5791],[7.4999,51.5792],[7.5001,51.5799],[7.5014,51.5794],[7.5025,51.5798],[7.5021,51.5808],[7.504,51.5857],[7.5038,51.5862],[7.5017,51.5863],[7.4978,51.5923],[7.4901,51.5925],[7.485,51.5909],[7.4781,51.5893],[7.4762,51.5907],[7.4711,51.5871],[7.4706,51.5875],[7.4695,51.5872],[7.4679,51.5888],[7.4671,51.5869],[7.4656,51.5858],[7.4654,51.5861],[7.464,51.5859],[7.4622,51.5849],[7.4622,51.5845],[7.4613,51.5844],[7.46,51.5832],[7.4589,51.5836],[7.4589,51.5839],[7.4564,51.5838],[7.4562,51.5843],[7.4544,51.5831],[7.455,51.583],[7.4525,51.5819],[7.4496,51.583],[7.4484,51.5822],[7.4482,51.5816],[7.4466,51.5818],[7.4461,51.5795],[7.4366,51.5817],[7.4364,51.5812],[7.4316,51.5818],[7.4295,51.5791],[7.4296,51.5782],[7.427,51.5775],[7.4264,51.5785],[7.425,51.578],[7.4237,51.5781],[7.4236,51.5785],[7.4212,51.5776],[7.4222,51.5747],[7.4259,51.5732],[7.4288,51.571],[7.432,51.5659],[7.435,51.5597],[7.4364,51.5526],[7.4349,51.5486],[7.4351,51.5473],[7.4341,51.5418],[7.4358,51.5419],[7.4378,51.5434],[7.4382,51.5426],[7.4367,51.5409],[7.4396,51.5413],[7.4447,51.5405],[7.4451,51.5393],[7.4538,51.5399],[7.4549,51.5372]]}],"see":[[7.505,51.4916],[7.505,51.4912],[7.5068,51.4912],[7.5068,51.491],[7.5078,51.4897],[7.5148,51.4886],[7.5176,51.4874],[7.5209,51.4869],[7.5212,51.4873],[7.5211,51.4878],[7.5181,51.4887],[7.5176,51.4894],[7.5169,51.4909],[7.5166,51.4912],[7.5161,51.4914],[7.5121,51.4914],[7.5101,51.4917],[7.505,51.4916]],"turm":[7.4766,51.4966]};
+var GRENZE = {"type":"Polygon","coordinates":[[[7.3024,51.5077],[7.3043,51.506],[7.304,51.5043],[7.3135,51.5042],[7.3148,51.5048],[7.3152,51.5058],[7.3173,51.506],[7.3194,51.5],[7.3183,51.4993],[7.3189,51.4991],[7.3163,51.4983],[7.3167,51.4973],[7.3158,51.4964],[7.3174,51.4939],[7.3225,51.4945],[7.3233,51.4927],[7.3229,51.4905],[7.3235,51.4889],[7.3236,51.4896],[7.325,51.4898],[7.3252,51.4891],[7.3268,51.4891],[7.3274,51.4901],[7.3282,51.49],[7.3298,51.4931],[7.3316,51.4931],[7.3314,51.4946],[7.3305,51.4946],[7.3306,51.4965],[7.3341,51.4965],[7.3342,51.4957],[7.3376,51.496],[7.3404,51.4953],[7.3397,51.4932],[7.3429,51.4931],[7.3426,51.4917],[7.3437,51.4915],[7.3425,51.4887],[7.3413,51.4889],[7.3402,51.4864],[7.3425,51.4835],[7.3475,51.4843],[7.3476,51.4831],[7.3488,51.482],[7.3513,51.4823],[7.3513,51.4836],[7.3537,51.4843],[7.3547,51.4819],[7.3561,51.4823],[7.3579,51.4807],[7.3592,51.4809],[7.3612,51.4805],[7.3613,51.48],[7.3713,51.4827],[7.3727,51.4802],[7.3716,51.4804],[7.371,51.4784],[7.3716,51.4764],[7.3776,51.478],[7.3798,51.4779],[7.3808,51.4788],[7.3871,51.4744],[7.3894,51.4741],[7.389,51.473],[7.3898,51.4728],[7.3887,51.4705],[7.3882,51.4672],[7.3885,51.4663],[7.3911,51.4659],[7.3912,51.4653],[7.3891,51.4626],[7.3928,51.4609],[7.3926,51.4592],[7.3938,51.4592],[7.3938,51.4577],[7.3986,51.4576],[7.4004,51.4581],[7.405,51.4549],[7.4083,51.4548],[7.4088,51.4536],[7.4114,51.4528],[7.4114,51.452],[7.4124,51.4517],[7.412,51.4512],[7.4142,51.4501],[7.4141,51.4482],[7.4151,51.4468],[7.4169,51.4449],[7.4185,51.4447],[7.4187,51.4404],[7.4221,51.4371],[7.4235,51.4317],[7.4298,51.4339],[7.4378,51.4356],[7.4437,51.4346],[7.4526,51.4361],[7.4615,51.4363],[7.4626,51.4339],[7.4668,51.4345],[7.4674,51.4325],[7.4676,51.4313],[7.4653,51.4291],[7.4649,51.426],[7.4636,51.4242],[7.4638,51.4186],[7.4651,51.4168],[7.4864,51.4179],[7.493,51.4157],[7.5009,51.4184],[7.5063,51.4185],[7.5108,51.4178],[7.5119,51.4183],[7.5088,51.4194],[7.5082,51.4211],[7.5072,51.4212],[7.5073,51.423],[7.505,51.4248],[7.5058,51.425],[7.5058,51.4261],[7.5047,51.4269],[7.5085,51.4278],[7.5105,51.4296],[7.5118,51.4334],[7.5201,51.4353],[7.5231,51.4368],[7.5286,51.4344],[7.5322,51.435],[7.5365,51.4454],[7.5386,51.4489],[7.5443,51.4526],[7.5526,51.4551],[7.5494,51.4576],[7.545,51.46],[7.5449,51.4608],[7.5424,51.461],[7.5433,51.4631],[7.5458,51.4645],[7.5461,51.4665],[7.5539,51.4695],[7.5617,51.4705],[7.566,51.4725],[7.5668,51.4722],[7.5716,51.475],[7.5739,51.4745],[7.5774,51.4707],[7.5794,51.4715],[7.5816,51.4692],[7.583,51.4688],[7.583,51.4661],[7.5841,51.4643],[7.593,51.4672],[7.5997,51.4713],[7.6057,51.4772],[7.6097,51.4798],[7.6095,51.4802],[7.6083,51.4797],[7.6022,51.4907],[7.601,51.4904],[7.6008,51.491],[7.5998,51.4912],[7.5987,51.4951],[7.5975,51.496],[7.5964,51.4959],[7.5982,51.4969],[7.5965,51.5076],[7.6066,51.5115],[7.6188,51.5172],[7.6328,51.5192],[7.6306,51.5219],[7.6363,51.5234],[7.6347,51.5265],[7.6382,51.5277],[7.6364,51.5302],[7.6359,51.532],[7.6347,51.532],[7.6312,51.5395],[7.6309,51.5404],[7.6327,51.541],[7.6326,51.5419],[7.6288,51.5416],[7.6294,51.543],[7.6335,51.5457],[7.6323,51.548],[7.6326,51.5497],[7.6293,51.5504],[7.6261,51.5523],[7.6201,51.5503],[7.608,51.5485],[7.6065,51.5501],[7.608,51.5509],[7.6065,51.5519],[7.6057,51.5513],[7.603,51.5547],[7.607,51.555],[7.6064,51.5569],[7.6045,51.557],[7.6035,51.5577],[7.6041,51.5595],[7.604,51.5624],[7.6059,51.5641],[7.6057,51.5648],[7.6067,51.5659],[7.6063,51.5685],[7.6005,51.5678],[7.6009,51.5653],[7.5994,51.5649],[7.5941,51.5648],[7.5908,51.5658],[7.5921,51.5663],[7.593,51.5683],[7.5938,51.5686],[7.5906,51.57],[7.5907,51.5722],[7.593,51.5735],[7.5963,51.574],[7.5972,51.5762],[7.5963,51.5764],[7.5962,51.5778],[7.5927,51.5797],[7.5903,51.5832],[7.5822,51.5812],[7.5815,51.5837],[7.5774,51.5831],[7.5699,51.5841],[7.5703,51.5858],[7.5637,51.5849],[7.563,51.5868],[7.5521,51.5851],[7.5319,51.5792],[7.5327,51.5797],[7.5259,51.5786],[7.5268,51.5782],[7.5264,51.5781],[7.5028,51.5791],[7.5021,51.5808],[7.5041,51.5855],[7.5038,51.5862],[7.5017,51.5863],[7.4978,51.5923],[7.4901,51.5925],[7.4781,51.5893],[7.4762,51.5907],[7.4711,51.5871],[7.4695,51.5872],[7.4679,51.5888],[7.4671,51.5869],[7.4656,51.5858],[7.464,51.5859],[7.46,51.5832],[7.4589,51.5839],[7.4564,51.5838],[7.4562,51.5843],[7.4525,51.5819],[7.4496,51.583],[7.4482,51.5816],[7.4466,51.5818],[7.4461,51.5795],[7.4275,51.5839],[7.4179,51.585],[7.421,51.5873],[7.4234,51.5902],[7.4228,51.5907],[7.4255,51.5919],[7.4237,51.5937],[7.426,51.5946],[7.4226,51.5976],[7.4234,51.598],[7.4213,51.5995],[7.419,51.6],[7.4148,51.598],[7.4133,51.5962],[7.4062,51.5942],[7.4003,51.5934],[7.3981,51.5885],[7.3957,51.5872],[7.392,51.5876],[7.3905,51.587],[7.382,51.5883],[7.38,51.5882],[7.3718,51.5907],[7.3719,51.5899],[7.3683,51.5825],[7.3632,51.5836],[7.3608,51.583],[7.3607,51.5822],[7.3582,51.5818],[7.3572,51.5822],[7.3569,51.5835],[7.3538,51.5855],[7.3534,51.5835],[7.3502,51.582],[7.3487,51.5819],[7.3497,51.5811],[7.3429,51.579],[7.3426,51.5784],[7.3385,51.5768],[7.3445,51.5712],[7.3464,51.5719],[7.3477,51.571],[7.3503,51.5674],[7.3492,51.567],[7.3538,51.5652],[7.3514,51.5632],[7.351,51.5597],[7.3518,51.5597],[7.3513,51.5602],[7.3519,51.5608],[7.3565,51.556],[7.3511,51.5526],[7.3526,51.552],[7.3536,51.5506],[7.3511,51.5497],[7.3523,51.549],[7.3484,51.5465],[7.3497,51.5468],[7.3505,51.5463],[7.3474,51.5454],[7.3494,51.5431],[7.3487,51.5428],[7.35,51.5405],[7.3498,51.5393],[7.3529,51.5379],[7.3535,51.5389],[7.3546,51.5388],[7.3555,51.5368],[7.3572,51.5357],[7.3578,51.5337],[7.3614,51.5341],[7.3619,51.5332],[7.3606,51.533],[7.3614,51.5312],[7.3639,51.5298],[7.3628,51.5294],[7.364,51.5281],[7.3626,51.5271],[7.3614,51.5283],[7.3603,51.528],[7.3562,51.5261],[7.3557,51.5249],[7.354,51.525],[7.3542,51.5238],[7.3463,51.5223],[7.3465,51.5241],[7.3448,51.5232],[7.3435,51.5233],[7.3433,51.5243],[7.3414,51.5234],[7.34,51.5217],[7.3347,51.5202],[7.3325,51.521],[7.3301,51.5208],[7.3274,51.5222],[7.3247,51.5226],[7.3244,51.5236],[7.3236,51.524],[7.3236,51.5235],[7.3199,51.5226],[7.3195,51.523],[7.3161,51.5219],[7.3157,51.5225],[7.3139,51.5211],[7.3126,51.5214],[7.3108,51.5206],[7.3075,51.5188],[7.3082,51.5185],[7.3069,51.5178],[7.3052,51.5177],[7.3035,51.5157],[7.3026,51.5123],[7.3024,51.5077]]]};
+
+// ---------- Bezirk je Halle (Punkt in Polygon; Ringe als [Laenge, Breite]) ----------
+function drin(p, ring){
+  var x = p[1], y = p[0], c = false;
+  for(var i = 0, j = ring.length - 1; i < ring.length; j = i++){
+    var xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+    if(((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) c = !c;
+  }
+  return c;
+}
+function bezirk(p){
+  if(!p) return "";
+  for(var i = 0; i < BEZIRKE.bezirke.length; i++) if(drin(p, BEZIRKE.bezirke[i].r)) return BEZIRKE.bezirke[i].n;
+  return "";
+}
+
+// ---------- Verzeichnis + Spielplan zusammenfuehren ----------
+var eintraege = [], nachId = {}, gleichePos = {};
+H.liste.forEach(function(h){
+  var pos = h.pos.slice(), k = pos.join(",");
+  // Zwei Schulen auf einem Gelaende (Schweizer Allee): Punkt minimal versetzen, sonst verdeckt einer den anderen
+  if(gleichePos[k]) pos[1] += 0.0012 * gleichePos[k];
+  gleichePos[k] = (gleichePos[k] || 0) + 1;
+  var e = {id: h.id, name: h.name, strasse: h.strasse, plz: h.plz, teil: h.teil, pos: pos, felder: h.felder,
+           bez: bezirk(h.pos), spiele: 0, vereine: {}, naechstes: null, dist: null};
+  eintraege.push(e); nachId[e.id] = e;
+});
+var TEAMS = {}, VEREINE = {};
+if(D){
+  (D.teams || []).forEach(function(t){ TEAMS[t.id] = t; });
+  (D.vereine || []).forEach(function(v){ VEREINE[v.name] = true; });
+}
+function zweistellig(n){ return (n < 10 ? "0" : "") + n; }
+var jetzt = new Date();
+var HEUTE = jetzt.getFullYear() + "-" + zweistellig(jetzt.getMonth() + 1) + "-" + zweistellig(jetzt.getDate());
+var UHR = zweistellig(jetzt.getHours()) + ":" + zweistellig(jetzt.getMinutes());
+function teamLabel(s){
+  var t = TEAMS[s.ht];
+  if(!t) return s.h;
+  return t.label.replace(/\s*\(.*\)\s*$/, "").replace(/\s*–\s*Pokal$/, "");
+}
+var extra = {};
+(D ? D.spiele : []).forEach(function(s){
+  if(s.sa !== SA || !s.halle || s.st === "Abgesagt") return;
+  var h = H.finde(s.halle, s.adr), e = h ? nachId[h.id] : null;
+  if(!e){
+    // Dortmunder Halle mit Heimspiel, die (noch) nicht im Verzeichnis steht: trotzdem zeigen, ohne Kartenpunkt
+    var m = String(s.adr || "").match(/^(.*?),\s*(44\d{3})\s+Dortmund(?:\s*-\s*(.+))?/);
+    if(!m || !s.hv) return;
+    var k = H.norm(s.halle) + "|" + m[2];
+    e = extra[k] || (extra[k] = {id: "sp-" + Object.keys(extra).length, name: s.halle, strasse: m[1], plz: m[2], teil: m[3] || "",
+                                 pos: null, felder: [], bez: "", spiele: 0, vereine: {}, naechstes: null, dist: null, extra: true});
+  }
+  e.spiele++;
+  if(s.hv){ (e.vereine[s.hv] = e.vereine[s.hv] || {})[teamLabel(s)] = true; }
+  var kommt = s.st === "Offen" && (s.d > HEUTE || (s.d === HEUTE && (s.t || "99:99") >= UHR));
+  if(kommt && (!e.naechstes || s.d + (s.t || "") < e.naechstes.d + (e.naechstes.t || ""))) e.naechstes = s;
+});
+var alle = eintraege.concat(Object.keys(extra).map(function(k){ return extra[k]; }));
+alle.forEach(function(e){
+  var teile = [e.name, e.strasse, e.plz, e.teil, e.bez];
+  e.felder.forEach(function(f){ teile.push(f.name, f.kuerzel); });
+  Object.keys(e.vereine).forEach(function(v){ teile.push(v); teile = teile.concat(Object.keys(e.vereine[v])); });
+  e.such = H.norm(teile.join(" "));
+});
+var mitSpielen = alle.filter(function(e){ return e.spiele > 0; }).length;
+var stats = el("h-stats");
+[[eintraege.length, "Hallen im Verzeichnis"], [mitSpielen, "mit Spielen " + SA]].forEach(function(p){
+  var sp = mk("span"); sp.appendChild(mk("b", null, String(p[0]))); sp.appendChild(document.createTextNode(p[1])); stats.appendChild(sp);
+});
+el("h-zahl-spiele").textContent = mitSpielen;
+el("h-zahl-alle").textContent = alle.length;
+
+// ---------- Liste ----------
+var zustand = {filter: mitSpielen ? "spiele" : "alle", q: "", ich: null};
+var WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+function datumKurz(iso){ var t = iso.split("-"), d = new Date(+t[0], +t[1] - 1, +t[2]); return WT[d.getDay()] + " " + t[2] + "." + t[1] + "."; }
+function fmtKm(d){ return d < 10 ? d.toFixed(1).replace(".", ",") + " km" : Math.round(d) + " km"; }
+function feldName(e, n){
+  if(n === e.name) return "Hauptfeld";
+  if(n.indexOf(e.name + " (") === 0) return n.slice(e.name.length + 2, -1);
+  return n;
+}
+function routeUrl(e){
+  return "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(e.name + ", " + e.strasse + ", " + e.plz + " Dortmund");
+}
+function hallenKarte(e){
+  var a = mk("article", "h-karte" + (e.spiele ? " bespielt" : "")); a.id = "halle-" + e.id; a.tabIndex = -1; a.setAttribute("data-spot", "");
+  var n = mk("h3", "h-name", e.name);
+  if(e.dist != null) n.appendChild(mk("span", "v-ueb-dist", fmtKm(e.dist)));
+  a.appendChild(n);
+  var adr = mk("p", "h-adr", e.strasse + ", " + e.plz + " Dortmund");
+  var unter = mk("small");
+  var teile = [];
+  if(e.teil) teile.push(e.teil);
+  if(e.bez && e.bez !== e.teil) teile.push("Bezirk " + e.bez);
+  if(e.extra) teile.push("aus dem Spielplan, noch nicht im Hallenverzeichnis");
+  unter.textContent = teile.join(" · ");
+  if(e.felder.length === 1 && e.felder[0].kuerzel){
+    if(teile.length) unter.appendChild(document.createTextNode(" · "));
+    var kz = mk("abbr", null, e.felder[0].kuerzel); kz.title = "Hallenkürzel"; unter.appendChild(kz);
+  }
+  if(unter.textContent) adr.appendChild(unter);
+  a.appendChild(adr);
+  if(e.felder.length > 1){
+    var fl = mk("div", "h-felder");
+    e.felder.forEach(function(f){
+      var c = mk("span", "h-feld", feldName(e, f.name));
+      if(f.kuerzel){ var k = mk("abbr", null, f.kuerzel); k.title = "Hallenkürzel"; c.appendChild(k); }
+      fl.appendChild(c);
+    });
+    a.appendChild(fl);
+  }
+  var vn = Object.keys(e.vereine).sort(function(x, y){ return x.localeCompare(y, "de"); });
+  if(vn.length){
+    var t = mk("div", "h-teams"); t.appendChild(mk("span", "h-label", "Heimspiele " + SA));
+    vn.forEach(function(v){
+      var z = mk("p", "h-verein");
+      if(VEREINE[v]){ var l = mk("a", null, v); l.href = "vereine-v2.html?verein=" + encodeURIComponent(v); z.appendChild(l); }
+      else z.appendChild(mk("b", null, v));
+      var lab = Object.keys(e.vereine[v]).sort(function(x, y){ return x.localeCompare(y, "de", {numeric: true}); });
+      // Pokal-Team ("Herren – Pokal" -> "Herren") nicht doppelt neben "Herren 1", "Herren 2" nennen
+      lab = lab.filter(function(x){ return !lab.some(function(y){ return y.indexOf(x + " ") === 0; }); });
+      z.appendChild(document.createTextNode(" · " + lab.join(", ")));
+      t.appendChild(z);
+    });
+    a.appendChild(t);
+  }
+  if(e.naechstes){
+    var s = e.naechstes, nx = mk("a", "h-naechstes"); nx.href = "kalender-v2.html?spiel=" + encodeURIComponent(s.uid);
+    nx.appendChild(mk("span", "h-label", "Nächstes Spiel"));
+    nx.appendChild(mk("b", null, datumKurz(s.d) + (s.t ? " · " + s.t + " Uhr" : "")));
+    nx.appendChild(mk("span", null, s.h + " – " + s.g));
+    nx.appendChild(svgUse("i-pfeil"));
+    a.appendChild(nx);
+  }
+  var fuss = mk("div", "h-fuss");
+  var r = mk("a", "h-knopf"); r.href = routeUrl(e); r.target = "_blank"; r.rel = "noopener";
+  r.setAttribute("aria-label", "Route zu " + e.name + " planen (Google Maps, neues Fenster)");
+  var pin = document.createElementNS(NS, "svg"); pin.setAttribute("viewBox", "0 0 24 24"); pin.setAttribute("aria-hidden", "true");
+  pin.innerHTML = '<g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></g>';
+  r.appendChild(pin); r.appendChild(document.createTextNode("Route"));
+  fuss.appendChild(r);
+  if(e.pos && karte){
+    var zk = mk("button", "h-knopf"); zk.type = "button";
+    var ks = document.createElementNS(NS, "svg"); ks.setAttribute("viewBox", "0 0 24 24"); ks.setAttribute("aria-hidden", "true");
+    ks.innerHTML = '<g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5L9 4Z"/><path d="M9 4v13.5M15 6.5V20"/></g>';
+    zk.appendChild(ks); zk.appendChild(document.createTextNode("Auf der Karte"));
+    zk.addEventListener("click", function(){ aufKarte(e.id); });
+    fuss.appendChild(zk);
+  }
+  a.appendChild(fuss);
+  return a;
+}
+function passt(e){
+  if(zustand.filter === "spiele" && !e.spiele) return false;
+  return !zustand.q || e.such.indexOf(zustand.q) >= 0;
+}
+function nachName(x, y){ return x.name.localeCompare(y.name, "de"); }
+function render(){
+  var ziel = leer(el("h-liste")), sicht = alle.filter(passt), gruppen = [];
+  if(!sicht.length){
+    ziel.appendChild(mk("p", "h-leer", zustand.filter === "spiele" ? "Keine Halle mit Spielen passt zur Suche – probier „Alle Hallen“." : "Keine Halle passt zur Suche."));
+  } else if(zustand.ich){
+    gruppen.push({t: "Nach Entfernung", l: sicht.slice().sort(function(x, y){ return (x.dist == null ? 1e9 : x.dist) - (y.dist == null ? 1e9 : y.dist); })});
+  } else {
+    var je = {};
+    sicht.forEach(function(e){ var b = e.extra ? "~" : (e.bez || "Ohne Bezirk"); (je[b] = je[b] || []).push(e); });
+    Object.keys(je).sort(function(x, y){ return x.localeCompare(y, "de"); }).forEach(function(b){
+      gruppen.push({t: b === "~" ? "Weitere Hallen aus dem Spielplan" : b,
+                    l: je[b].sort(function(x, y){ return (y.spiele > 0) - (x.spiele > 0) || nachName(x, y); })});
+    });
+  }
+  gruppen.forEach(function(g){
+    var box = mk("section", "h-gruppe"), kopf = mk("h2", "h-gruppe-titel", g.t + " ");
+    kopf.appendChild(mk("small", null, String(g.l.length)));
+    box.appendChild(kopf);
+    var raster = mk("div", "h-raster");
+    g.l.forEach(function(e){ raster.appendChild(hallenKarte(e)); });
+    box.appendChild(raster);
+    ziel.appendChild(box);
+  });
+  var an = {}; sicht.forEach(function(e){ an[e.id] = true; });
+  Object.keys(marker).forEach(function(id){ var m = marker[id].getElement(); if(m) m.classList.toggle("aus", !an[id]); });
+}
+function setzeFilter(f){
+  zustand.filter = f;
+  el("h-filter").querySelectorAll("button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-f") === f)); });
+}
+el("h-filter").addEventListener("click", function(ev){
+  var b = ev.target.closest("button[data-f]"); if(!b) return;
+  setzeFilter(b.getAttribute("data-f")); render();
+});
+var suchTimer = null;
+el("h-suche").addEventListener("input", function(){
+  clearTimeout(suchTimer);
+  suchTimer = setTimeout(function(){ zustand.q = H.norm(el("h-suche").value); render(); }, 120);
+});
+function springe(id){
+  var e = nachId[id]; if(!e) return;
+  var k = el("halle-" + id);
+  if(!k){ el("h-suche").value = ""; zustand.q = ""; setzeFilter("alle"); render(); k = el("halle-" + id); }
+  if(!k) return;
+  k.scrollIntoView({behavior: ruhig ? "auto" : "smooth", block: "center"});
+  k.classList.remove("aktiv"); void k.offsetWidth; k.classList.add("aktiv");
+  try{ k.focus({preventScroll: true}); }catch(x){}
+  var m = marker[id] && marker[id].getElement();
+  if(m){ m.classList.add("aktiv"); setTimeout(function(){ m.classList.remove("aktiv"); }, 1800); }
+}
+
+// ---------- Karte (stilisiert wie die Vereinskarte: keine Kacheln, Farben aus den Tokens) ----------
+var karte = null, marker = {}, bezirkFl = [], seeFl = null, grenzlinie = null, ichMarker = null;
+function cssFarbe(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function kartenStil(){
+  if(!karte) return;
+  var flaeche = cssFarbe("--surface"), linie = cssFarbe("--line-2"), tinte = cssFarbe("--ink"), wasser = cssFarbe("--damen");
+  bezirkFl.forEach(function(f){ f.setStyle({fillColor: flaeche, fillOpacity: 1, color: linie, weight: 1.4}); });
+  if(seeFl) seeFl.setStyle({fillColor: wasser, fillOpacity: .28, color: wasser, weight: 1.2, opacity: .7});
+  if(grenzlinie) grenzlinie.setStyle({color: tinte, weight: 4, lineJoin: "round"});
+}
+function lngLat(ring){ return ring.map(function(c){ return [c[1], c[0]]; }); }
+function mitte(ring){
+  var a = 0, x = 0, y = 0;
+  for(var i = 0, n = ring.length - 1; i < n; i++){
+    var p = ring[i], q = ring[i + 1], k = p[0] * q[1] - q[0] * p[1];
+    a += k; x += (p[0] + q[0]) * k; y += (p[1] + q[1]) * k;
+  }
+  return a ? [y / (3 * a), x / (3 * a)] : [ring[0][1], ring[0][0]];
+}
+function karteBauen(){
+  if(!window.L){ el("h-karte-box").hidden = true; return; }
+  var mobil = matchMedia("(pointer: coarse)").matches;
+  karte = L.map("h-karte", {scrollWheelZoom: false, dragging: !mobil, tap: false, zoomSnap: .25, maxZoom: 14});
+  karte.attributionControl.setPrefix(false);
+  karte.attributionControl.addAttribution('Grenzen &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende');
+  BEZIRKE.bezirke.forEach(function(b){
+    bezirkFl.push(L.polygon(lngLat(b.r), {interactive: false}).addTo(karte));
+    L.marker(mitte(b.r), {interactive: false, keyboard: false, zIndexOffset: -1000,
+      icon: L.divIcon({className: "k-bezirk", html: "<span>" + b.n + "</span>", iconSize: [0, 0]})}).addTo(karte);
+  });
+  if(BEZIRKE.see) seeFl = L.polygon(lngLat(BEZIRKE.see), {interactive: false}).addTo(karte);
+  grenzlinie = L.polygon(lngLat(GRENZE.coordinates[0]), {fill: false, interactive: false}).addTo(karte);
+  kartenStil();
+  new MutationObserver(kartenStil).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", kartenStil);
+  karte.fitBounds(grenzlinie.getBounds(), {padding: [14, 14]});
+  karte.setMinZoom(karte.getZoom() - 0.5);
+  karte.setMaxBounds(grenzlinie.getBounds().pad(0.25));
+  // Weit herausgezoomt (Handy) kleinere Bezirksnamen, wie auf der Vereinskarte
+  function klein(){ karte.getContainer().classList.toggle("klein", karte.getZoom() < 11); }
+  karte.on("zoomend", klein); klein();
+  eintraege.forEach(function(e){
+    var m = L.marker(e.pos, {icon: L.divIcon({className: "h-mark" + (e.spiele ? " bespielt" : ""), html: '<span class="h-punkt"></span>',
+                                               iconSize: [30, 30], iconAnchor: [15, 15]}),
+                             title: e.name, alt: e.name, keyboard: true, riseOnHover: true, zIndexOffset: e.spiele ? 500 : 0}).addTo(karte);
+    var tip = mk("div"); tip.appendChild(mk("b", null, e.name));
+    tip.appendChild(mk("small", null, e.strasse + (e.teil ? " · " + e.teil : "") + (e.spiele ? " · " + e.spiele + " Spiele " + SA : "")));
+    m.bindTooltip(tip, {direction: "top", offset: [0, -10], opacity: 1});
+    m.on("click", function(){ springe(e.id); });
+    marker[e.id] = m;
+  });
+}
+function aufKarte(id){
+  var e = nachId[id], m = marker[id]; if(!e || !m) return;
+  el("h-karte-box").scrollIntoView({behavior: ruhig ? "auto" : "smooth", block: "center"});
+  karte.setView(e.pos, 13.5, {animate: !ruhig});
+  m.openTooltip();
+  var me = m.getElement();
+  if(me){ me.classList.add("aktiv"); setTimeout(function(){ me.classList.remove("aktiv"); }, 1800); }
+}
+function km(a, b){
+  var R = 6371, r = Math.PI / 180, dLat = (b[0] - a[0]) * r, dLon = (b[1] - a[1]) * r;
+  var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+el("h-nahe").addEventListener("click", function(){
+  var b = el("h-nahe"), st = el("h-nahe-status");
+  if(!navigator.geolocation){ st.textContent = "Dein Browser kann keinen Standort bestimmen."; return; }
+  b.setAttribute("aria-busy", "true"); st.textContent = "Standort wird bestimmt …";
+  navigator.geolocation.getCurrentPosition(function(p){
+    b.removeAttribute("aria-busy");
+    var ich = [p.coords.latitude, p.coords.longitude];
+    zustand.ich = ich;
+    alle.forEach(function(e){ e.dist = e.pos ? km(ich, e.pos) : null; });
+    render();
+    var nahe = alle.filter(function(e){ return passt(e) && e.dist != null; }).sort(function(x, y){ return x.dist - y.dist; });
+    if(karte){
+      if(ichMarker) karte.removeLayer(ichMarker);
+      ichMarker = L.marker(ich, {icon: L.divIcon({className: "", html: '<span class="k-ich"></span>', iconSize: [18, 18], iconAnchor: [9, 9]}),
+        title: "Dein Standort", keyboard: false, interactive: false}).addTo(karte);
+      if(nahe.length) karte.fitBounds(L.latLngBounds([ich].concat(nahe.slice(0, 3).map(function(e){ return e.pos; }))), {padding: [56, 56], maxZoom: 13.5});
+    }
+    leer(st);
+    if(!nahe.length){ st.textContent = "Keine Halle mit Kartenpunkt passt zum Filter."; return; }
+    st.appendChild(document.createTextNode("Am nächsten: ")); st.appendChild(mk("b", null, nahe[0].name));
+    st.appendChild(document.createTextNode(" (" + fmtKm(nahe[0].dist) + ") – die Liste ist jetzt nach Entfernung sortiert."));
+  }, function(f){
+    b.removeAttribute("aria-busy");
+    st.textContent = f.code === 1 ? "Standort nicht freigegeben – du kannst die Karte auch einfach verschieben und zoomen."
+                                  : "Standort konnte gerade nicht bestimmt werden.";
+  }, {enableHighAccuracy: false, timeout: 10000, maximumAge: 300000});
+});
+
+karteBauen();
+var wunsch = null; try{ wunsch = new URLSearchParams(location.search).get("halle"); }catch(x){}
+if(wunsch && nachId[wunsch] && !nachId[wunsch].spiele) setzeFilter("alle");
+render();
+if(wunsch && nachId[wunsch]) setTimeout(function(){ springe(wunsch); }, ruhig ? 0 : 450);
+})();
+</script>
+
+</body>
+</html>
