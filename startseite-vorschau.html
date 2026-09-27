@@ -11,9 +11,8 @@
    im Kalender, damit die Wahl auf allen dobasket-Seiten gilt. */
 try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")document.documentElement.setAttribute("data-theme",g);}catch(e){}
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&family=Caveat:wght@600&display=swap">
+<link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Tokens: DESIGN.md Abschnitt 2 -- Namen 1:1 wie kalender-/vereine-vorschau. */
 :root{
