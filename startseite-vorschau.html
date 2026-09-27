@@ -281,6 +281,9 @@ button.tag:focus-visible{border-radius:999px}
 .gross .cover{flex:1;min-height:280px;background:var(--stage);color:var(--on-stage)}
 .klein .cover{height:92px}
 .cover-bild img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%}
+/* Plakate/Logos ganz zeigen statt beschneiden (News-Uebernahme 27.09.) */
+.cover-plakat{background:var(--stage)}
+.cover-plakat img{object-fit:contain;object-position:50% 50%}
 .cover-glyphe{position:absolute;right:22px;bottom:18px;width:64px;height:64px;border-radius:50%;background:var(--surface);
   display:grid;place-items:center;color:var(--accent);box-shadow:var(--schatten)}
 .cover-glyphe svg{width:30px;height:30px}
@@ -674,6 +677,7 @@ button.tag:focus-visible{border-radius:999px}
         <span class="eyebrow" data-reveal>News</span>
         <h2 class="h2" data-float>Neues aus dem Kreis<span class="punkt">.</span></h2>
       </div>
+      <a class="link" href="news-v2.html" data-reveal>Alle News <svg><use href="#i-pfeil"/></svg></a>
     </div>
 
     <div class="bento">
@@ -688,30 +692,28 @@ button.tag:focus-visible{border-radius:999px}
           <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
         </div>
       </a>
-      <a class="karte klein" href="#" data-reveal style="--i:1">
-        <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
-          <div class="cover-glyphe"><svg><use href="#i-pokal"/></svg></div></div>
+      <a class="karte klein" href="news-nrw-3x3-tour-am-27-6-2026-in-dortmund.html" data-reveal style="--i:1">
+        <div class="cover cover-bild cover-plakat"><img src="img/news/nrw-3x3-tour-am-27-6-2026-in-dortmund.jpg" alt="Plakat der NRW 3x3 Tour 2026, 20.06. bis 11.07." loading="lazy" width="389" height="620"></div>
         <div class="news-text">
-          <div class="news-meta"><span class="tag">Pokal</span><span class="tag tag-platzhalter">Platzhalter</span><time datetime="2026-09-14">14.09.2026</time></div>
-          <h3>Kreispokal: Die Auslosung der 2. Runde</h3>
+          <div class="news-meta"><span class="tag">3x3</span><time datetime="2026-06-23">23.06.2026</time></div>
+          <h3>NRW 3x3 Tour am 27.6.2026 in Dortmund – Helfer gesucht</h3>
           <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
         </div>
       </a>
-      <a class="karte klein" href="#" data-reveal style="--i:2">
+      <a class="karte klein" href="news-dobasket-feiert-sein-70-jubilaum.html" data-reveal style="--i:2">
         <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
-          <div class="cover-glyphe"><svg><use href="#i-pfeife"/></svg></div></div>
+          <div class="cover-glyphe"><svg><use href="#i-ball"/></svg></div></div>
         <div class="news-text">
-          <div class="news-meta"><span class="tag">Schiedsrichter</span><span class="tag tag-platzhalter">Platzhalter</span><time datetime="2026-09-10">10.09.2026</time></div>
-          <h3>Neulingslehrgang im Oktober – jetzt anmelden</h3>
+          <div class="news-meta"><span class="tag">Kreis</span><time datetime="2026-02-04">04.02.2026</time></div>
+          <h3>DOBASKET feiert sein 70. Jubiläum</h3>
           <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
         </div>
       </a>
-      <a class="karte klein" href="#" data-reveal style="--i:3">
-        <div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg>
-          <div class="cover-glyphe"><svg><use href="#i-stimme"/></svg></div></div>
+      <a class="karte klein" href="news-dbb-next-level-pottential-cup-2025.html" data-reveal style="--i:3">
+        <div class="cover cover-bild cover-plakat"><img src="img/news/dbb-next-level-pottential-cup-2025.jpg" alt="Logo des DBB Next Level POTTential Cup 2025" loading="lazy" width="458" height="346"></div>
         <div class="news-text">
-          <div class="news-meta"><span class="tag">Kreistag</span><span class="tag tag-platzhalter">Platzhalter</span><time datetime="2026-09-02">02.09.2026</time></div>
-          <h3>Einladung zum Kreistag 2026</h3>
+          <div class="news-meta"><span class="tag">Jugend</span><time datetime="2025-03-24">24.03.2025</time></div>
+          <h3>DBB NEXT LEVEL POTTential Cup 2025</h3>
           <span class="weiter">Weiterlesen <svg><use href="#i-pfeil"/></svg></span>
         </div>
       </a>
