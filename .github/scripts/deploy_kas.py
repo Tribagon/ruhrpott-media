@@ -88,8 +88,18 @@ def dateien():
         liste += sorted(p.name for p in REPO.glob(muster))
     for ordner in WEB_ORDNER:
         liste += sorted(p.relative_to(REPO).as_posix() for p in (REPO / ordner).rglob("*") if p.is_file())
-    aus = [(rel, (REPO / rel).read_bytes()) for rel in dict.fromkeys(liste)]
+    aus = [(rel, lesen(rel)) for rel in dict.fromkeys(liste)]
     return aus + [(".htaccess", HTACCESS.encode()), ("robots.txt", ROBOTS.encode())]
+
+
+# Textdateien immer mit LF: Git checkt sie unter Windows (autocrlf) mit CRLF aus, auf GitHub mit LF --
+# ohne Angleichen haetten lokaler Lauf und Action verschiedene Pruefsummen und luden sich gegenseitig alles neu.
+TEXT = {".html", ".js", ".css", ".json", ".txt", ".svg", ""}      # "" = ohne Endung (LICENSE)
+
+
+def lesen(rel):
+    daten = (REPO / rel).read_bytes()
+    return daten.replace(b"\r\n", b"\n") if pathlib.Path(rel).suffix.lower() in TEXT else daten
 
 
 def manifest_lesen(ftp):
