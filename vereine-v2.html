@@ -1311,6 +1311,10 @@ function vereinsMenue(){
 }
 /* /VEREINSMENUE */
 vereinsMenue();
+// Stand der Spieldaten (setzt upload_kalender.py nur bei echter Aenderung; fehlt er, bleibt die Stelle leer)
+var ST = (window.DOBASKET_DATEN || {}).stand;
+if(ST && /^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(ST)) document.querySelectorAll("[data-stand]").forEach(function(n){
+  n.textContent = " · Stand " + ST.slice(8,10) + "." + ST.slice(5,7) + "." + ST.slice(0,4) + ", " + ST.slice(11,16) + " Uhr"; });
 var wurzel = document.documentElement, ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
 var knopf = document.querySelector(".thema");
 function istDunkel(){ var g = wurzel.getAttribute("data-theme"); return g ? g === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }

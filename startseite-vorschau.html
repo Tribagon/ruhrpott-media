@@ -820,7 +820,7 @@ button.tag:focus-visible{border-radius:999px}
       <div><h4>Rechtliches</h4><ul><li><a href="impressum.html">Impressum</a></li><li><a href="datenschutz.html">Datenschutz</a></li><li><a href="#vorstand">Kontakt</a></li></ul></div>
     </div>
     <div class="fuss-unten">
-      <span>Spieldaten: basketball-bund.net · Entwurf, Stand <span id="stand"></span></span>
+      <span>Spieldaten: basketball-bund.net<span id="stand"></span></span>
       <span class="buzzer" id="buzzer">Buzzer-Beater. Danke fürs Lesen bis zum Schluss.</span>
     </div>
   </div>
@@ -860,7 +860,10 @@ function s2d(s){ return new Date(s + "T00:00:00Z"); }
 function wtag(s){ return (s2d(s).getUTCDay()+6)%7; }
 function fmtKurz(s){ var d = s2d(s); return String(d.getUTCDate()).padStart(2,"0") + "." + String(d.getUTCMonth()+1).padStart(2,"0") + "."; }
 function tageBis(s){ return Math.round((s2d(s) - s2d(HEUTE)) / 864e5); }
-el("stand").textContent = fmtKurz(HEUTE) + HEUTE.slice(0,4);
+// Stand = letzte echte Datenaenderung (upload_kalender.py), nicht das heutige Datum; fehlt er, bleibt die Stelle leer
+(function(st){ if(st && /^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(st))
+  el("stand").textContent = " · Stand " + st.slice(8,10) + "." + st.slice(5,7) + "." + st.slice(0,4) + ", " + st.slice(11,16) + " Uhr";
+})((window.DOBASKET_DATEN || {}).stand);
 
 /* ---------------- Liga-Farben & -Labels (1:1 aus kalender-vorschau) ---------------- */
 var FARBEN = {"Herren":"var(--herren)","Damen":"var(--damen)","U18":"var(--u18)","U16":"var(--u16)","U14":"var(--u14)","U12":"var(--u12)","U10":"var(--u10)","Rollstuhl":"var(--rolli)"};
