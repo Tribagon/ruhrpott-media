@@ -997,8 +997,7 @@ var DOKUMENTE = [
   {kat:"ordnung", titel:"Kreisschiedsrichterordnung", sub:"Ansetzung, Schiedsrichtergestellung und Entgelte", datum:"19.09.2024", typ:"PDF", groesse:"70 KB", url:"dokumente/kreisschiedsrichterordnung-2024-09-19.pdf"},
   {kat:"ordnung", titel:"Kreisjugendordnung", sub:"Basketballjugend im Kreis Dortmund", datum:"02.06.2022", typ:"PDF", groesse:"79 KB", url:"dokumente/kreisjugendordnung-2022-06-02.pdf"},
   {kat:"spielbetrieb", titel:"Ausschreibung Jugend 2026/27", sub:"Altersstufen, Meldungen und Durchführung der Jugendligen", datum:"11.08.2026", typ:"PDF", groesse:"418 KB", url:"dokumente/ausschreibung-jugend-2026-27.pdf"},
-  {kat:"spielbetrieb", titel:"Spielabsage oder Spielverlegung", sub:"Wen der absagende Verein informieren muss", datum:"27.09.2026", typ:"PDF", groesse:"200 KB", url:"dokumente/info-spielabsagen.pdf"},
-  {kat:"kreistag", titel:"Protokoll Kreistag 2026", sub:"wird nachgereicht", datum:"", typ:"PDF", groesse:""}
+  {kat:"spielbetrieb", titel:"Spielabsage oder Spielverlegung", sub:"Wen der absagende Verein informieren muss", datum:"27.09.2026", typ:"PDF", groesse:"200 KB", url:"dokumente/info-spielabsagen.pdf"}
 ];
 /* PFIFF */
 // Easter Egg: dreimal schnell (innerhalb 1,2 s) auf die Pfeife -> sie pfeift.
@@ -1113,7 +1112,9 @@ function vorstandBauen(){
 }
 function dokumenteBauen(){
   var ziel = el("doku-liste");
-  DOKUMENTE.forEach(function(d){
+  // Neueste zuerst (Hendrik 28.09.2026) -- nach datum TT.MM.JJJJ; ohne Datum ans Ende
+  function sortWert(d){ var t = (d.datum || "").split("."); return t.length === 3 ? t[2] + t[1] + t[0] : ""; }
+  DOKUMENTE.slice().sort(function(a, b){ return sortWert(b).localeCompare(sortWert(a)); }).forEach(function(d){
     // Ohne url gibt es die Datei noch nicht: Zeile ohne Link, "folgt" statt Groesse.
     var a;
     if(d.url){
