@@ -36,7 +36,7 @@ SCHLUESSEL = ("KAS_FTP_HOST", "KAS_FTP_USER", "KAS_FTP_PASS")
 
 # Seiten der V2 (die alten kalender-/vereine-vorschau.html sind nur Bauquelle fuer baue_v2.py)
 WEB_DATEIEN = ["startseite-vorschau.html", "kalender-v2.html", "vereine-v2.html", "hallen-v2.html",
-               "schiedsrichter-v2.html", "impressum.html", "datenschutz.html", "news-v2.html", "vereine-info.js", "hallen.js",
+               "schiedsrichter-v2.html", "impressum.html", "datenschutz.html", "kontakt.html", "kontakt.php", "news-v2.html", "vereine-info.js", "hallen.js",
                "kalender/daten.js"]
 WEB_MUSTER = ["news-*.html"]
 WEB_ORDNER = ["fonts", "vendor", "dokumente", "img/news", "img/vereine", "img/vorstand"]
@@ -94,7 +94,7 @@ def dateien():
 
 # Textdateien immer mit LF: Git checkt sie unter Windows (autocrlf) mit CRLF aus, auf GitHub mit LF --
 # ohne Angleichen haetten lokaler Lauf und Action verschiedene Pruefsummen und luden sich gegenseitig alles neu.
-TEXT = {".html", ".js", ".css", ".json", ".txt", ".svg", ""}      # "" = ohne Endung (LICENSE)
+TEXT = {".html", ".js", ".css", ".json", ".txt", ".svg", ".php", ""}      # "" = ohne Endung (LICENSE)
 
 
 def lesen(rel):

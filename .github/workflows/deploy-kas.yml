@@ -12,6 +12,7 @@ on:
     paths:
       - "*.html"
       - "*.js"
+      - "*.php"
       - "kalender/daten.js"
       - "fonts/**"
       - "vendor/**"
