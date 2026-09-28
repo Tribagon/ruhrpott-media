@@ -1,0 +1,51 @@
+name: Website nach ALL-INKL (neu.dobasket.de)
+
+# Laedt geaenderte Website-Dateien per FTP-TLS auf den ALL-INKL-Webspace (Ordner /dobasket-v2/).
+# Laeuft bei jedem Push mit Website-Dateien -- vor allem nach den Kalenderdaten-Uploads der
+# Spielplan-Pipeline (die committet per PAT, das loest Workflows aus). Dieses Repo ist oeffentlich,
+# Actions-Minuten kosten hier nichts. Zugang: Secrets KAS_FTP_HOST/USER/PASS (Zusatz-FTP-Nutzer,
+# nur fuer /dobasket-v2/). Logik und Sicherungen: .github/scripts/deploy_kas.py.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.html"
+      - "*.js"
+      - "kalender/daten.js"
+      - "fonts/**"
+      - "vendor/**"
+      - "dokumente/**"
+      - "img/news/**"
+      - "img/vereine/**"
+      - "img/vorstand/**"
+      - ".github/scripts/deploy_kas.py"
+      - ".github/workflows/deploy-kas.yml"
+  workflow_dispatch:
+    inputs:
+      alles:
+        description: "Alle Dateien neu hochladen (nicht nur geaenderte)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# Nie zwei Uploads gleichzeitig -- der spaetere wartet und uebernimmt dann den neuesten Stand
+concurrency:
+  group: deploy-kas
+  cancel-in-progress: false
+
+jobs:
+  hochladen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Geaenderte Dateien hochladen
+        env:
+          KAS_FTP_HOST: ${{ secrets.KAS_FTP_HOST }}
+          KAS_FTP_USER: ${{ secrets.KAS_FTP_USER }}
+          KAS_FTP_PASS: ${{ secrets.KAS_FTP_PASS }}
+          ALLES: ${{ inputs.alles && '--alles' || '' }}
+        run: python3 .github/scripts/deploy_kas.py --live $ALLES
