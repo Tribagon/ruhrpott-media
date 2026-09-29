@@ -133,6 +133,12 @@ button.tag:focus-visible{border-radius:999px}
 /* Sprunglink fuer Tastatur/Screenreader (Website-Audit 29.09. F16): erst beim Fokus sichtbar */
 .skip{position:absolute;left:12px;top:-80px;z-index:200;padding:12px 18px;border-radius:999px;background:var(--ink);color:var(--ground);font-weight:700;text-decoration:none;transition:top .15s}
 .skip:focus{top:12px}
+/* Nach-oben-Knopf (Hendrik 29.09.): erscheint nach ~1,5 Bildschirmhoehen; ausgeblendet auch nicht per Tab erreichbar */
+.nach-oben{position:fixed;right:var(--rand);bottom:max(18px,calc(env(safe-area-inset-bottom) + 12px));z-index:55;display:grid;place-items:center;width:52px;height:52px;border-radius:999px;background:var(--accent-cta);color:var(--on-accent);box-shadow:var(--schatten-hoch);opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .2s,transform .25s var(--ease),visibility 0s .25s,background .15s}
+.nach-oben.sichtbar{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .25s var(--ease),visibility 0s,background .15s}
+.nach-oben:hover{background:var(--accent-cta-hover)}
+.nach-oben:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.nach-oben svg{width:22px;height:22px;transform:rotate(180deg)}
 .ball-knopf{position:absolute;left:10.5%;top:22%;width:14%;height:52%;border-radius:50%}
 .ball-knopf:focus-visible{outline-offset:0}
 .nav-links{display:flex;align-items:center;gap:2px;margin-left:auto}
@@ -422,7 +428,7 @@ button.tag:focus-visible{border-radius:999px}
 .doku-status{grid-column:3;justify-self:end}
 
 /* ---------- Footer ---------- */
-.fuss{background:var(--stage);color:var(--on-stage);padding:72px 0 32px}
+.fuss{background:var(--stage);color:var(--on-stage);padding:72px 0 96px}   /* unten Platz fuer den Nach-oben-Knopf */
 .fuss-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
 .fuss .marke{color:var(--on-stage)}
 .fuss .marke svg{height:auto;width:min(300px,100%)}
@@ -851,6 +857,8 @@ button.tag:focus-visible{border-radius:999px}
     </div>
   </div>
 </footer>
+
+<a class="nach-oben" id="nach-oben" href="#top" aria-label="Nach oben"><svg aria-hidden="true"><use href="#i-runter"/></svg></a>
 
 <script src="vereine-info.js"></script>
 <script src="kalender/daten.js"></script>
@@ -1302,6 +1310,14 @@ function scrollInit(){
     });
   })();
 
+  var hoch = el("nach-oben");
+  // Mit JS: sanft (bzw. sofort bei reduzierter Bewegung) nach oben und Fokus auf das Logo, damit
+  // Tastatur-Nutzer oben weitermachen. Ohne JS springt der Anker #top.
+  hoch.addEventListener("click", function(ev){
+    ev.preventDefault();
+    window.scrollTo({top: 0, behavior: ruhig ? "auto" : "smooth"});
+    var ml = document.querySelector(".marke-link"); if(ml) ml.focus({preventScroll: true});
+  });
   var nav = el("nav"), wolken = el("hero-logo"), heroSichtbar = true, stSichtbar = false, geplant = false;
   // Parallax nur im breiten Layout: bis 1024 px steht das Logo im Textraster und wuerde nach oben
   // in die Saison-Zeile rutschen (Website-Audit 29.09. F07). Beim Wiedereintritt neu rechnen,
@@ -1313,6 +1329,7 @@ function scrollInit(){
     geplant = false;
     var y = window.scrollY, vh = window.innerHeight;
     nav.classList.toggle("gescrollt", y > 12);
+    hoch.classList.toggle("sichtbar", y > vh * 1.5);
     if(!ruhig && weit.matches){ if(heroSichtbar) wolken.style.transform = "translateY(" + (y * -0.06).toFixed(1) + "px)"; }
     else wolken.style.transform = "";
     if(!ruhig && stSichtbar){
