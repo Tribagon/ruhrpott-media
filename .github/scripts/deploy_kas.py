@@ -36,7 +36,7 @@ SCHLUESSEL = ("KAS_FTP_HOST", "KAS_FTP_USER", "KAS_FTP_PASS")
 
 # Seiten der V2 (die alten kalender-/vereine-vorschau.html sind nur Bauquelle fuer baue_v2.py)
 WEB_DATEIEN = ["startseite-vorschau.html", "kalender-v2.html", "vereine-v2.html", "hallen-v2.html",
-               "schiedsrichter-v2.html", "impressum.html", "datenschutz.html", "kontakt.html", "kontakt.php", "news-v2.html", "vereine-info.js", "hallen.js",
+               "schiedsrichter-v2.html", "impressum.html", "datenschutz.html", "kontakt.html", "kontakt.php", "404.html", "news-v2.html", "vereine-info.js", "hallen.js",
                "kalender/daten.js"]
 WEB_MUSTER = ["news-*.html"]
 WEB_ORDNER = ["fonts", "vendor", "dokumente", "img/news", "img/vereine", "img/vorstand"]
@@ -45,6 +45,8 @@ FREMD = {"wp-content", "wp-admin", "wp-config.php", "wp-login.php", "neu", "htdo
 
 HTACCESS = """# dobasket V2 -- Testadresse (erzeugt von deploy_kas.py)
 DirectoryIndex startseite-vorschau.html index.html
+# Eigene Fehlerseite (Status bleibt 404; Pfade darin sind wurzelbezogen)
+ErrorDocument 404 /404.html
 <IfModule mod_headers.c>
   # Testumgebung: nicht in Suchmaschinen aufnehmen (sonst Doppelung zu dobasket.de)
   Header set X-Robots-Tag "noindex, nofollow"

@@ -20,13 +20,13 @@ try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")docu
   --ground:#f8f8f6; --surface:#ffffff; --sunken:#eef1ef;
   --stage:#151616; --stage-2:#202324;
   --line:#e4e7e4; --line-2:#d2d7d3;
-  --ink:#1f1f1f; --ink-2:#3a4650; --muted:#6a7480;
+  --ink:#1f1f1f; --ink-2:#3a4650; --muted:#5f6974;
   --on-stage:#f4f2ee; --on-stage-muted:#a3a9ad;
   --accent:#ef5a00; --accent-hover:#d94f00; --accent-weich:#ffe7db; --accent-ink:#b8420a;
   --accent-cta:#cc4d00; --accent-cta-hover:#b84400; --on-accent:#ffffff;
   --ink-rgb:31,31,31; --accent-rgb:239,90,0; --ground-rgb:248,248,246;
-  --herren:#2b3a44; --damen:#007fa3;
-  --u18:#2f7a3f; --u16:#6a4bc4; --u14:#b8336a; --u12:#9a6200; --u10:#2a5bd7; --rolli:#0e7c6b;
+  --herren:#2b3a44; --damen:#007396;
+  --u18:#2c733b; --u16:#6a4bc4; --u14:#b8336a; --u12:#8f5b00; --u10:#2a5bd7; --rolli:#0c7465;
   --schatten:0 1px 2px rgba(var(--ink-rgb),.06), 0 8px 24px -12px rgba(var(--ink-rgb),.18);
   --schatten-hoch:0 2px 4px rgba(var(--ink-rgb),.06), 0 24px 48px -20px rgba(var(--ink-rgb),.28);
   --f-display:"Archivo","Segoe UI",system-ui,sans-serif;
@@ -49,7 +49,7 @@ try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")docu
     --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
     --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
     --herren:#b9c4cb; --damen:#35a9cc;
-    --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff; --rolli:#4cc9b0;
+    --u18:#5cc274; --u16:#a58cf5; --u14:#f06aa6; --u12:#e0b040; --u10:#6f9bff; --rolli:#4cc9b0;
   }
 }
 :root[data-theme="dark"]{
@@ -62,7 +62,7 @@ try{var g=localStorage.getItem("dobasket-thema");if(g==="dark"||g==="light")docu
   --accent-cta:#ff7d3f; --accent-cta-hover:#ff9258; --on-accent:#151616;
   --ink-rgb:0,0,0; --accent-rgb:255,125,63; --ground-rgb:20,24,27;
   --herren:#b9c4cb; --damen:#35a9cc;
-  --u18:#5cc274; --u16:#a58cf5; --u14:#e8589a; --u12:#e0b040; --u10:#6f9bff; --rolli:#4cc9b0;
+  --u18:#5cc274; --u16:#a58cf5; --u14:#f06aa6; --u12:#e0b040; --u10:#6f9bff; --rolli:#4cc9b0;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -130,6 +130,9 @@ button.tag:focus-visible{border-radius:999px}
 .nav.gescrollt .marke svg{height:38px}
 .marke-link{display:block;border-radius:8px}
 /* Unsichtbarer Knopf genau ueber dem Ball im Schriftzug (Easter Egg) */
+/* Sprunglink fuer Tastatur/Screenreader (Website-Audit 29.09. F16): erst beim Fokus sichtbar */
+.skip{position:absolute;left:12px;top:-80px;z-index:200;padding:12px 18px;border-radius:999px;background:var(--ink);color:var(--ground);font-weight:700;text-decoration:none;transition:top .15s}
+.skip:focus{top:12px}
 .ball-knopf{position:absolute;left:10.5%;top:22%;width:14%;height:52%;border-radius:50%}
 .ball-knopf:focus-visible{outline-offset:0}
 .nav-links{display:flex;align-items:center;gap:2px;margin-left:auto}
@@ -304,8 +307,12 @@ button.tag:focus-visible{border-radius:999px}
 .buehne{background:var(--stage);color:var(--on-stage);position:relative;overflow:hidden}
 .buehne .eyebrow{color:var(--on-stage-muted)}
 .statement{font:900 clamp(30px,4.4vw,60px)/1.08 var(--f-display);letter-spacing:-.03em;margin:26px 0 0;max-width:20ch}
-.statement .wl{opacity:.18;transition:opacity .35s}
-.statement .wl.an{opacity:1}
+/* Noch nicht "angeleuchtete" Woerter: abgedunkelte Farbe statt 18 % Deckkraft -- so bleibt der Text
+   auch nach Sprungmarken, auf Screenshots und im Druck lesbar (>= 3:1, grosse Schrift; Pruefergebnis + Audit F04) */
+.statement .wl{color:color-mix(in srgb,var(--on-stage) 50%,var(--stage));transition:color .35s}
+.statement .wl.an{color:var(--on-stage)}
+.statement .akz .wl:not(.an){color:color-mix(in srgb,var(--accent) 75%,var(--stage))}
+.statement .akz .wl.an{color:var(--accent)}
 .statement .akz{color:var(--accent)}
 .claim{display:inline-block;margin-top:44px;font:600 clamp(34px,4vw,50px)/1 var(--f-hand);color:var(--on-stage);transform:rotate(-4deg);transform-origin:left}
 .claim svg{width:100%;height:18px;margin-top:4px;color:var(--accent)}
@@ -513,11 +520,13 @@ button.tag:focus-visible{border-radius:999px}
   *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
   .maske>span,.einblenden,[data-reveal],.w>span{opacity:1!important;transform:none!important}
   .laufband-spur{animation:none!important}
-  .statement .wl{opacity:1!important}
+  .statement .wl{opacity:1!important;color:var(--on-stage)!important}
+  .statement .akz .wl{color:var(--accent)!important}
 }
 </style>
 </head>
 <body>
+<a class="skip" href="#top">Zum Inhalt springen</a>
 
 <!-- ======= SVG-Bibliothek: Wortmarke, Icons, Muster ======= -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -567,11 +576,10 @@ button.tag:focus-visible{border-radius:999px}
       <a class="marke-link" href="#top" aria-label="dobasket – Basketballkreis Dortmund, zum Seitenanfang">
         <svg viewBox="116 201 1448 430" role="img" aria-hidden="true"><use href="#wortmarke"/></svg>
       </a>
-      <button class="ball-knopf" type="button" id="ball-knopf" aria-label="Ball"></button>
+      <button class="ball-knopf" type="button" id="ball-knopf" tabindex="-1" aria-hidden="true"></button>
     </div>
     <nav class="nav-links" aria-label="Hauptnavigation">
-      <a href="#spieltag">Spieltag</a>
-      <a href="#news">News</a>
+      <a href="kalender-v2.html" class="unterseite">Kalender</a>
       <div class="drop">
         <a href="vereine-v2.html" class="drop-link">Vereine<svg aria-hidden="true"><use href="#i-runter"/></svg></a>
         <div class="drop-panel">
@@ -580,10 +588,11 @@ button.tag:focus-visible{border-radius:999px}
           <a class="drop-alle" href="vereine-v2.html">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
         </div>
       </div>
-      <a href="kalender-v2.html" class="unterseite">Kalender</a>
       <a href="schiedsrichter-v2.html" class="unterseite">Schiedsrichter</a>
+      <a href="#news">News</a>
       <a href="#vorstand">Vorstand</a>
       <a href="#dokumente">Dokumente</a>
+      <a href="kontakt.html" class="unterseite">Kontakt</a>
     </nav>
     <a class="rund-knopf insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener" aria-label="dobasket auf Instagram"><svg><use href="#i-insta"/></svg></a>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
@@ -596,13 +605,13 @@ button.tag:focus-visible{border-radius:999px}
     <span class="eyebrow">Menü</span>
     <button class="rund-knopf" type="button" id="menue-zu" aria-label="Menü schließen"><svg><use href="#i-zu"/></svg></button>
   </div>
-  <a href="#spieltag">Spieltag</a>
-  <a href="#news">News</a>
-  <a href="vereine-v2.html">Vereine</a>
   <a href="kalender-v2.html">Kalender</a>
+  <a href="vereine-v2.html">Vereine</a>
   <a href="schiedsrichter-v2.html">Schiedsrichter</a>
+  <a href="#news">News</a>
   <a href="#vorstand">Vorstand</a>
   <a href="#dokumente">Dokumente</a>
+  <a href="kontakt.html">Kontakt</a>
 </div>
 
 <main id="top">
@@ -832,7 +841,7 @@ button.tag:focus-visible{border-radius:999px}
         <p style="margin-top:18px;color:var(--on-stage-muted);max-width:34ch;font-size:15px">Der Basketballkreis Dortmund im Westdeutschen Basketball-Verband.</p>
         <a class="fuss-insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-insta"/></svg>@dobasket</a>
       </div>
-      <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="hallen-v2.html">Hallen</a></li><li><a href="#spieltag">Ergebnisse</a></li></ul></div>
+      <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="hallen-v2.html">Hallen</a></li><li><a href="#spieltag">Spieltag</a></li></ul></div>
       <div><h4>Der Kreis</h4><ul><li><a href="#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="#vorstand">Vorstand</a></li><li><a href="#dokumente">Dokumente</a></li></ul></div>
       <div><h4>Rechtliches</h4><ul><li><a href="impressum.html">Impressum</a></li><li><a href="datenschutz.html">Datenschutz</a></li><li><a href="kontakt.html">Kontakt</a></li></ul></div>
     </div>
@@ -1026,7 +1035,7 @@ function pfiffVerdrahten(wrap){
   var NS = "http://www.w3.org/2000/svg";
   wrap.classList.add("pfiff");
   var knopf = document.createElement("button");
-  knopf.type = "button"; knopf.className = "pfiff-knopf"; knopf.setAttribute("aria-label","Pfeife");
+  knopf.type = "button"; knopf.className = "pfiff-knopf"; knopf.tabIndex = -1; knopf.setAttribute("aria-hidden","true");
   wrap.appendChild(knopf);
   var klicks = [], laeuft = false;
   knopf.addEventListener("click", function(){
@@ -1072,12 +1081,19 @@ function vereinsMenue(){
       var a = document.createElement("a"); a.href = "vereine-v2.html?verein=" + encodeURIComponent(n);
       var m = document.createElement("span"); m.className = "drop-mono"; m.setAttribute("aria-hidden","true");
       var info = (window.DOBASKET_VEREINE_INFO || {})[n];
-      if(info && info.logo){ var bild = document.createElement("img"); bild.src = info.logo; bild.alt = ""; bild.loading = "lazy"; m.appendChild(bild); m.classList.add("mit-logo"); }
+      if(info && info.logo){ var bild = document.createElement("img"); bild.setAttribute("data-src", info.logo); bild.alt = ""; bild.width = 36; bild.height = 36; m.appendChild(bild); m.classList.add("mit-logo"); }
       else m.textContent = vereinsKuerzel(n);
       var t = document.createElement("span"); t.className = "drop-name"; t.appendChild(document.createTextNode(n));
       var s = document.createElement("small"); var z = teams[n] || 0; s.textContent = z ? z + (z === 1 ? " Mannschaft" : " Mannschaften") : "aktuell ohne Mannschaft";
       t.appendChild(s); a.appendChild(m); a.appendChild(t); ziel.appendChild(a);
     });
+    // Logos erst laden, wenn das Menue geoeffnet wird (sonst holt jede Seite alle Logos, Audit 29.09. F05)
+    var drop = ziel.closest(".drop") || ziel;
+    function logosLaden(){
+      drop.removeEventListener("pointerenter", logosLaden); drop.removeEventListener("focusin", logosLaden);
+      ziel.querySelectorAll("img[data-src]").forEach(function(b){ b.src = b.getAttribute("data-src"); b.removeAttribute("data-src"); });
+    }
+    drop.addEventListener("pointerenter", logosLaden); drop.addEventListener("focusin", logosLaden);
   });
 }
 /* /VEREINSMENUE */
@@ -1287,13 +1303,18 @@ function scrollInit(){
   })();
 
   var nav = el("nav"), wolken = el("hero-logo"), heroSichtbar = true, stSichtbar = false, geplant = false;
-  new IntersectionObserver(function(es){ heroSichtbar = es[0].isIntersecting; }).observe(el("hero"));
+  // Parallax nur im breiten Layout: bis 1024 px steht das Logo im Textraster und wuerde nach oben
+  // in die Saison-Zeile rutschen (Website-Audit 29.09. F07). Beim Wiedereintritt neu rechnen,
+  // sonst bleibt nach schnellem Zurueckscrollen der alte Versatz stehen.
+  var weit = window.matchMedia("(min-width:1025px)");
+  new IntersectionObserver(function(es){ heroSichtbar = es[0].isIntersecting; if(heroSichtbar) tick(); }).observe(el("hero"));
   new IntersectionObserver(function(es){ stSichtbar = es[0].isIntersecting; }).observe(st);
   function tick(){
     geplant = false;
     var y = window.scrollY, vh = window.innerHeight;
     nav.classList.toggle("gescrollt", y > 12);
-    if(!ruhig && heroSichtbar) wolken.style.transform = "translateY(" + (y * -0.06).toFixed(1) + "px)";
+    if(!ruhig && weit.matches){ if(heroSichtbar) wolken.style.transform = "translateY(" + (y * -0.06).toFixed(1) + "px)"; }
+    else wolken.style.transform = "";
     if(!ruhig && stSichtbar){
       var r = st.getBoundingClientRect();
       var p = Math.max(0, Math.min(1, (vh * 0.8 - r.top) / (r.height * 0.55 + vh * 0.3)));
@@ -1302,6 +1323,7 @@ function scrollInit(){
     }
   }
   window.addEventListener("scroll", function(){ if(!geplant){ geplant = true; requestAnimationFrame(tick); } }, {passive:true});
+  weit.addEventListener("change", tick);
   tick();
 }
 
