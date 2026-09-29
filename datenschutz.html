@@ -188,7 +188,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 [data-reveal].sichtbar{opacity:1;transform:none}
 
-.sx-fuss{background:var(--stage);color:var(--on-stage);padding:64px 0 30px;margin-top:clamp(56px,8vw,96px)}
+.sx-fuss{background:var(--stage);color:var(--on-stage);padding:64px 0 96px;margin-top:clamp(56px,8vw,96px)}
 .sx-fuss-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
 .sx-fuss .sx-marke{color:var(--on-stage)}
 .sx-fuss .sx-marke svg{height:auto;width:min(280px,100%)}
@@ -244,6 +244,25 @@ h1,h2,h3,p{margin:0}
 .ds-adresse{padding:14px 18px;border-left:4px solid var(--accent);background:var(--surface);border-radius:0 12px 12px 0;color:var(--ink)}
 @media (max-width:860px){ .ds-kurz{grid-template-columns:1fr} }
 
+/* Nach-oben-Knopf (Hendrik 29.09.): erscheint nach ~1,5 Bildschirmhoehen; ausgeblendet auch nicht per Tab erreichbar */
+.nach-oben{position:fixed;right:var(--rand);bottom:max(18px,calc(env(safe-area-inset-bottom) + 12px));z-index:45;display:grid;place-items:center;width:52px;height:52px;border-radius:999px;color:var(--on-accent);box-shadow:var(--schatten-hoch);opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .2s,transform .25s var(--ease),visibility 0s .25s,background .15s}
+.nach-oben.sichtbar{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .25s var(--ease),visibility 0s,background .15s}
+.nach-oben:hover .leder{fill:var(--accent-cta-hover)}
+.nach-oben:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.nach-oben svg,.wurfball svg{display:block;width:100%;height:100%}
+.nach-oben .leder,.wurfball .leder{fill:var(--accent-cta);transition:fill .15s}
+.nach-oben .naht,.wurfball .naht{fill:none;stroke:rgba(0,0,0,.45);stroke-width:1.7}
+.nach-oben .pfeil{fill:none;stroke:var(--on-accent);stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
+.nach-oben.wirft{opacity:0!important}
+/* Korbwurf beim Klick (Hendrik 29.09.): Korb blendet kurz ein, der Ball fliegt hinein. Reine Deko. */
+.wurfball{position:fixed;left:0;top:0;width:52px;height:52px;z-index:90;pointer-events:none}
+.korb{position:fixed;width:96px;height:112px;pointer-events:none}
+.korb-hinten{z-index:88}.korb-vorne{z-index:91}
+.korb svg{display:block;overflow:visible}
+.korb .brett{fill:var(--surface);stroke:var(--ink);stroke-width:2.5}
+.korb .brett-feld{fill:none;stroke:var(--accent);stroke-width:2.5}
+.korb .ring{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round}
+.korb .netz{fill:none;stroke:var(--ink-2);stroke-width:1.4;stroke-linecap:round;transform-box:fill-box;transform-origin:50% 0}
 </style>
 </head>
 <body>
@@ -464,5 +483,101 @@ if(!ruhig && matchMedia("(hover: hover) and (pointer: fine)").matches){
 })();
 </script>
 
+<a class="nach-oben" id="nach-oben" href="#" aria-label="Nach oben"><svg viewBox="0 0 52 52" aria-hidden="true"><circle class="leder" cx="26" cy="26" r="26"/><g class="naht"><path d="M26 0v52M0 26h52"/><path d="M8.5 7.5c7 5 7 32 0 37M43.5 7.5c-7 5-7 32 0 37"/></g><path class="pfeil" d="M17.5 30.5 26 22l8.5 8.5"/></svg></a>
+<script>
+/* NACHOBEN -- Nach-oben-Knopf mit Korbwurf (Hendrik 29./30.09.), eigenstaendig: baue_v2.py bindet diesen
+   Block samt Markup und NACHOBEN-CSS auf allen Unterseiten ein. Erscheint nach ~1,5 Bildschirmhoehen.
+   Klick: Seite scrollt in 0,9 s hoch, rechts ueber dem Knopf blendet ein Korb ein, der Ball fliegt im Bogen
+   hinein. Deko: blockiert nichts; reduzierte Bewegung = nur Sprung; wer selbst scrollt, bricht ab. */
+(function(){
+  "use strict";
+  var hoch = document.getElementById("nach-oben");
+  if(!hoch) return;
+  var ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function mk(tag, klasse){ var n = document.createElement(tag); if(klasse) n.className = klasse; return n; }
+  function el(id){ return document.getElementById(id); }
+  var geplant = false;
+  function pruefen(){ geplant = false; hoch.classList.toggle("sichtbar", window.scrollY > window.innerHeight * 1.5); }
+  window.addEventListener("scroll", function(){ if(!geplant){ geplant = true; requestAnimationFrame(pruefen); } }, {passive: true});
+  pruefen();
+
+  function nachObenScrollen(dauer){
+    // CSS "scroll-behavior:smooth" waehrenddessen aus, sonst glaettet der Browser jeden Einzelschritt nach
+    // (statt scrollTo({behavior:"instant"}), das aeltere Safari-Versionen nicht kennen)
+    var html = document.documentElement, y0 = window.scrollY, t0 = null, stop = false;
+    html.style.scrollBehavior = "auto";
+    function ende(){ html.style.scrollBehavior = ""; window.removeEventListener("wheel", abbruch); window.removeEventListener("touchstart", abbruch); }
+    function abbruch(){ stop = true; ende(); }
+    window.addEventListener("wheel", abbruch, {passive: true, once: true});
+    window.addEventListener("touchstart", abbruch, {passive: true, once: true});
+    function schritt(t){
+      if(stop) return;
+      if(t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / dauer), e = p < .5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;
+      window.scrollTo(0, Math.round(y0 * (1 - e)));
+      if(p < 1) requestAnimationFrame(schritt); else ende();
+    }
+    requestAnimationFrame(schritt);
+  }
+
+  function korbwurf(start, fertig){
+    var vw = window.innerWidth, vh = window.innerHeight;
+    // Korb am rechten Rand ueber dem Knopf (Hendrik 30.09.: mittig sah komisch aus), mind. 8 px Abstand zum Rand
+    var hx = Math.round(Math.min(start.left + start.width / 2, vw - 48 - 8)), hy = Math.round(Math.max(170, Math.min(vh * .3, 250)));   // Mitte des Rings
+    function teil(klasse, inhalt){
+      var d = mk("div", "korb " + klasse); d.setAttribute("aria-hidden", "true");
+      d.style.left = (hx - 48) + "px"; d.style.top = (hy - 66) + "px";
+      d.innerHTML = '<svg viewBox="0 0 96 112" width="96" height="112">' + inhalt + '</svg>';
+      document.body.appendChild(d); return d;
+    }
+    // Hinten: Brett + hintere Ringhaelfte, vorne: Netz + vordere Ringhaelfte -> der Ball faellt "durch" den Ring
+    var hinten = teil("korb-hinten", '<rect class="brett" x="4" y="2" width="88" height="58" rx="4"/><rect class="brett-feld" x="32" y="26" width="32" height="24"/><path class="ring" d="M22 66a26 5 0 0 1 52 0"/>');
+    var vorne = teil("korb-vorne", '<path class="netz" d="M22 66l8 38M32 67l4 37M42 67.5l1 36.5M54 67.5l-1 36.5M64 67l-4 37M74 66l-8 38M26 80h44M28.5 92h39M30 104h36"/><path class="ring" d="M22 66a26 5 0 0 0 52 0"/>');
+    var ein = [{opacity: 0, transform: "translateY(-12px) scale(.9)"}, {opacity: 1, transform: "none"}];
+    var aus = [{opacity: 1}, {opacity: 0}];
+    [hinten, vorne].forEach(function(k){
+      k.animate(ein, {duration: 220, easing: "ease-out", fill: "both"});
+      k.animate(aus, {duration: 280, delay: 1150, fill: "forwards"});
+    });
+
+    var ball = mk("div", "wurfball"), svg = el("nach-oben").querySelector("svg").cloneNode(true);
+    svg.removeChild(svg.querySelector(".pfeil")); ball.appendChild(svg); ball.setAttribute("aria-hidden", "true");
+    document.body.appendChild(ball);
+    var sx = start.left + start.width / 2, sy = start.top + start.height / 2;
+    // Bogen holt nach links aus (Kontrollpunkt links oberhalb), sonst flöge der Ball senkrecht hoch
+    var ey = hy - 10, cy = Math.max(20, Math.min(sy, ey) - 190), cx = hx - Math.min(170, vw * .35), frames = [];
+    for(var i = 0; i <= 20; i++){             // Flug im Bogen: 0 .. 80 % der Zeit
+      var q = i / 20, x = (1-q)*(1-q)*sx + 2*(1-q)*q*cx + q*q*hx, y = (1-q)*(1-q)*sy + 2*(1-q)*q*cy + q*q*ey, sk = 1 - .42 * q;
+      frames.push({offset: q * .8, opacity: 1, transform: "translate(" + (x - 26) + "px," + (y - 26) + "px) rotate(" + (-q * 560) + "deg) scale(" + sk + ")"});
+    }
+    frames.push({offset: 1, opacity: 0, transform: "translate(" + (hx - 26) + "px," + (hy + 30 - 26) + "px) rotate(-620deg) scale(.58)"});   // durchs Netz
+    ball.animate(frames, {duration: 1000, easing: "linear", fill: "forwards"}).onfinish = function(){ ball.remove(); };
+    vorne.querySelector(".netz").animate([{transform: "scaleY(1)"}, {transform: "scaleY(1.25)"}, {transform: "scaleY(.94)"}, {transform: "scaleY(1)"}],
+      {duration: 420, delay: 820, easing: "ease-out"});
+    setTimeout(function(){
+      var sonne = el("sonne");                // Bonus: das Ball-Logo im Hero zuckt wie beim "Swish"
+      if(sonne){ sonne.classList.remove("treffer"); void sonne.getBoundingClientRect(); sonne.classList.add("treffer"); }
+    }, 950);
+    setTimeout(function(){ hinten.remove(); vorne.remove(); fertig(); }, 1480);
+  }
+
+  var wirft = false;
+  hoch.addEventListener("click", function(ev){
+    ev.preventDefault();
+    // Fokus nur bei Tastatur (detail 0) ans Logo -- nach Tippen/Klicken soll dort kein Fokusrahmen aufleuchten
+    var ml = ev.detail === 0 ? document.querySelector(".marke-link, .sx-nav .sx-marke") : null;
+    if(ruhig || !hoch.animate){ window.scrollTo(0, 0); if(ml) ml.focus({preventScroll: true}); return; }
+    if(wirft) return;
+    wirft = true;
+    var r = hoch.getBoundingClientRect();
+    hoch.classList.add("wirft");            // der Ball "verlaesst" den Knopf
+    function frei(){ wirft = false; hoch.classList.remove("wirft"); }
+    try { korbwurf(r, frei); } catch(x){ frei(); }   // Deko darf den Knopf nie unsichtbar haengen lassen
+    nachObenScrollen(900);
+    if(ml) ml.focus({preventScroll: true});
+  });
+})();
+/* /NACHOBEN */
+</script>
 </body>
 </html>
