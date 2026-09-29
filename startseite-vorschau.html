@@ -109,6 +109,8 @@ svg{display:block}
   background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 2px no-repeat;transition:background-size .25s var(--ease);padding:4px 0}
 .link:hover,.link:focus-visible{background-size:100% 2px}
 .link svg{width:16px;height:16px}
+.link{position:relative}
+.link::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:44px;transform:translateY(-50%)}
 .tag{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;
   font:700 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;background:var(--sunken);color:var(--ink-2);white-space:nowrap}
 .tag-akzent{background:var(--accent-weich);color:var(--accent-ink)}
@@ -134,7 +136,6 @@ button.tag:focus-visible{border-radius:999px}
 .nav-links a{color:var(--ink-2);font-weight:600;font-size:15px;text-decoration:none;padding:10px 13px;border-radius:999px;transition:background .15s,color .15s}
 .nav-links a:hover{color:var(--ink);background:var(--sunken)}
 .nav-links a:focus-visible{border-radius:999px}
-.nav-links .unterseite::after{content:"↗";font-size:11px;margin-left:3px;color:var(--muted)}
 .rund-knopf{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;
   border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);flex:none;transition:background .15s,color .15s,border-color .15s}
 .rund-knopf:hover{background:var(--sunken);color:var(--ink);border-color:var(--accent)}
@@ -422,8 +423,8 @@ button.tag:focus-visible{border-radius:999px}
 .fuss-insta svg{width:22px;height:22px}
 .fuss-insta:hover{color:var(--accent)}
 .fuss h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage-muted);margin-bottom:14px}
-.fuss ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
-.fuss ul a{color:var(--on-stage);text-decoration:none;display:inline-block;padding:8px 0;opacity:.85;transition:opacity .15s,color .15s}
+.fuss ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.fuss ul a{color:var(--on-stage);text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:0;opacity:.85;transition:opacity .15s,color .15s}
 .fuss ul a:hover{opacity:1;color:var(--accent)}
 .fuss-unten{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:56px;padding-top:22px;border-top:1px solid var(--stage-2);
   font-size:13px;color:var(--on-stage-muted)}
@@ -482,14 +483,30 @@ button.tag:focus-visible{border-radius:999px}
   .doku-icon{width:34px;height:42px}
   .tuer{padding:26px;min-height:0}
   .wz{grid-template-columns:3px 34px 46px 1fr auto;gap:9px;padding:11px 14px}
-  .fuss-raster{grid-template-columns:1fr}
+  /* Heim und Gast untereinander, ganze Namen (Pruefergebnis 24.09.: Gegner wurde abgeschnitten) */
+  .wz-paar>span{position:relative;white-space:normal;overflow:visible}
+  .wz-paar .tn{display:block;overflow-wrap:anywhere}
+  .wz-paar .tn-sep{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .fuss-raster{grid-template-columns:1fr 1fr;column-gap:20px}
+  .fuss-raster>:first-child{grid-column:1/-1}
   .marke svg{height:38px}
   .gross .cover{min-height:200px}
 }
 
+@media (max-width:380px){ .nav-innen{gap:8px} .marke svg,.nav.gescrollt .marke svg{height:34px} }
 @media (max-width:1024px){ .vorstand{grid-template-columns:repeat(3,1fr)} }
 @media (max-width:760px){ .vorstand{grid-template-columns:repeat(2,1fr)} .person-name{font-size:17px} .person-text{padding:14px 14px 10px} }
-@media (max-width:480px){ .vorstand{grid-template-columns:1fr} .person-foto{aspect-ratio:4/3} .person-foto img{object-position:50% 18%} }
+@media (max-width:480px){
+  .vorstand{grid-template-columns:1fr;gap:12px}
+  .person:not(.person-gesucht){flex-direction:row}
+  .person-foto{flex:none;width:96px;aspect-ratio:auto;min-height:124px}
+  .person-foto img{position:absolute;inset:0;object-position:50% 18%}
+  .person-ohne .d-avatar{width:62%}
+  .person-text{padding:12px 14px;min-width:0}
+  .person-name{font-size:17px}
+  .person-aufgabe{font-size:13.5px}
+  .person-gesucht{padding:22px 20px}
+}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -581,9 +598,9 @@ button.tag:focus-visible{border-radius:999px}
   </div>
   <a href="#spieltag">Spieltag</a>
   <a href="#news">News</a>
-  <a href="vereine-v2.html">Vereine ↗</a>
-  <a href="kalender-v2.html">Kalender ↗</a>
-  <a href="schiedsrichter-v2.html">Schiedsrichter ↗</a>
+  <a href="vereine-v2.html">Vereine</a>
+  <a href="kalender-v2.html">Kalender</a>
+  <a href="schiedsrichter-v2.html">Schiedsrichter</a>
   <a href="#vorstand">Vorstand</a>
   <a href="#dokumente">Dokumente</a>
 </div>
@@ -892,7 +909,7 @@ function teamKnoten(s){
     (heim ? hs : gs).classList.add("sieger");
     (heim ? gs : hs).classList.add("verlierer");
   }
-  w.appendChild(hs); w.appendChild(document.createTextNode(" – ")); w.appendChild(gs);
+  w.appendChild(hs); w.appendChild(mk("span","tn-sep"," – ")); w.appendChild(gs);
   return w;
 }
 function zeitschluessel(s){ return s.d + "T" + (s.t || "00:00"); }

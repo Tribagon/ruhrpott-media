@@ -88,6 +88,8 @@
   background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 2px no-repeat;transition:background-size .25s var(--ease);padding:4px 0}
 .link:hover,.link:focus-visible{background-size:100% 2px}
 .link svg{width:16px;height:16px}
+.link{position:relative}
+.link::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:44px;transform:translateY(-50%)}
 .tag{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;
   font:700 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;background:var(--sunken);color:var(--ink-2);white-space:nowrap}
 .tag-akzent{background:var(--accent-weich);color:var(--accent-ink)}
@@ -189,8 +191,9 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 .sx-fuss .sx-marke svg{height:auto;width:min(280px,100%)}
 .sx-fuss h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-stage-muted);margin:0 0 12px}
 .sx-fuss ul{list-style:none;margin:0;padding:0}
-.sx-fuss ul a{color:var(--on-stage);text-decoration:none;display:inline-block;padding:8px 0;opacity:.85;font-weight:500;transition:opacity .15s,color .15s}
+.sx-fuss ul a{color:var(--on-stage);text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:0;opacity:.85;font-weight:500;transition:opacity .15s,color .15s}
 .sx-fuss ul a:hover{opacity:1;color:var(--accent)}
+.sx-fuss-unten a{display:inline-flex;align-items:center;min-height:44px}
 .sx-fuss-unten{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--stage-2);font-size:13px;color:var(--on-stage-muted)}
 
 .insta{text-decoration:none}
@@ -199,7 +202,9 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 .sx-fuss-insta:hover{color:var(--accent)}
 @media (max-width:1024px){ .sx-links{display:none} .insta{margin-left:auto} .burger{display:inline-flex} }
 @media (max-width:1024px){ .sx-fuss-raster{grid-template-columns:1fr 1fr} }
-@media (max-width:760px){ .sx-fuss-raster{grid-template-columns:1fr} .sx-marke svg{height:38px} }
+@media (max-width:760px){ .sx-fuss-raster{grid-template-columns:1fr 1fr;column-gap:20px} .sx-fuss-raster>:first-child{grid-column:1/-1} .sx-marke svg{height:38px} }
+/* Kleine Handys (320 px): Kopfleiste und Seitentitel passten nicht in die Breite */
+@media (max-width:380px){ .sx-nav-innen{gap:8px} .sx-nav .sx-marke svg,.sx-nav.gescrollt .sx-marke svg{height:34px} .sx-h1{font-size:12vw} }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .maske>span,.sx-ein,[data-reveal]{animation:none!important;opacity:1!important;transform:none!important;transition:none!important}
