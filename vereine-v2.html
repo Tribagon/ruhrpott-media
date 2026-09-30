@@ -435,6 +435,7 @@ a{color:var(--accent-ink)}
 .tabelle tr:hover td{background:var(--sunken)}
 .tabelle tr.ich td{background:var(--accent-weich)}
 .pfad-runde{border-radius:14px;padding:14px 16px}
+.r-paar .tn{display:inline-block;max-width:100%}   /* Umbruch zwischen den Teams, nicht im Namen */
 .ohne-verein .abschnitt,.ohne-verein .widgets{display:none!important}
 .v-uebersicht{display:flex;flex-direction:column;gap:18px}
 .v-ueb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
@@ -719,7 +720,7 @@ function teamKnoten(s){
   var w=mk("span"); var hs=mk("span","tn",s.h), gs=mk("span","tn",s.g);
   if(s.e && s.e[0]!==s.e[1]){ var heim=s.e[0]>s.e[1];
     (heim?hs:gs).classList.add("sieger"); (heim?gs:hs).classList.add("verlierer"); }
-  w.appendChild(hs); w.appendChild(document.createTextNode(" – ")); w.appendChild(gs); return w;
+  w.appendChild(hs); w.appendChild(document.createTextNode("\u00a0– ")); w.appendChild(gs); return w;
 }
 function widgetZeile(s){
   var b=mk("div","wz"); b.style.setProperty("--pk",farbe(s.lk));

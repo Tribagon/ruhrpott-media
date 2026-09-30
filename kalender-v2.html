@@ -637,6 +637,10 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
   .eintrag{min-height:40px;padding:6px;font-size:13px}
   .eintrag .pa{display:block;white-space:normal;overflow:visible}
   .zeile .pa>span{white-space:normal;overflow:visible}
+  /* Paarung bricht zwischen den Teams um, nicht mitten im Namen (Hendrik 30.09.: "TVE Dortmund Barop 5 -"
+     / "ASC 09 Dortmund 2"). Nur hier, wo umgebrochen wird: am Desktop kuerzt text-overflow sonst einen
+     unteilbaren Block komplett weg statt mit "...". Zu lange Einzelnamen brechen innerhalb des Blocks um. */
+  .zeile .tn,.eintrag .tn{display:inline-block;max-width:100%}
 }
 /* Handy: Das Ergebnis steht wie am Desktop RECHTS neben der Paarung (Hendrik 30.09.). Das Original blendet
    .erg unter 640 px aus -> Woche/Tagesliste zeigten nur den fetten Sieger, aber keine Zahl; in der Liste
@@ -1181,7 +1185,7 @@ function teamKnoten(s){
     (heimGewinnt ? gs : hs).classList.add("verlierer");
   }
   w.appendChild(hs);
-  w.appendChild(document.createTextNode(" – "));
+  w.appendChild(document.createTextNode("\u00a0– "));
   w.appendChild(gs);
   return w;
 }
@@ -1199,7 +1203,10 @@ function eintragKnoten(s){
   // genau die Unterscheidung, um die es hier geht. Zwei Zeichen passen noch rein,
   // der volle Chip ("U16w OL") steht in Woche, Liste und Detailfenster.
   b.appendChild(mk("span","eb", D.ligen[s.lk].ebene));
-  b.appendChild(mk("span","pa", s.e ? paarText(s) + "  " + ergText(s) : paarText(s)));
+  var pa = mk("span","pa");
+  pa.appendChild(mk("span","tn", s.h)); pa.appendChild(document.createTextNode("\u00a0– ")); pa.appendChild(mk("span","tn", s.g));
+  if(s.e) pa.appendChild(document.createTextNode("  " + ergText(s)));
+  b.appendChild(pa);
   b.addEventListener("click", function(ev){ ev.stopPropagation(); spielOeffnen(s); });
   return b;
 }
