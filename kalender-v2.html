@@ -638,16 +638,22 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
   .eintrag .pa{display:block;white-space:normal;overflow:visible}
   .zeile .pa>span{white-space:normal;overflow:visible}
 }
-/* Liste auf dem Handy: Datum und Uhrzeit untereinander, damit die Paarung die ganze Restbreite bekommt
-   (vorher blieben fuer die Namen ~96 px). Reihenfolge: rail, Datum, Zeit, Chip, Paarung, Ergebnis. */
+/* Handy: Das Ergebnis steht wie am Desktop RECHTS neben der Paarung (Hendrik 30.09.). Das Original blendet
+   .erg unter 640 px aus -> Woche/Tagesliste zeigten nur den fetten Sieger, aber keine Zahl; in der Liste
+   stand es unter der Uhrzeit und las sich wie eine dritte Zeitangabe. Ohne Ergebnis bleibt die Spalte leer. */
 @media (max-width:640px){
-  /* !important: listeBauen setzt das Spaltenraster als Inline-Style */
-  .liste .zeile{grid-template-columns:3px 78px minmax(0,1fr)!important;grid-template-rows:auto auto auto;column-gap:10px;row-gap:0}
-  .liste .zeile>:nth-child(1){grid-column:1;grid-row:1 / span 3}
+  .zeile{grid-template-columns:3px 56px minmax(0,1fr) auto}
+  .zeile .erg{display:block;font-size:16px;text-align:right}
+  .zeile .erg.wort{font-size:10px}
+  /* Liste: Datum und Uhrzeit untereinander, damit die Paarung die Restbreite bekommt.
+     Reihenfolge: rail, Datum, Zeit, Chip, Paarung, Ergebnis.
+     !important: listeBauen setzt das Spaltenraster als Inline-Style */
+  .liste .zeile{grid-template-columns:3px 78px minmax(0,1fr) auto!important;grid-template-rows:auto auto;column-gap:10px;row-gap:0}
+  .liste .zeile>:nth-child(1){grid-column:1;grid-row:1 / span 2}
   .liste .zeile>:nth-child(2){grid-column:2;grid-row:1}
   .liste .zeile>:nth-child(3){grid-column:2;grid-row:2;font-size:13px;color:var(--ink-2)}
   .liste .zeile>:nth-child(5){grid-column:3;grid-row:1 / span 2}
-  .liste .zeile>:nth-child(6){display:block;grid-column:2;grid-row:3;font-size:15px}   /* Ergebnis unter der Uhrzeit (war auf dem Handy ganz ausgeblendet) */
+  .liste .zeile>:nth-child(6){grid-column:4;grid-row:1 / span 2}
 }
 
 /* Nach-oben-Knopf (Hendrik 29.09.): erscheint nach ~1,5 Bildschirmhoehen; ausgeblendet auch nicht per Tab erreichbar */
