@@ -625,6 +625,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
    ~4:1. Zur Textfarbe hin mischen: hell dunkler, dunkel heller (Website-Audit 29.09. F04). */
 .eintrag .eb{color:color-mix(in srgb,var(--pk) 65%,var(--ink))}
 .eintrag{min-height:24px}   /* WCAG 2.2 Zielgroesse 24 px (Desktop-Monatsraster lag bei 22,6 px) */
+.zeile .nur-handy{display:none}   /* Liga in der Infozeile: nur auf dem Handy, sonst steht sie im Chip */
 /* Tablet/Touch (Website-Audit 29.09. F03): Das 7-Spalten-Monatsraster zeigte bis 900 px nur noch
    "20:15 PK" ohne Teams. Bis 900 px ist der Monat deshalb eine Tagesliste mit ausgeschriebenen,
    umbrechenden Namen und groesseren Tippflaechen; Namen in Liste/Woche werden nicht mehr abgeschnitten. */
@@ -649,6 +650,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
   .zeile{grid-template-columns:3px 56px minmax(0,1fr) auto}
   .zeile .erg{display:block;font-size:16px;text-align:right}
   .zeile .erg.wort{font-size:10px}
+  .zeile .nur-handy{display:inline}
   /* Liste: Datum und Uhrzeit untereinander, damit die Paarung die Restbreite bekommt.
      Reihenfolge: rail, Datum, Zeit, Chip, Paarung, Ergebnis.
      !important: listeBauen setzt das Spaltenraster als Inline-Style */
@@ -1229,10 +1231,10 @@ function zeileKnoten(s, kompakt){
   // In der Tagesliste (kompakt) fehlt der Liga-Chip in eigener Spalte -- dann die
   // Liga hier farbig in die Infozeile, sonst waere nur an der Farbe erkennbar,
   // welche Altersklasse/Liga es ist.
-  if(kompakt){
-    sub.appendChild(mk("span","wz-liga", ligaChip(D.ligen[s.lk])));
-    sub.appendChild(document.createTextNode(" · "));
-  }
+  var lz = mk("span", kompakt ? null : "nur-handy");
+  lz.appendChild(mk("span","wz-liga", ligaChip(D.ligen[s.lk])));
+  lz.appendChild(document.createTextNode(" · "));
+  sub.appendChild(lz);
   sub.appendChild(document.createTextNode((s.halle || "Halle steht noch nicht fest") +
       (s.st !== "Offen" && s.st !== "Gespielt" ? " · " + s.st : "")));
   pa.appendChild(sub);
