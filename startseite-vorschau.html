@@ -1056,10 +1056,10 @@ var VORSTAND = [
   {amt:"Kassierer", name:"Achim Wirth", aufgabe:"Finanzen", mail:"schatzmeister@dobasket.de", foto:"img/vorstand/wirth.jpg"}
 ];
 /* Rechtsausschuss: eigenes, unabhaengiges Gremium (Satzung § 9 Abs. 2 b, § 14), gehoert NICHT
-   zum Vorstand (§ 11). Wunsch Thomas Grossmann 10/2026: Name + Stammverein, als Kontakt nur seine Adresse.
+   zum Vorstand (§ 11). Wunsch Thomas Großmann 10/2026: als Kontakt nur seine Adresse (Stammverein auf der Karte: Hendrik 08.10. nein).
    Beisitzer hier ergaenzen (ohne Foto: foto:null, icon:"i-..." wie beim Schiedsrichterwart). */
 var RECHTSAUSSCHUSS = [
-  {amt:"Vorsitzender", name:"Thomas Grossmann", aufgabe:"TSC Eintracht Dortmund", mail:"rechtsausschuss@dobasket.de", foto:"img/vorstand/grossmann.jpg"}
+  {amt:"Vorsitzender", name:"Thomas Großmann", mail:"rechtsausschuss@dobasket.de", foto:"img/vorstand/grossmann.jpg"}
 ];
 var DOKUMENTE = [
   // url = echte Datei im Repo; ohne url steht das Dokument als "folgt" in der Liste (kein Link).
@@ -1171,7 +1171,7 @@ function personKarte(ziel, p, i){
   var tx = mk("div","person-text");
   tx.appendChild(mk("span","person-amt", p.amt));
   tx.appendChild(mk("h3","person-name", p.name));
-  tx.appendChild(mk("span","person-aufgabe", p.aufgabe));
+  if(p.aufgabe) tx.appendChild(mk("span","person-aufgabe", p.aufgabe));
   var a = mk("a"); a.href = "mailto:" + p.mail; a.appendChild(svgUse("i-mail")); a.appendChild(document.createTextNode(p.mail));
   tx.appendChild(a); k.appendChild(tx); ziel.appendChild(k);
 }

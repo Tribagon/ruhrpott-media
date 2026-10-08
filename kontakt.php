@@ -19,7 +19,7 @@ const ANLIEGEN = [
     'schiedsrichter' => ['Schiedsrichter',                'schiedsrichter@dobasket.de'],
     'jugend'         => ['Jugend',                        'jugendwart@dobasket.de'],
     'finanzen'       => ['Finanzen und Beiträge',         'schatzmeister@dobasket.de'],
-    'recht'          => ['Recht und Datenschutz',         'rechtsausschuss@dobasket.de'],
+    'datenschutz'    => ['Datenschutz',                   'vorsitz1@dobasket.de'],
 ];
 
 const MIN_SEKUNDEN = 3;          // schneller fuellt kein Mensch das Formular aus
