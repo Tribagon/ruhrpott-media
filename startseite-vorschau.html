@@ -831,6 +831,20 @@ button.tag:focus-visible{border-radius:999px}
   </div>
 </section>
 
+<!-- ======= Rechtsausschuss (eigenes Gremium, nicht Teil des Vorstands) ======= -->
+<section class="abschnitt" id="rechtsausschuss" style="padding-top:0">
+  <div class="inhalt">
+    <div class="abschnitt-kopf">
+      <div class="links">
+        <span class="eyebrow" data-reveal>Rechtsausschuss</span>
+        <h2 class="h2" data-float>Unabhängig entschieden<span class="punkt">.</span></h2>
+        <p data-reveal>Der Rechtsausschuss ist ein eigenes Gremium des Kreises und gehört nicht zum Vorstand. Er entscheidet unabhängig nach den Rechtsordnungen von WBV und DBB (§&nbsp;14 der Satzung).</p>
+      </div>
+    </div>
+    <div class="vorstand" id="rechtsausschuss-raster"></div>
+  </div>
+</section>
+
 <!-- ======= Dokumente ======= -->
 <section class="abschnitt" id="dokumente" style="padding-top:0">
   <div class="inhalt">
@@ -863,7 +877,7 @@ button.tag:focus-visible{border-radius:999px}
         <a class="fuss-insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-insta"/></svg>@dobasket</a>
       </div>
       <div><h4>Spielbetrieb</h4><ul><li><a href="kalender-v2.html">Spielkalender</a></li><li><a href="vereine-v2.html">Vereine &amp; Teams</a></li><li><a href="hallen-v2.html">Hallen</a></li><li><a href="#spieltag">Spieltag</a></li></ul></div>
-      <div><h4>Der Kreis</h4><ul><li><a href="#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="#vorstand">Vorstand</a></li><li><a href="#dokumente">Dokumente</a></li></ul></div>
+      <div><h4>Der Kreis</h4><ul><li><a href="#news">News</a></li><li><a href="schiedsrichter-v2.html">Schiedsrichter</a></li><li><a href="#vorstand">Vorstand</a></li><li><a href="#rechtsausschuss">Rechtsausschuss</a></li><li><a href="#dokumente">Dokumente</a></li></ul></div>
       <div><h4>Rechtliches</h4><ul><li><a href="impressum.html">Impressum</a></li><li><a href="datenschutz.html">Datenschutz</a></li><li><a href="kontakt.html">Kontakt</a></li></ul></div>
     </div>
     <div class="fuss-unten">
@@ -1039,8 +1053,13 @@ var VORSTAND = [
   {amt:"Jugendwart", name:"Christian Podszuk", aufgabe:"Spielleitung Junioren, Talentstützpunkt und Entwicklung", mail:"jugendwart@dobasket.de", foto:"img/vorstand/podszuk.jpg"},
   {amt:"Schiedsrichterwart", name:"Milenko Aleksic", aufgabe:"Aus- und Weiterbildung, Be- und Umbesetzung, Betreuung", mail:"schiedsrichter@dobasket.de", foto:null, icon:"i-pfeife"},
   {amt:"Sportwart", name:"Martin Schmitz", aufgabe:"Spielleitung Senioren, Liga-Koop", mail:"sportwart@dobasket.de", foto:"img/vorstand/schmitz.jpg"},
-  {amt:"Kassierer", name:"Achim Wirth", aufgabe:"Finanzen", mail:"schatzmeister@dobasket.de", foto:"img/vorstand/wirth.jpg"},
-  {amt:"Rechtsausschussvorsitzender", name:"Thomas Grossmann", aufgabe:"Datenschutz", mail:"rechtsausschuss@dobasket.de", foto:"img/vorstand/grossmann.jpg"}
+  {amt:"Kassierer", name:"Achim Wirth", aufgabe:"Finanzen", mail:"schatzmeister@dobasket.de", foto:"img/vorstand/wirth.jpg"}
+];
+/* Rechtsausschuss: eigenes, unabhaengiges Gremium (Satzung § 9 Abs. 2 b, § 14), gehoert NICHT
+   zum Vorstand (§ 11). Wunsch Thomas Grossmann 10/2026: Name + Stammverein, als Kontakt nur seine Adresse.
+   Beisitzer hier ergaenzen (ohne Foto: foto:null, icon:"i-..." wie beim Schiedsrichterwart). */
+var RECHTSAUSSCHUSS = [
+  {amt:"Vorsitzender", name:"Thomas Grossmann", aufgabe:"TSC Eintracht Dortmund", mail:"rechtsausschuss@dobasket.de", foto:"img/vorstand/grossmann.jpg"}
 ];
 var DOKUMENTE = [
   // url = echte Datei im Repo; ohne url steht das Dokument als "folgt" in der Liste (kein Link).
@@ -1127,37 +1146,40 @@ function logoOhneBall(){
   var teile = n.getAttribute("d").trim().split(/(?=M )/).filter(function(s){ return s.trim(); });
   return teile.filter(function(s, i){ return i !== 5 && i !== 6; }).join(" ");
 }
+function personKarte(ziel, p, i){
+  var k = mk("div","karte person"); k.setAttribute("data-reveal",""); k.style.setProperty("--i", i);
+  var bild = mk("div","person-foto" + (p.foto ? "" : " person-ohne"));
+  if(p.foto){
+    var img = mk("img"); img.src = p.foto; img.alt = "Porträt " + p.name; img.loading = "lazy"; img.width = 480; img.height = 600;
+    bild.appendChild(img);
+  } else {
+    // Dasselbe Wappen wie auf der Schiri-Seite: das D-Logo (Turm, Buesche),
+    // der Ball ersetzt durch das Rollen-Icon.
+    var av = mk("div","d-avatar");
+    var sv = document.createElementNS("http://www.w3.org/2000/svg","svg");
+    sv.setAttribute("class","d-wappen"); sv.setAttribute("viewBox","215 200 830 870"); sv.setAttribute("aria-hidden","true");
+    var pf = document.createElementNS("http://www.w3.org/2000/svg","path");
+    pf.setAttribute("fill","currentColor"); pf.setAttribute("fill-rule","evenodd"); pf.setAttribute("d", logoOhneBall());
+    sv.appendChild(pf);
+    var ic = svgUse(p.icon).firstChild; ic.setAttribute("class","wappen-icon");
+    ic.setAttribute("x","529.5"); ic.setAttribute("y","413.5"); ic.setAttribute("width","400"); ic.setAttribute("height","400");
+    sv.appendChild(ic); av.appendChild(sv);
+    bild.appendChild(av);
+    if(p.icon === "i-pfeife") pfiffVerdrahten(av);
+  }
+  k.appendChild(bild);
+  var tx = mk("div","person-text");
+  tx.appendChild(mk("span","person-amt", p.amt));
+  tx.appendChild(mk("h3","person-name", p.name));
+  tx.appendChild(mk("span","person-aufgabe", p.aufgabe));
+  var a = mk("a"); a.href = "mailto:" + p.mail; a.appendChild(svgUse("i-mail")); a.appendChild(document.createTextNode(p.mail));
+  tx.appendChild(a); k.appendChild(tx); ziel.appendChild(k);
+}
 function vorstandBauen(){
   var ziel = el("vorstand-raster");
-  VORSTAND.forEach(function(p, i){
-    var k = mk("div","karte person"); k.setAttribute("data-reveal",""); k.style.setProperty("--i", i);
-    var bild = mk("div","person-foto" + (p.foto ? "" : " person-ohne"));
-    if(p.foto){
-      var img = mk("img"); img.src = p.foto; img.alt = "Porträt " + p.name; img.loading = "lazy"; img.width = 480; img.height = 600;
-      bild.appendChild(img);
-    } else {
-      // Dasselbe Wappen wie auf der Schiri-Seite: das D-Logo (Turm, Buesche),
-      // der Ball ersetzt durch das Rollen-Icon.
-      var av = mk("div","d-avatar");
-      var sv = document.createElementNS("http://www.w3.org/2000/svg","svg");
-      sv.setAttribute("class","d-wappen"); sv.setAttribute("viewBox","215 200 830 870"); sv.setAttribute("aria-hidden","true");
-      var pf = document.createElementNS("http://www.w3.org/2000/svg","path");
-      pf.setAttribute("fill","currentColor"); pf.setAttribute("fill-rule","evenodd"); pf.setAttribute("d", logoOhneBall());
-      sv.appendChild(pf);
-      var ic = svgUse(p.icon).firstChild; ic.setAttribute("class","wappen-icon");
-      ic.setAttribute("x","529.5"); ic.setAttribute("y","413.5"); ic.setAttribute("width","400"); ic.setAttribute("height","400");
-      sv.appendChild(ic); av.appendChild(sv);
-      bild.appendChild(av);
-      if(p.icon === "i-pfeife") pfiffVerdrahten(av);
-    }
-    k.appendChild(bild);
-    var tx = mk("div","person-text");
-    tx.appendChild(mk("span","person-amt", p.amt));
-    tx.appendChild(mk("h3","person-name", p.name));
-    tx.appendChild(mk("span","person-aufgabe", p.aufgabe));
-    var a = mk("a"); a.href = "mailto:" + p.mail; a.appendChild(svgUse("i-mail")); a.appendChild(document.createTextNode(p.mail));
-    tx.appendChild(a); k.appendChild(tx); ziel.appendChild(k);
-  });
+  VORSTAND.forEach(function(p, i){ personKarte(ziel, p, i); });
+  var ra = el("rechtsausschuss-raster");
+  RECHTSAUSSCHUSS.forEach(function(p, i){ personKarte(ra, p, i); });
   // Wie auf der alten Seite: der freie Platz wirbt fuers Ehrenamt.
   var g = mk("div","karte person person-gesucht"); g.setAttribute("data-reveal",""); g.style.setProperty("--i", VORSTAND.length);
   var gt = mk("div");
