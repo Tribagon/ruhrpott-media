@@ -50,6 +50,11 @@ ErrorDocument 404 /404.html
 <IfModule mod_headers.c>
   # Testumgebung: nicht in Suchmaschinen aufnehmen (sonst Doppelung zu dobasket.de)
   Header set X-Robots-Tag "noindex, nofollow"
+  # Seiten, Skripte und Spieldaten bei jedem Aufruf kurz beim Server nachfragen (per ETag meist nur
+  # "304 unveraendert"). Ohne Angabe behielt Safari alte JS-Dateien und neue Funktionen fehlten (09.10.2026).
+  <FilesMatch "\\.(html|js|css|php)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
 </IfModule>
 <IfModule mod_mime.c>
   AddType font/woff2 .woff2
