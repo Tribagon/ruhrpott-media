@@ -440,6 +440,23 @@ a{color:var(--accent-ink)}
 .tabelle tr.ich td{background:var(--accent-weich)}
 .pfad-runde{border-radius:14px;padding:14px 16px}
 .r-paar .tn{display:inline-block;max-width:100%}   /* Umbruch zwischen den Teams, nicht im Namen */
+/* Spiellisten (Mannschafts-Detail, Vereins-Widgets) am Handy: Paarung bricht zwischen den Teams um statt
+   "ASC 09 Dort..." abzuschneiden (Hendrik 10.10.2026, gleiche Regel wie im Kalender seit 30.09.).
+   Nur hier: am Desktop wuerde text-overflow einen unteilbaren Block komplett wegkuerzen. */
+@media (max-width:760px){
+  .wz-paar>span{white-space:normal;overflow:visible}
+  .wz-paar .tn{display:inline-block;max-width:100%}
+}
+.tn-strich{font-weight:400}
+/* Schmale Handys: Uhrzeit unter das Datum (wie die Handy-Liste im Kalender), damit die Paarung Platz hat */
+@media (max-width:480px){
+  .wz{grid-template-columns:3px 40px 1fr auto;column-gap:10px;row-gap:0;padding:10px 14px}
+  .wz-rail{grid-row:1 / span 2}
+  .wz-tag{grid-column:2;grid-row:1;align-self:end}
+  .wz-zeit{grid-column:2;grid-row:2;align-self:start;text-align:center;font-size:13px}
+  .wz-paar{grid-column:3;grid-row:1 / span 2}
+  .wz-erg{grid-column:4;grid-row:1 / span 2}
+}
 .ohne-verein .abschnitt,.ohne-verein .widgets{display:none!important}
 .v-uebersicht{display:flex;flex-direction:column;gap:18px}
 .v-ueb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
@@ -726,7 +743,7 @@ function teamKnoten(s){
   var w=mk("span"); var hs=mk("span","tn",s.h), gs=mk("span","tn",s.g);
   if(s.e && s.e[0]!==s.e[1]){ var heim=s.e[0]>s.e[1];
     (heim?hs:gs).classList.add("sieger"); (heim?gs:hs).classList.add("verlierer"); }
-  w.appendChild(hs); w.appendChild(document.createTextNode("\u00a0– ")); w.appendChild(gs); return w;
+  hs.appendChild(mk("span","tn-strich","\u00a0–")); w.appendChild(hs); w.appendChild(document.createTextNode(" ")); w.appendChild(gs); return w;
 }
 function widgetZeile(s){
   var b=mk("a","wz"); b.href="kalender-v2.html?spiel="+encodeURIComponent(s.uid); b.style.setProperty("--pk",farbe(s.lk));
