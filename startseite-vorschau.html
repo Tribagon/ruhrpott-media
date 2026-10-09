@@ -311,6 +311,11 @@ button.tag:focus-visible{border-radius:999px}
 /* Plakate/Logos ganz zeigen statt beschneiden (News-Uebernahme 27.09.) */
 .cover-plakat{background:var(--stage)}
 .cover-plakat img{object-fit:contain;object-position:50% 50%}
+/* Grosse Karte (Hendrik 10.10.): Plakat ganz statt unten abgeschnitten ("Jetzt anmelden" fehlte); die Flaeche
+   daneben fuellt dasselbe Bild verschwommen statt dunkler Balken (gleiche Datei, kein zweiter Download) */
+.cover-plakat img.cover-bg{object-fit:cover;filter:blur(26px) saturate(1.15);transform:scale(1.2);opacity:.55}
+@media (max-width:760px){ .gross .cover.cover-plakat{min-height:0;aspect-ratio:4/5} }   /* Handy: Plakat lesbar gross */
+@media (min-width:761px) and (max-width:1024px){ .gross .cover.cover-plakat{min-height:440px} }   /* Tablet */
 .cover-glyphe{position:absolute;right:22px;bottom:18px;width:64px;height:64px;border-radius:50%;background:var(--surface);
   display:grid;place-items:center;color:var(--accent);box-shadow:var(--schatten)}
 .cover-glyphe svg{width:30px;height:30px}
@@ -731,7 +736,8 @@ button.tag:focus-visible{border-radius:999px}
 
     <div class="bento">
       <a class="karte gross" href="news-3x3-basketballnacht.html" data-reveal style="--i:0">
-        <div class="cover cover-bild">
+        <div class="cover cover-bild cover-plakat">
+          <img class="cover-bg" src="img/news/3x3-basketballnacht-2026.jpg" alt="" aria-hidden="true" loading="lazy">
           <img src="img/news/3x3-basketballnacht-2026.jpg" alt="Plakat der 3. 3x3-Basketballnacht: Basketballkorb im Flutlicht, 2. Oktober 2026, 19 Uhr, Phoenix-Gymnasium" loading="lazy" width="984" height="1350">
         </div>
         <div class="news-text">
