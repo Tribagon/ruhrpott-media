@@ -357,6 +357,10 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 }
 
 /* =================== Vereine V2: Feinschliff nach DESIGN.md =================== */
+/* Spielzeilen fuehren ins Spielfenster des Kalenders (Hendrik 09.10.2026, wie auf der Startseite) */
+a.wz{color:inherit;text-decoration:none;cursor:pointer;transition:background .12s}
+a.wz:hover{background:var(--sunken)}
+a.wz:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:0}
 .wrap{max-width:1240px;padding:0 var(--rand);gap:clamp(40px,5vw,64px)}
 a{color:var(--accent-ink)}
 .hero{gap:clamp(18px,3vw,32px);align-items:center}
@@ -725,7 +729,7 @@ function teamKnoten(s){
   w.appendChild(hs); w.appendChild(document.createTextNode("\u00a0– ")); w.appendChild(gs); return w;
 }
 function widgetZeile(s){
-  var b=mk("div","wz"); b.style.setProperty("--pk",farbe(s.lk));
+  var b=mk("a","wz"); b.href="kalender-v2.html?spiel="+encodeURIComponent(s.uid); b.style.setProperty("--pk",farbe(s.lk));
   b.appendChild(mk("span","wz-rail"));
   var tg=mk("span","wz-tag"); tg.appendChild(mk("b",null,String(s2d(s.d).getUTCDate())));
   tg.appendChild(document.createTextNode(WT[wtag(s.d)])); b.appendChild(tg);
@@ -1058,6 +1062,8 @@ function teamAusUrl(such){
 function teamDetail(t, li){
   el("td-team").textContent = aktuellerVerein;
   el("td-liga").textContent = "· " + teamKurz(t) + (li ? " · " + ligaName(li) : "");
+  var tinf = teamInfo(t.id);
+  if(tinf) try{ history.replaceState(null, "", "?verein=" + encodeURIComponent(aktuellerVerein) + "&liga=" + encodeURIComponent(tinf.lnr) + "&team=" + encodeURIComponent(tinf.roh)); }catch(e){}
   if(FAV) FAV.teamAktionen(document.querySelector("#team-detail .td-kopf"), t.id);
   var sp=teamSpiele(t);
   var w=mk("div","widget"), liste=mk("div","widget-liste");
@@ -1080,6 +1086,7 @@ function teamDetail(t, li){
 }
 el("td-back").addEventListener("click", function(){
   el("team-detail").hidden=true;
+  try{ history.replaceState(null, "", "?verein=" + encodeURIComponent(aktuellerVerein)); }catch(e){}
   el("v-teams").scrollIntoView({behavior:"smooth", block:"start"});
 });
 
