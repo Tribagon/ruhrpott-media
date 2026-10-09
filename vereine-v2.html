@@ -673,12 +673,14 @@ a{color:var(--accent-ink)}
 
 <script src="vereine-info.js"></script>
 <script src="kalender/daten.js"></script>
+<script src="meine-teams.js"></script>
 <script>
 
 var D = window.DOBASKET_DATEN;
 if(!D){ document.getElementById("v-name").textContent = "Vereinsdaten gerade nicht erreichbar"; throw new Error("kalender/daten.js fehlt"); }
 var SA = D.saison;
 document.getElementById("sx-saison").textContent = SA;
+var FAV = window.DOBASKET_FAV || null;   // Meine Teams (meine-teams.js); null = aus
 
 // --- Zeit/Datum (UTC, wie im Kalender) ---
 function s2d(s){ return new Date(s+"T00:00:00Z"); }
@@ -806,6 +808,7 @@ function teamsBauen(verein){
       lz.appendChild(mk("span","tc-name", teamKurz(t)));
       var istPokal = !!(li && (li.ebene||"").indexOf("PK") === 0);
       card.appendChild(lz);
+      if(FAV && !t._zurueck) FAV.sternTeam(card, t.id);
       if(li) card.appendChild(mk("div","tc-sub", ligaName(li)));
       var tab=mk("div","tc-tab");
       if(t._zurueck){
@@ -899,6 +902,7 @@ function seiteBauen(verein){
     '<span><b>'+spieleOhneAbsage+'</b> Spiele '+SA+'</span>'+
     '';
   vereinsLinks(meta, verein);
+  if(FAV) FAV.vereinAktionen(meta, verein);
 
   teamsBauen(verein);
   var ohne = teams.length === 0;
@@ -1054,6 +1058,7 @@ function teamAusUrl(such){
 function teamDetail(t, li){
   el("td-team").textContent = aktuellerVerein;
   el("td-liga").textContent = "· " + teamKurz(t) + (li ? " · " + ligaName(li) : "");
+  if(FAV) FAV.teamAktionen(document.querySelector("#team-detail .td-kopf"), t.id);
   var sp=teamSpiele(t);
   var w=mk("div","widget"), liste=mk("div","widget-liste");
   if(sp.length) sp.forEach(function(s){ liste.appendChild(widgetZeile(s)); });

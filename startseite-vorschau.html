@@ -891,6 +891,7 @@ button.tag:focus-visible{border-radius:999px}
 
 <script src="vereine-info.js"></script>
 <script src="kalender/daten.js"></script>
+<script src="meine-teams.js"></script>
 <script>
 (function(){
 "use strict";
@@ -1000,6 +1001,8 @@ function datenBauen(){
     .sort(function(a,b){ return zeitschluessel(a) > zeitschluessel(b) ? -1 : 1; }).slice(0,5);
   fuelle("w-naechste","w-naechste-meta", naechste.slice(0,5), "Kein Spiel mehr angesetzt.", naechste.length ? "ab " + fmtKurz(naechste[0].d) : "");
   fuelle("w-ergebnisse","w-ergebnisse-meta", ergebnisse, "Noch keine Ergebnisse in dieser Saison.", ergebnisse.length ? "zuletzt " + fmtKurz(ergebnisse[0].d) : "");
+  // Meine Teams (meine-teams.js): eigener Block ueber diesen Widgets, nur wenn etwas gemerkt ist
+  if(window.DOBASKET_FAV) DOBASKET_FAV.startseite(widgetZeile);
 
   // Live-Karte im Hero
   var n = naechste[0];

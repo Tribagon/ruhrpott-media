@@ -803,6 +803,13 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
             <span id="f-gespielt-text">Gespielte ausblenden</span>
           </button>
         </div>
+        <div class="feld feld-schalter" hidden>
+          <label id="l-meine">Meine Teams</label>
+          <button class="schalter" id="f-meine" type="button" role="switch" aria-checked="false" aria-labelledby="l-meine f-meine-text">
+            <span class="schalter-bahn" aria-hidden="true"><span class="schalter-knopf"></span></span>
+            <span id="f-meine-text">Nur meine Teams</span>
+          </button>
+        </div>
         <button class="filter-reset" id="f-reset" hidden>Filter zurücksetzen</button>
       </div>
     </div>
@@ -832,6 +839,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-ui);
 
 <script src="vereine-info.js"></script>
 <script src="kalender/daten.js"></script>
+<script src="meine-teams.js"></script>
 <script src="hallen.js"></script>
 <script>
 
@@ -954,7 +962,9 @@ function mk(tag, klasse, text){
 }
 
 // --- Zustand ---
+var FAV = window.DOBASKET_FAV && DOBASKET_FAV.favoriten ? DOBASKET_FAV : null;   // null = Meine Teams aus
 var zustand = {
+  nurMeine: false,                              // Schalter 'Nur meine Teams'
   ansicht: "monat",
   cursor: monatsErster(HEUTE),
   liga: "", verein: "", team: "", suche: "",
@@ -1013,6 +1023,7 @@ function passt(s){
   if(!zustand.alter[farbGruppe(l.alter)]) return false;
   // Gespielt = liegt vor heute oder hat schon ein Ergebnis.
   if(zustand.ohneGespielte && (s.d < HEUTE || (s.e && typeof s.e[0] === "number"))) return false;
+  if(zustand.nurMeine && !(FAV && FAV.spielIstFav(s))) return false;
   // zustand.liga ist ein Anzeige-Label -- so fallen die Pokal-Phasen (gleiche
   // Beschriftung, verschiedene Liganummern) zu einem Filter zusammen.
   if(zustand.liga && ligaLabel(l) !== zustand.liga) return false;
@@ -1198,6 +1209,7 @@ function eintragKnoten(s){
   if(zustand.aktiv === s.uid) b.classList.add("aktiv");
   b.style.setProperty("--pk", farbe(s.lk));
   b.title = paarText(s) + " · " + D.ligen[s.lk].name;
+  if(FAV) FAV.markiere(b, s);
   b.appendChild(mk("span","rail"));
   b.appendChild(zeitKnoten(s,"zt"));
   // Die Farbe traegt die Altersklasse, dieses Kuerzel die Spielebene. Ohne es
@@ -1215,6 +1227,7 @@ function eintragKnoten(s){
 
 function zeileKnoten(s, kompakt){
   var b = mk("button","zeile");
+  if(FAV) FAV.markiere(b, s);
   b.dataset.uid = s.uid;
   if(zustand.aktiv === s.uid) b.classList.add("aktiv");
   b.style.setProperty("--pk", farbe(s.lk));
@@ -1531,7 +1544,7 @@ function spielOeffnen(s){
       var pf = document.createElementNS("http://www.w3.org/2000/svg","svg"); pf.setAttribute("aria-hidden","true");
       var u = document.createElementNS("http://www.w3.org/2000/svg","use"); u.setAttribute("href","#i-pfeil"); pf.appendChild(u);
       a.appendChild(pf);
-      zu.appendChild(a);
+      zu.appendChild(FAV ? FAV.mitStern(a, s[k[2]], s.sa) : a);
     });
 
     // Frueher stand hier ein Hinweis, dass noch keine Tabelle vorliegt. Raus
@@ -1704,9 +1717,27 @@ function filterBauen(){
     zeichne();
   });
 
+  var fm = el("f-meine");
+  if(FAV){
+    fm.parentNode.hidden = false;
+    fm.addEventListener("click", function(){
+      if(!zustand.nurMeine && !FAV.anzahl()){ FAV.oeffnen(); return; }   // noch nichts gemerkt: erklaeren statt leerer Kalender
+      zustand.nurMeine = !zustand.nurMeine;
+      fm.setAttribute("aria-checked", zustand.nurMeine ? "true" : "false");
+      zeichne();
+    });
+    FAV.beiAenderung(function(){
+      if(zustand.nurMeine && !FAV.anzahl()){ zustand.nurMeine = false; fm.setAttribute("aria-checked","false"); }
+      zeichne();
+    });
+    // kalender-v2.html?meine=1 (von der Startseite / aus Meine Teams): gleich gefiltert oeffnen
+    try{ if(new URLSearchParams(location.search).get("meine") === "1" && FAV.anzahl()){ zustand.nurMeine = true; fm.setAttribute("aria-checked","true"); } }catch(e){}
+  }
+
   el("f-reset").addEventListener("click", function(){
     zustand.liga = ""; zustand.verein = ""; zustand.team = ""; zustand.suche = "";
     zustand.ohneGespielte = false; el("f-gespielt").setAttribute("aria-checked","false");
+    zustand.nurMeine = false; el("f-meine").setAttribute("aria-checked","false");
     Object.keys(zustand.alter).forEach(function(g){ zustand.alter[g] = true; });
     el("f-liga").value = ""; el("f-suche").value = "";
     Array.prototype.forEach.call(chips.children, function(b){ b.setAttribute("aria-pressed","true"); });
@@ -1846,7 +1877,7 @@ function zeichne(){
     (n < inSaison ? " passen zum Filter (von " + ohneAbs.toLocaleString("de-DE") + " der Saison " + zustand.saison + ")"
                   : " in der Saison " + zustand.saison) +
     (abg ? " · dazu " + abg + " abgesagt" : "")));
-  var gefiltert = zustand.liga || zustand.verein || zustand.team || zustand.suche || zustand.ohneGespielte ||
+  var gefiltert = zustand.liga || zustand.verein || zustand.team || zustand.suche || zustand.ohneGespielte || zustand.nurMeine ||
     Object.keys(zustand.alter).some(function(g){ return !zustand.alter[g]; });
   el("f-reset").hidden = !gefiltert;
 
