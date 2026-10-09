@@ -1526,6 +1526,7 @@ function spielOeffnen(s){
       rt.appendChild(mk("small",null,"Google Maps"));
       r.appendChild(rt);
     }
+    if(window.DOBASKET_FAV && DOBASKET_FAV.spielKnopf) DOBASKET_FAV.spielKnopf(r, s);
 
     var zu = mk("div","zu-teams");
     [["h","hv","ht"],["g","gv","gt"]].forEach(function(k){

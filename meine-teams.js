@@ -8,7 +8,8 @@
  * Abschalten = unten in SCHALTER den Wert auf false setzen und pushen (Auto-Deploy).
  *   favoriten       Sterne, Kopf-Knopf "Meine Teams", Kalender-Filter, Startseiten-Block.
  *                   Aus => im Browser gespeicherte Favoriten werden beim naechsten Besuch geloescht.
- *   kalenderExport  .ics-Download fuer eine Mannschaft, einen Verein und "Meine Teams".
+ *   kalenderExport  .ics-Download fuer eine Mannschaft, einen Verein und "Meine Teams"; dazu im
+ *                   Spielfenster "In meinen Kalender" (Android: Google-Kalender-Link, sonst .ics).
  * Beide aus => das Modul tut gar nichts.
  * Dauerhaft aus? Dann auch den Absatz zu "dobasket-meine-teams" in der Datenschutzerklaerung
  * (baue_v2.py, Abschnitt 04) wieder herausnehmen.
@@ -241,6 +242,48 @@ function meldung(text){
   toast.textContent = text; toast.classList.add("zeigen");
   clearTimeout(toastUhr); toastUhr = setTimeout(function(){ toast.classList.remove("zeigen"); }, 6000);
 }
+// Android: Google Kalender uebernimmt .ics-Dateien noch nicht ueberall (Stand 10/2026) -- Hinweis dort,
+// und einzelne Spiele gehen per Google-Vorlage-Link direkt in den Kalender (Hendrik 09.10.2026)
+var ANDROID = /Android/i.test(navigator.userAgent || "");
+function kalSvg(){ return svgPfad("M7 3v3M17 3v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5z", "mt-linie-svg"); }
+function androidHinweis(){
+  return mk("p", "mt-hinweis-android", "Hinweis für Android: Noch nicht jede Kalender-App kann die Datei direkt übernehmen. " +
+    "Einzelne Spiele kannst du im Spielkalender mit „In meinen Kalender“ eintragen.");
+}
+function googleLink(s){
+  var li = D.ligen[s.lk] || {}, zeit = /^(\d\d):(\d\d)$/.exec(s.t || "");
+  var q = {
+    action: "TEMPLATE",
+    text: "🏀 " + s.h + " – " + s.g,
+    dates: zeit ? lokal(s.d, +zeit[1], +zeit[2]) + "/" + lokal(s.d, +zeit[1] + 2, +zeit[2]) : s.d.replace(/-/g, "") + "/" + folgetag(s.d),
+    ctz: "Europe/Berlin",
+    location: [s.halle, s.adr].filter(Boolean).join(", "),
+    details: (li.name || "") + "\nAktuelle Infos: " + seitenUrl("kalender-v2.html?spiel=" + encodeURIComponent(s.uid))
+  };
+  return "https://calendar.google.com/calendar/render?" + Object.keys(q).map(function(k){ return k + "=" + encodeURIComponent(q[k]); }).join("&");
+}
+// Ein einzelnes Spiel: Android -> Google Kalender (fertig ausgefuellt, nur speichern), sonst .ics mit genau diesem Spiel
+function spielKnopf(ziel, s){
+  if(!SCHALTER.kalenderExport || !ziel || !kommend([s]).length) return;
+  var k;
+  if(ANDROID){
+    k = mk("a", "route-knopf mt-spiel-kal"); k.href = googleLink(s); k.target = "_blank"; k.rel = "noopener";
+    k.setAttribute("aria-label", "Spiel in Google Kalender eintragen (neues Fenster)");
+  } else {
+    k = mk("button", "route-knopf mt-spiel-kal"); k.type = "button";
+    k.addEventListener("click", function(){
+      herunterladen(icsBauen([s], "dobasket"), dateiname(s.h + " " + s.g + " " + s.d));
+      meldung("Termin gespeichert. Öffne die Datei, um ihn in deinen Kalender zu übernehmen.");
+    });
+  }
+  k.appendChild(kalSvg()); k.appendChild(document.createTextNode("In meinen Kalender"));
+  k.appendChild(mk("small", null, ANDROID ? "Google Kalender" : ".ics"));
+  // Neben den Route-Knopf, falls der direkt davor steht
+  var vor = ziel.lastElementChild;
+  if(vor && vor.classList.contains("route-knopf")){
+    var reihe = mk("div", "mt-knopfreihe"); ziel.insertBefore(reihe, vor); reihe.appendChild(vor); reihe.appendChild(k);
+  } else ziel.appendChild(k);
+}
 function exportKnopf(text, quelle, name, kalName){
   var b = mk("button", "mt-pill mt-export"); b.type = "button";
   b.appendChild(ladenSvg()); b.appendChild(mk("span", null, text));
@@ -419,6 +462,7 @@ function blattInhalt(){
     });
     var fuss = mk("div", "mt-blatt-fuss");
     if(SCHALTER.kalenderExport) fuss.appendChild(exportKnopf("Alle kommenden Spiele als Kalenderdatei", meineSpiele, "meine-teams", "dobasket – Meine Teams"));
+    if(SCHALTER.kalenderExport && ANDROID) fuss.appendChild(androidHinweis());
     var ik = mk("a", "mt-pill", "Im Kalender anzeigen"); ik.href = "kalender-v2.html?meine=1"; fuss.appendChild(ik);
     var alle = mk("button", "mt-textknopf", "Alle entfernen"); alle.type = "button";
     alle.addEventListener("click", function(){
@@ -486,6 +530,7 @@ function vereinAktionen(ziel, verein){
   if(SCHALTER.favoriten) box.appendChild(sternKnopf("verein", verein, "Ganzen Verein merken"));
   if(SCHALTER.kalenderExport) box.appendChild(exportKnopf("Alle Spiele in den Kalender", function(){ return spieleVonVerein(verein); },
     verein, "dobasket – " + verein));
+  if(SCHALTER.kalenderExport && ANDROID) box.appendChild(androidHinweis());
   ziel.appendChild(box);
 }
 function teamAktionen(kopf, teamId){
@@ -496,6 +541,7 @@ function teamAktionen(kopf, teamId){
   if(SCHALTER.favoriten) box.appendChild(sternKnopf("team", k, "Mannschaft merken"));
   if(SCHALTER.kalenderExport) box.appendChild(exportKnopf("Spiele in den Kalender", function(){ return spieleVonTeam(t); },
     t.verein + " " + teamKurz(t.label), "dobasket – " + t.verein + " " + teamKurz(t.label)));
+  if(SCHALTER.kalenderExport && ANDROID) box.appendChild(androidHinweis());
   kopf.appendChild(box);
 }
 function sternTeam(karte, teamId){
@@ -524,6 +570,7 @@ window.DOBASKET_FAV = {
   mitStern: mitStern,
   vereinAktionen: vereinAktionen,
   teamAktionen: teamAktionen,
+  spielKnopf: spielKnopf,
   startseite: startseite
 };
 
@@ -600,6 +647,11 @@ var css = [
 ".mt-start-kopf{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}",
 ".mt-start-kopf h3{display:flex;align-items:center;gap:8px;margin:0;font:900 20px/1.2 var(--f-display);letter-spacing:-.01em}",
 ".mt-start-kopf .mt-stern-svg{color:var(--accent)}",
+".mt-knopfreihe{display:flex;flex-wrap:wrap;align-items:center;gap:10px}",
+".mt-knopfreihe .route-knopf{margin:0}",
+"button.mt-spiel-kal{cursor:pointer}",
+".mt-hinweis-android{flex-basis:100%;margin:2px 0 0;font-size:13px;line-height:1.45;color:var(--muted);max-width:60ch}",
+".mt-blatt-fuss .mt-hinweis-android{text-align:center;align-self:center}",
 ".mt-toast{position:fixed;left:50%;bottom:20px;z-index:130;max-width:min(520px,calc(100vw - 32px));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--ink);color:var(--ground);padding:12px 18px;border-radius:14px;font-size:14px;font-weight:600;line-height:1.4;box-shadow:var(--schatten-hoch);transition:opacity .2s,transform .2s}",
 ".mt-toast.zeigen{opacity:1;transform:translate(-50%,0)}",
 "@media (prefers-reduced-motion:reduce){.mt-schleier,.mt-blatt,.mt-toast{transition:none}}"
