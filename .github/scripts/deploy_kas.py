@@ -37,6 +37,7 @@ SCHLUESSEL = ("KAS_FTP_HOST", "KAS_FTP_USER", "KAS_FTP_PASS")
 # Seiten der V2 (die alten kalender-/vereine-vorschau.html sind nur Bauquelle fuer baue_v2.py)
 WEB_DATEIEN = ["startseite-vorschau.html", "kalender-v2.html", "vereine-v2.html", "hallen-v2.html",
                "schiedsrichter-v2.html", "impressum.html", "datenschutz.html", "kontakt.html", "kontakt.php", "404.html", "news-v2.html", "vereine-info.js", "hallen.js", "meine-teams.js",
+               "favicon.svg", "favicon-32.png", "apple-touch-icon.png",
                "kalender/daten.js"]
 WEB_MUSTER = ["news-*.html"]
 WEB_ORDNER = ["fonts", "vendor", "dokumente", "img/news", "img/vereine", "img/vorstand"]
