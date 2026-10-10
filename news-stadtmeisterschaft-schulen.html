@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ehrentag des WBV-Kreises Dortmund | dobasket</title>
-<meta name="description" content="Goldene und Silberne Ehrennadel des WBV für Thomas Großmann, Barbara Sträßer und Henrik Sojka – und ein besonderer Dank an Familie Nicola.">
+<title>Stadtmeisterschaft der Schulen 2026/27 | dobasket</title>
+<meta name="description" content="Basketball-Stadtmeisterschaft der Dortmunder Schulen 2026/27: 18 Schulmannschaften, U15 und U17, Spieltage am 3., 4., 9. und 11. November.">
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -323,6 +323,32 @@ h1,h2,h3,p{margin:0}
 .na-uebersicht{padding:clamp(24px,4vw,48px) 0 0}
 @media (max-width:640px){ .na-karte .cover{height:150px} .na-chip{flex:1 1 auto;justify-content:center} }
 
+/* =================== Artikel Schul-Stadtmeisterschaft =================== */
+.sm-tage{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.sm-tag{display:grid;grid-template-columns:96px 1fr;gap:20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
+.sm-datum{display:flex;flex-direction:column;align-items:flex-start;gap:4px;border-right:1px solid var(--line);padding-right:16px}
+.sm-datum b{font:900 40px/1 var(--f-display);letter-spacing:-.04em;color:var(--ink)}
+.sm-datum b small{font-size:20px;color:var(--accent-ink)}
+.sm-datum span{font:700 11.5px/1.2 var(--f-eng);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sm-was{display:flex;flex-direction:column;gap:8px;min-width:0}
+.sm-was h3{font:900 21px/1.15 var(--f-display);letter-spacing:-.02em;color:var(--ink)}
+.sm-ort{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:15px;color:var(--muted);line-height:1.4}
+.sm-ort a{color:var(--accent-ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.sm-ort a:hover{color:var(--ink)}
+.sm-schulen{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0;padding:0;list-style:none}
+.sm-schulen li{font-size:13.5px;font-weight:600;line-height:1.2;padding:7px 11px;border-radius:999px;background:var(--sunken);color:var(--ink-2)}
+.sm-gruppe{font:700 11.5px/1 var(--f-eng);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.sm-hinweis{background:var(--accent-weich);color:var(--ink);border-radius:var(--r);padding:16px 20px;font-size:16px;line-height:1.5}
+.sm-meister{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:0;padding:0;list-style:none}
+.sm-meister li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;display:flex;flex-direction:column;gap:4px}
+.sm-meister span{font:700 11.5px/1.2 var(--f-eng);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sm-meister b{font-size:16.5px;color:var(--ink)}
+@media (max-width:640px){
+  .sm-tag{grid-template-columns:1fr;gap:12px;padding:18px}
+  .sm-datum{flex-direction:row;align-items:baseline;gap:10px;border-right:none;padding-right:0}
+  .sm-meister{grid-template-columns:1fr}
+}
+
 /* Nach-oben-Knopf (Hendrik 29.09.): erscheint nach ~1,5 Bildschirmhoehen; ausgeblendet auch nicht per Tab erreichbar */
 .nach-oben{position:fixed;right:var(--rand);bottom:max(18px,calc(env(safe-area-inset-bottom) + 12px));z-index:45;display:grid;place-items:center;width:52px;height:52px;border-radius:999px;color:var(--on-accent);box-shadow:var(--schatten-hoch);opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .2s,transform .25s var(--ease),visibility 0s .25s,background .15s}
 .nach-oben.sichtbar{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .25s var(--ease),visibility 0s,background .15s}
@@ -416,9 +442,9 @@ h1,h2,h3,p{margin:0}
   <div class="sx-inhalt">
     <a class="sx-zurueck sx-ein" style="--d:0s" href="news-v2.html"><svg aria-hidden="true"><use href="#i-pfeil"/></svg>Alle News</a>
     <div class="nw-hero">
-      <div class="nw-meta sx-ein" style="--d:.05s"><span class="nw-tag">Kreis</span><time datetime="2024-10-26">26.10.2024</time><span>· Michael Mazur</span></div>
-      <h1 class="sx-h1 na-titel sx-ein" style="--d:.15s">Ehrentag des WBV-Kreises Dortmund<span class="punkt">.</span></h1>
-      <p class="nw-lead sx-ein" style="--d:.3s">Goldene und Silberne Ehrennadel des WBV für Thomas Großmann, Barbara Sträßer und Henrik Sojka – und ein besonderer Dank an Familie Nicola.</p>
+      <div class="nw-meta sx-ein" style="--d:.05s"><span class="nw-tag">Schulsport</span><time datetime="2026-10-11">11.10.2026</time><span>· Ausschuss für den Schulsport der Stadt Dortmund</span></div>
+      <h1 class="sx-h1"><span class="maske"><span>Stadtmeisterschaft</span></span><span class="maske"><span>der Schulen<span class="punkt">.</span></span></span></h1>
+      <p class="nw-lead sx-ein" style="--d:.4s">Vom 3. bis 11. November spielen 18 Schulmannschaften an vier Vormittagen die Dortmunder Basketball-Stadtmeister der U15 und U17 aus. Wer gewinnt, vertritt Dortmund bei der Regierungsbezirksmeisterschaft.</p>
     </div>
   </div>
 </section>
@@ -426,9 +452,35 @@ h1,h2,h3,p{margin:0}
 <section class="nw-abschnitt">
   <div class="sx-inhalt nw-raster">
     <article class="nw-text na-text" data-reveal>
-      <p>Im Rahmen des <strong>Ehrentages des Basketball-Kreises Dortmund e.V.</strong> (Kreis) wurden drei verdiente Mitglieder für ihre besonderen Dienste im Ehrenamt auch vom Westdeutschen Basketball-Verband (WBV) geehrt.</p><p><strong>Thomas Großmann</strong> vom TSC Eintracht Dortmund wurde für seine langjährige ehrenamtliche Tätigkeit mit der Goldenen Ehrennadel, sowie <strong>Barbara Sträßer</strong> von der TV Arminius 1884 e.V. Dortmund Wickede und <strong>Henrik Sojka</strong> vom SVD 49 Dortmund mit der Silbernen Ehrennadel vom Verband ausgezeichnet.<br>Präsident <strong>Uwe J. Plonka</strong> und Vizepräsident Jugend <strong>Nadeesh Kattur</strong> waren vor Ort im Vereinsheim des TC Brackel und nahmen die Ehrungen vor und überbrachten allen Geehrten und den Gästen <a href="https://basketball.nrw/index.php?option=com_content&amp;view=article&amp;id=4668:bbk-dortmund-1-x-gold-und-2-x-silber&amp;catid=24" target="_blank" rel="noopener">herzliche Grüße vom Verband</a>.</p><p>Der Kreis nahm u.a. noch eine besondere Ehrung für die <strong>Familie Nicola</strong> von TV Arminius Wickede vor. In der mittlerweile 3. Generation kümmert sich die Familie um die Belange der Basketball-Abteilung. Urgestein Horst Nicola, mittlerweile 87 Jahre alt, hat - ebenso wie seine Frau Christel - sein Fachwissen an Kinder und Enkel immer weitergegeben. Uwe Plonka dankte der gesamten Familie Nicola für ihr Engagement. Der Verein erhält in den nächsten Tagen ein Ballpaket des Westdeutschen Basketball-Verbandes als Dank und Anerkennung.<br>Daneben wurden <strong>Dirk Ansorge</strong> und <strong>Andreas Gövert </strong>(beide TVE Dortmund-Barop) sowie <strong>Markus Napirei</strong> (SVD 49 Dortmund) für ihre langjährige Arbeit im Kreis geehrt.</p><p>Bild v.l.n.r: Christian Podszuk (Jugendwart Kreis - TVE Dortmund-Barop), Thomas Großmann (Gold), Christina, Hendrik, Isabel Nicola (alle TVA Wickede), Dirk Weber (Kreisvorsitzender),Christel Nicola (TVA), Dirk Ansorge (Schiedsrichterwart TVE Dortmund-Barop), Horst Nicola (TVA Wickede), Barbara Sträßer (Silber), Henrik Sojka (Silber), Jonathan Nicola (TVA)</p>
+      <p>Der <strong>Ausschuss für den Schulsport der Stadt Dortmund</strong> richtet die Basketball-Stadtmeisterschaft im Rahmen des Landessportfests der Schulen aus. Gemeldet haben <strong>14 Jungen- und 4 Mädchenmannschaften</strong>. Gespielt wird an allen Tagen parallel auf zwei Feldern, die Spiele leiten Schiedsrichterinnen und Schiedsrichter des WBV.</p>
+      <h2>Die Spieltage<span class="punkt">.</span></h2>
+      <ol class="sm-tage"><li class="sm-tag"><div class="sm-datum"><b>03<small>.11.</small></b><span>Dienstag</span></div><div class="sm-was"><h3>U15 Jungen · Vorrunde Gruppe 1</h3><div class="sm-ort"><a href="hallen-v2.html?halle=sportzentrum-renninghausen">Sporthalle Renninghausen</a><span>Am Hombruchsfeld 55a (Helene-Lange-Gymnasium)</span><span>09:30–12:30 Uhr</span></div><ul class="sm-schulen"><li>Helene-Lange-Gymnasium</li><li>Heinrich-Böll-Gesamtschule</li><li>Heinrich-Heine-Gymnasium</li><li>Goethe-Gymnasium</li></ul></div></li><li class="sm-tag"><div class="sm-datum"><b>04<small>.11.</small></b><span>Mittwoch</span></div><div class="sm-was"><h3>U15 Jungen · Vorrunde Gruppe 2</h3><div class="sm-ort"><a href="hallen-v2.html?halle=doppelturnhalle-kreuzstrasse">Sporthalle Kreuzstraße</a><span>Kreuzstraße 163 (Leibniz-Gymnasium)</span><span>09:30–12:30 Uhr</span></div><ul class="sm-schulen"><li>Leibniz-Gymnasium</li><li>Max-Planck-Gymnasium</li><li>Stadtgymnasium</li><li>Immanuel-Kant-Gymnasium</li></ul></div></li><li class="sm-tag"><div class="sm-datum"><b>09<small>.11.</small></b><span>Montag</span></div><div class="sm-was"><h3>U17 Jungen · Vorrunde, Halbfinale, Finale</h3><div class="sm-ort"><a href="hallen-v2.html?halle=sporthalle-phoenix-gymnasium">Sporthalle Hörde 3</a><span>Seekante 12 (Phoenix-Gymnasium)</span><span>10:30–15:30 Uhr</span></div><p class="sm-gruppe">Gruppe 1</p><ul class="sm-schulen"><li>Käthe-Kollwitz-Gymnasium</li><li>Heinrich-Heine-Gymnasium</li><li>Phoenix-Gymnasium</li></ul><p class="sm-gruppe">Gruppe 2</p><ul class="sm-schulen"><li>Goethe-Gymnasium</li><li>Helene-Lange-Gymnasium</li><li>Immanuel-Kant-Gymnasium</li></ul></div></li><li class="sm-tag"><div class="sm-datum"><b>11<small>.11.</small></b><span>Mittwoch</span></div><div class="sm-was"><h3>U15 Finaltag · Jungen und Mädchen</h3><div class="sm-ort"><a href="hallen-v2.html?halle=sportzentrum-renninghausen">Sporthalle Renninghausen</a><span>Am Hombruchsfeld 55a (Helene-Lange-Gymnasium)</span><span>Jungen ab 09:30 Uhr · Mädchen ab 10:30 Uhr</span></div><p class="sm-gruppe">Jungen</p><ul class="sm-schulen"><li>Halbfinale, Spiel um Platz 3, Finale</li></ul><p class="sm-gruppe">Mädchen</p><ul class="sm-schulen"><li>Helene-Lange-Gymnasium</li><li>Goethe-Gymnasium</li><li>Max-Planck-Gymnasium</li></ul></div></li></ol>
+      <p class="sm-hinweis"><strong>U17 Mädchen:</strong> Das Goethe-Gymnasium hat als einzige Schule gemeldet und ist damit kampflos Stadtmeister. Es fährt direkt zur Regierungsbezirksmeisterschaft.</p>
+      <h2>So wird gespielt<span class="punkt">.</span></h2>
+      <p><strong>U15 Jungen:</strong> zwei Vierergruppen, jeder gegen jeden. Am Finaltag treffen die Gruppenersten im Halbfinale auf die Zweiten der anderen Gruppe. <strong>U17 Jungen:</strong> zwei Dreiergruppen, Halbfinale und Finale am selben Tag. <strong>U15 Mädchen:</strong> drei Teams, jeder gegen jeden.</p>
+      <p>Ein Spiel dauert <strong>2 × 10 Minuten</strong>, bei Gleichstand wird jeweils 3 Minuten verlängert, bis es einen Sieger gibt. In beiden Altersklassen ist <strong>Mann-Mann-Verteidigung</strong> vorgeschrieben. Nur der erste Anwurf eines Turniers steht fest, die übrigen Zeiten sind Richtzeiten – es kann also auch früher losgehen.</p>
+      <h2>Titelverteidiger<span class="punkt">.</span></h2>
+      <p>Stadtmeister im Schuljahr 2025/26 (damals noch als U16 und U18 ausgespielt):</p>
+      <ul class="sm-meister">
+        <li><span>Jungen U17 / WK II</span><b>Max-Planck-Gymnasium</b></li>
+        <li><span>Jungen U15 / WK III</span><b>Phoenix-Gymnasium</b></li>
+        <li><span>Mädchen U17 / WK II</span><b>Max-Planck-Gymnasium</b></li>
+        <li><span>Mädchen U15 / WK III</span><b>Goethe-Gymnasium</b></li>
+      </ul>
+      <p class="nw-quelle">Quelle: Spielplan des Ausschusses für den Schulsport der Stadt Dortmund vom 05.10.2026. Fragen zur Stadtmeisterschaft beantwortet der Ausschuss – <a href="https://www.dortmund.de/schulsport" target="_blank" rel="noopener">dortmund.de/schulsport</a>.</p>
     </article>
-    <aside class="nw-seite" data-reveal><a class="nw-plakat" href="img/news/ehrentag-des-wbv-kreises-dortmund.jpg" target="_blank" rel="noopener" aria-label="Bild in voller Größe öffnen"><img src="img/news/ehrentag-des-wbv-kreises-dortmund.jpg" alt="Gruppenfoto der Geehrten und Gäste beim Ehrentag im Vereinsheim des TC Brackel" width="1400" height="882" loading="lazy"></a></aside>
+    <aside class="nw-seite" data-reveal>
+      <dl class="nw-fakten">
+        <div><dt>Wann</dt><dd>03.–11.11.2026, vormittags</dd></div>
+        <div><dt>Wo</dt><dd>Renninghausen, Kreuzstraße, Hörde</dd></div>
+        <div><dt>Teams</dt><dd>18 Schulmannschaften</dd></div>
+        <div><dt>Klassen</dt><dd>U15 (Jg. 2013 u. jünger), U17 (Jg. 2011 u. jünger)</dd></div>
+        <div><dt>Preise</dt><dd>Wanderpokale der Sparkasse Dortmund, Urkunden und Spielbälle</dd></div>
+      </dl>
+      <a class="nw-plakat" href="img/news/stadtmeisterschaft-schulen-2026.jpg" target="_blank" rel="noopener" aria-label="Plakat in voller Größe öffnen">
+        <img src="img/news/stadtmeisterschaft-schulen-2026.jpg" alt="Plakat: Stadtmeisterschaft der Schulen 2026/27, U15 und U17, Spieltage 3., 4., 9. und 11. November" width="1080" height="1350" loading="lazy">
+      </a>
+    </aside>
   </div>
 </section>
 
@@ -436,7 +488,7 @@ h1,h2,h3,p{margin:0}
   <div class="sx-inhalt">
     <div class="na-mehr-kopf" data-reveal><h2 class="h2">Weitere News<span class="punkt">.</span></h2>
       <a class="link" href="news-v2.html">Alle News <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a></div>
-    <div class="na-raster" data-reveal><a class="karte na-karte" href="news-stadtmeisterschaft-schulen.html" data-kat="Schulsport" data-spot><div class="cover cover-bild cover-plakat"><img src="img/news/stadtmeisterschaft-schulen-2026.jpg" alt="Plakat: Stadtmeisterschaft der Schulen 2026/27, U15 und U17, Spieltage 3., 4., 9. und 11. November" loading="lazy" width="1080" height="1350"></div><div class="news-text"><div class="news-meta"><span class="tag tag-akzent">Schulsport</span><time datetime="2026-10-11">11.10.2026</time></div><h3>Stadtmeisterschaft der Schulen: 18 Teams spielen im November</h3><p>Vom 3. bis 11. November spielen Dortmunds Schulen ihre Basketball-Stadtmeister der U15 und U17 aus – in Renninghausen, an der Kreuzstraße und in Hörde.</p><span class="weiter">Weiterlesen <svg aria-hidden="true"><use href="#i-pfeil"/></svg></span></div></a><a class="karte na-karte" href="news-3x3-basketballnacht.html" data-kat="Jugend" data-spot><div class="cover cover-bild cover-plakat"><img src="img/news/3x3-basketballnacht-2026.jpg" alt="Plakat der 3. 3x3-Basketballnacht: Basketballkorb im Flutlicht, 2. Oktober 2026, 19 Uhr, Phoenix-Gymnasium" loading="lazy" width="984" height="1350"></div><div class="news-text"><div class="news-meta"><span class="tag tag-akzent">Jugend</span><time datetime="2026-09-24">24.09.2026</time></div><h3>3. 3x3-Basketballnacht am 2. Oktober in Hörde</h3><p>Der TVE Barop lädt gemeinsam mit AWO und Sportjugend Dortmund zum Streetball-Abend ins Phoenix-Gymnasium – für die Jahrgänge 2008 bis 2015, Anmeldung kostenlos bis 30. September.</p><span class="weiter">Weiterlesen <svg aria-hidden="true"><use href="#i-pfeil"/></svg></span></div></a><a class="karte na-karte" href="news-nrw-3x3-tour-am-27-6-2026-in-dortmund.html" data-kat="3x3" data-spot><div class="cover cover-bild cover-plakat"><img src="img/news/nrw-3x3-tour-am-27-6-2026-in-dortmund.jpg" alt="Plakat der NRW 3x3 Tour 2026, 20.06. bis 11.07." loading="lazy" width="389" height="620"></div><div class="news-text"><div class="news-meta"><span class="tag tag-akzent">3x3</span><time datetime="2026-06-23">23.06.2026</time></div><h3>NRW 3x3 Tour am 27.6.2026 in Dortmund – Helfer gesucht</h3><p>Am 27. Juni macht die 32. NRW 3x3 Tour am Phoenix-See Station. Der TVE Barop organisiert das Turnier und sucht noch Helferinnen und Helfer.</p><span class="weiter">Weiterlesen <svg aria-hidden="true"><use href="#i-pfeil"/></svg></span></div></a></div>
+    <div class="na-raster" data-reveal><a class="karte na-karte" href="news-3x3-basketballnacht.html" data-kat="Jugend" data-spot><div class="cover cover-bild cover-plakat"><img src="img/news/3x3-basketballnacht-2026.jpg" alt="Plakat der 3. 3x3-Basketballnacht: Basketballkorb im Flutlicht, 2. Oktober 2026, 19 Uhr, Phoenix-Gymnasium" loading="lazy" width="984" height="1350"></div><div class="news-text"><div class="news-meta"><span class="tag tag-akzent">Jugend</span><time datetime="2026-09-24">24.09.2026</time></div><h3>3. 3x3-Basketballnacht am 2. Oktober in Hörde</h3><p>Der TVE Barop lädt gemeinsam mit AWO und Sportjugend Dortmund zum Streetball-Abend ins Phoenix-Gymnasium – für die Jahrgänge 2008 bis 2015, Anmeldung kostenlos bis 30. September.</p><span class="weiter">Weiterlesen <svg aria-hidden="true"><use href="#i-pfeil"/></svg></span></div></a><a class="karte na-karte" href="news-nrw-3x3-tour-am-27-6-2026-in-dortmund.html" data-kat="3x3" data-spot><div class="cover cover-bild cover-plakat"><img src="img/news/nrw-3x3-tour-am-27-6-2026-in-dortmund.jpg" alt="Plakat der NRW 3x3 Tour 2026, 20.06. bis 11.07." loading="lazy" width="389" height="620"></div><div class="news-text"><div class="news-meta"><span class="tag tag-akzent">3x3</span><time datetime="2026-06-23">23.06.2026</time></div><h3>NRW 3x3 Tour am 27.6.2026 in Dortmund – Helfer gesucht</h3><p>Am 27. Juni macht die 32. NRW 3x3 Tour am Phoenix-See Station. Der TVE Barop organisiert das Turnier und sucht noch Helferinnen und Helfer.</p><span class="weiter">Weiterlesen <svg aria-hidden="true"><use href="#i-pfeil"/></svg></span></div></a><a class="karte na-karte" href="news-dobasket-feiert-sein-70-jubilaum.html" data-kat="Kreis" data-spot><div class="cover"><svg class="muster" aria-hidden="true"><rect width="100%" height="100%" fill="url(#muster)"/></svg><div class="cover-glyphe"><svg aria-hidden="true"><use href="#i-ball"/></svg></div></div><div class="news-text"><div class="news-meta"><span class="tag tag-akzent">Kreis</span><time datetime="2026-02-04">04.02.2026</time></div><h3>DOBASKET feiert sein 70. Jubiläum</h3><p>Der Basketballkreis ist 70 geworden. Gefeiert wird am 16. Mai mit den Stadtmeisterschafts-Endspielen, Musik, Grill und Ehrungen in der Halle Gartenstadt II.</p><span class="weiter">Weiterlesen <svg aria-hidden="true"><use href="#i-pfeil"/></svg></span></div></a></div>
   </div>
 </section>
 </main>
