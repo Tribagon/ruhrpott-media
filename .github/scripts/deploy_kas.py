@@ -40,10 +40,10 @@ SCHLUESSEL = ("KAS_FTP_HOST", "KAS_FTP_USER", "KAS_FTP_PASS")
 WEB_DATEIEN = ["index.html", "kalender.html", "vereine.html", "hallen.html",
                "schiedsrichter.html", "impressum.html", "datenschutz.html", "kontakt.html", "kontakt.php", "404.html", "news.html",
                "sitemap.xml", "vereine-info.js", "hallen.js", "meine-teams.js",
-               "favicon.svg", "favicon-32.png", "apple-touch-icon.png",
+               "favicon.svg", "favicon-32.png", "apple-touch-icon.png", "img/teilen.jpg",
                "kalender/daten.js"]
 WEB_MUSTER = ["news-*.html"]
-WEB_ORDNER = ["fonts", "vendor", "dokumente", "img/news", "img/vereine", "img/vorstand"]
+WEB_ORDNER = ["fonts", "vendor", "dokumente", "img/news", "img/og", "img/vereine", "img/vorstand"]   # img/og: Link-Vorschaubilder der News
 # Wer so etwas im Ziel findet, ist im falschen Ordner (altes WordPress in /neu/, Wurzel des Webspace)
 FREMD = {"wp-content", "wp-admin", "wp-config.php", "wp-login.php", "neu", "htdocs", "www", "cgi-bin", "logs"}
 

@@ -19,6 +19,8 @@ on:
       - "vendor/**"
       - "dokumente/**"
       - "img/news/**"
+      - "img/og/**"
+      - "img/teilen.jpg"
       - "img/vereine/**"
       - "img/vorstand/**"
       - ".github/scripts/deploy_kas.py"
