@@ -74,6 +74,9 @@ DirectorySlash Off
   RewriteRule ^news/([a-z0-9-]+)/?$ /news-$1 [R=301,L]
   RewriteRule ^(blog/.*|relaunch-dobasket|home-v3|homepage-v2|einladung-kreistag-2019|mega-menu|slider|style-guide|test|access-denied|log-in|sign-up|reset-password|update-password|user-account)/?$ / [R=301,L]
 
+  # Abgetippt mit Schraegstrich (/kalender/ waere sonst der Ordner kalender/ -> 403)
+  RewriteRule ^(kalender|vereine|schiedsrichter|hallen|news|impressum|datenschutz|kontakt)/$ /$1 [R=301,L]
+
   # --- Adressen ohne .html ---
   # Direkter Aufruf von /index.html bzw. /x.html -> ohne Endung (THE_REQUEST: nur echte Anfragen, keine internen)
   RewriteCond %{THE_REQUEST} \\s/+index\\.html[\\s?]
