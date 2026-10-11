@@ -35,8 +35,11 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 SCHLUESSEL = ("KAS_FTP_HOST", "KAS_FTP_USER", "KAS_FTP_PASS")
 
 # Seiten der V2 (die alten kalender-/vereine-vorschau.html sind nur Bauquelle fuer baue_v2.py)
-WEB_DATEIEN = ["startseite-vorschau.html", "kalender-v2.html", "vereine-v2.html", "hallen-v2.html",
-               "schiedsrichter-v2.html", "impressum.html", "datenschutz.html", "kontakt.html", "kontakt.php", "404.html", "news-v2.html", "vereine-info.js", "hallen.js", "meine-teams.js",
+# Seit 11.10.2026 endgueltige Namen (baue_v2.py Abschnitt ENDGUELTIGE ADRESSEN); Adressen ohne .html (siehe HTACCESS).
+# startseite-vorschau.html ist nur noch Bauquelle -- ausgeliefert wird index.html.
+WEB_DATEIEN = ["index.html", "kalender.html", "vereine.html", "hallen.html",
+               "schiedsrichter.html", "impressum.html", "datenschutz.html", "kontakt.html", "kontakt.php", "404.html", "news.html",
+               "sitemap.xml", "vereine-info.js", "hallen.js", "meine-teams.js",
                "favicon.svg", "favicon-32.png", "apple-touch-icon.png",
                "kalender/daten.js"]
 WEB_MUSTER = ["news-*.html"]
@@ -44,13 +47,48 @@ WEB_ORDNER = ["fonts", "vendor", "dokumente", "img/news", "img/vereine", "img/vo
 # Wer so etwas im Ziel findet, ist im falschen Ordner (altes WordPress in /neu/, Wurzel des Webspace)
 FREMD = {"wp-content", "wp-admin", "wp-config.php", "wp-login.php", "neu", "htdocs", "www", "cgi-bin", "logs"}
 
-HTACCESS = """# dobasket V2 -- Testadresse (erzeugt von deploy_kas.py)
-DirectoryIndex startseite-vorschau.html index.html
+HTACCESS = """# dobasket V2 (erzeugt von deploy_kas.py) -- gilt fuer neu.dobasket.de UND spaeter dobasket.de
+DirectoryIndex index.html
 # Eigene Fehlerseite (Status bleibt 404; Pfade darin sind wurzelbezogen)
 ErrorDocument 404 /404.html
+Options -MultiViews -Indexes
+# /kalender ist Seite UND Ordner (kalender/daten.js): ohne das wuerde Apache auf /kalender/ umleiten
+DirectorySlash Off
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  # Jede Adresse ausser dobasket.de/www (Testadresse neu., KAS-Standardnamen ...): robots.txt sperrt alles
+  RewriteCond %{HTTP_HOST} !^(www[.])?dobasket[.]de$ [NC]
+  RewriteRule ^robots\\.txt$ robots-test.txt [L]
+
+  # --- Alte Adressen -> neue (301) ---
+  # Vorschau-/Testnamen bis 10/2026
+  RewriteRule ^startseite-vorschau\\.html$ / [R=301,L]
+  RewriteRule ^(kalender|vereine|schiedsrichter|hallen|news)-v2\\.html$ /$1 [R=301,L]
+  # Alte Webflow-Seite (Sitemap dobasket.de, Stand 11.10.2026)
+  RewriteRule ^uber-uns/?$ /#vorstand [R=301,NE,L]
+  RewriteRule ^datenschutzerklarung/?$ /datenschutz [R=301,L]
+  RewriteRule ^liga/?$ /kalender [R=301,L]
+  RewriteRule ^ich-suche-dunkle-hallen/?$ /hallen [R=301,L]
+  RewriteRule ^news/([a-z0-9-]+)/?$ /news-$1 [R=301,L]
+  RewriteRule ^(blog/.*|relaunch-dobasket|home-v3|homepage-v2|einladung-kreistag-2019|mega-menu|slider|style-guide|test|access-denied|log-in|sign-up|reset-password|update-password|user-account)/?$ / [R=301,L]
+
+  # --- Adressen ohne .html ---
+  # Direkter Aufruf von /index.html bzw. /x.html -> ohne Endung (THE_REQUEST: nur echte Anfragen, keine internen)
+  RewriteCond %{THE_REQUEST} \\s/+index\\.html[\\s?]
+  RewriteRule ^index\\.html$ / [R=301,L]
+  RewriteCond %{THE_REQUEST} \\s/+([^\\s?]+)\\.html[\\s?]
+  RewriteCond %1 !^404$
+  RewriteRule ^(.+)\\.html$ /$1 [R=301,L]
+  # /x -> x.html ausliefern, wenn es die Datei gibt
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^([^/]+?)/?$ $1.html [L]
+</IfModule>
+
 <IfModule mod_headers.c>
-  # Testumgebung: nicht in Suchmaschinen aufnehmen (sonst Doppelung zu dobasket.de)
-  Header set X-Robots-Tag "noindex, nofollow"
+  # Nur dobasket.de/www indexierbar; Testadresse neu. und jeder andere Hostname nicht (sonst Doppelung)
+  Header set X-Robots-Tag "noindex, nofollow" "expr=%{HTTP_HOST} !~ /^(www[.])?dobasket[.]de$/i"
   # Seiten, Skripte und Spieldaten bei jedem Aufruf kurz beim Server nachfragen (per ETag meist nur
   # "304 unveraendert"). Ohne Angabe behielt Safari alte JS-Dateien und neue Funktionen fehlten (09.10.2026).
   <FilesMatch "\\.(html|js|css|php)$">
@@ -66,7 +104,8 @@ ErrorDocument 404 /404.html
 </Files>
 """
 MANIFEST = ".deploy-manifest.json"
-ROBOTS = "User-agent: *\nDisallow: /\n"
+ROBOTS = "User-agent: *\nAllow: /\n\nSitemap: https://dobasket.de/sitemap.xml\n"      # dobasket.de
+ROBOTS_TEST = "User-agent: *\nDisallow: /\n"                                            # neu.dobasket.de (per .htaccess)
 
 
 def zugang(env_datei):
@@ -97,7 +136,7 @@ def dateien():
     for ordner in WEB_ORDNER:
         liste += sorted(p.relative_to(REPO).as_posix() for p in (REPO / ordner).rglob("*") if p.is_file())
     aus = [(rel, lesen(rel)) for rel in dict.fromkeys(liste)]
-    return aus + [(".htaccess", HTACCESS.encode()), ("robots.txt", ROBOTS.encode())]
+    return aus + [(".htaccess", HTACCESS.encode()), ("robots.txt", ROBOTS.encode()), ("robots-test.txt", ROBOTS_TEST.encode())]
 
 
 # Textdateien immer mit LF: Git checkt sie unter Windows (autocrlf) mit CRLF aus, auf GitHub mit LF --

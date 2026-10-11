@@ -74,7 +74,7 @@ function ligaVon(t){
 }
 function vInfo(v){ return (window.DOBASKET_VEREINE_INFO || {})[v] || {}; }
 function teamUrl(t){
-  return "vereine-v2.html?verein=" + encodeURIComponent(t.verein) + "&liga=" + encodeURIComponent(t.lnr) + "&team=" + encodeURIComponent(t.name);
+  return "vereine?verein=" + encodeURIComponent(t.verein) + "&liga=" + encodeURIComponent(t.lnr) + "&team=" + encodeURIComponent(t.name);
 }
 
 // ---------- Mannschaften der laufenden Saison: Schluessel "liganr|Team-Name" ----------
@@ -197,13 +197,13 @@ function folgetag(datum){
   var p = datum.split("-").map(Number);
   return new Date(Date.UTC(p[0], p[1]-1, p[2] + 1)).toISOString().slice(0,10).replace(/-/g, "");
 }
-function seitenUrl(datei){ try{ return new URL(datei, location.href).href; }catch(e){ return "https://neu.dobasket.de/" + datei; } }
+function seitenUrl(datei){ try{ return new URL(datei, location.href).href; }catch(e){ return "https://dobasket.de/" + datei; } }
 function icsBauen(spiele, kalName){
   var stempel = utcStempel(new Date()), heute = fmtTag(HEUTE).slice(3) + HEUTE.slice(0,4);
   var z = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//dobasket//Spielkalender//DE", "CALSCALE:GREGORIAN",
            "METHOD:PUBLISH", "X-WR-CALNAME:" + icsText(kalName), "X-WR-TIMEZONE:Europe/Berlin"].concat(VTIMEZONE);
   spiele.forEach(function(s){
-    var li = D.ligen[s.lk] || {}, link = seitenUrl("kalender-v2.html?spiel=" + encodeURIComponent(s.uid));
+    var li = D.ligen[s.lk] || {}, link = seitenUrl("kalender?spiel=" + encodeURIComponent(s.uid));
     var ort = [s.halle, s.adr].filter(Boolean).join(", ");
     var zeit = /^(\d\d):(\d\d)$/.exec(s.t || "");
     var text = [li.name || "", zeit ? "" : "Die Anwurfzeit stand beim Export noch nicht fest.",
@@ -258,7 +258,7 @@ function googleLink(s){
     dates: zeit ? lokal(s.d, +zeit[1], +zeit[2]) + "/" + lokal(s.d, +zeit[1] + 2, +zeit[2]) : s.d.replace(/-/g, "") + "/" + folgetag(s.d),
     ctz: "Europe/Berlin",
     location: [s.halle, s.adr].filter(Boolean).join(", "),
-    details: (li.name || "") + "\nAktuelle Infos: " + seitenUrl("kalender-v2.html?spiel=" + encodeURIComponent(s.uid))
+    details: (li.name || "") + "\nAktuelle Infos: " + seitenUrl("kalender?spiel=" + encodeURIComponent(s.uid))
   };
   return "https://calendar.google.com/calendar/render?" + Object.keys(q).map(function(k){ return k + "=" + encodeURIComponent(q[k]); }).join("&");
 }
@@ -415,7 +415,7 @@ function blattInhalt(){
     lb.appendChild(mk("p", null, "Tippe auf einer Vereinsseite bei einer Mannschaft auf den ☆ – oder merk dir gleich den ganzen Verein. " +
       "Deine Teams stehen dann auf der Startseite ganz oben, lassen sich im Kalender herausfiltern" +
       (SCHALTER.kalenderExport ? " und als Kalenderdatei exportieren." : ".")));
-    var zv = mk("a", "mt-pill mt-voll", "Zu den Vereinen"); zv.href = "vereine-v2.html"; lb.appendChild(zv);
+    var zv = mk("a", "mt-pill mt-voll", "Zu den Vereinen"); zv.href = "vereine"; lb.appendChild(zv);
     rumpf.appendChild(lb);
   } else {
     rumpf.appendChild(mk("p", "mt-intro", "Diese Mannschaften hast du dir gemerkt. Ihre Spiele stehen auf der Startseite oben und lassen sich im Kalender mit „Nur meine Teams“ herausfiltern."));
@@ -429,7 +429,7 @@ function blattInhalt(){
       var g = gruppen[v], box = mk("section", "mt-gruppe");
       var gk = mk("div", "mt-gruppe-kopf"), info = vInfo(v);
       if(v && info.logo){ var im = mk("img"); im.src = info.logo; im.alt = ""; gk.appendChild(im); }
-      if(v){ var va = mk("a", null, v); va.href = "vereine-v2.html?verein=" + encodeURIComponent(v); gk.appendChild(va); }
+      if(v){ var va = mk("a", null, v); va.href = "vereine?verein=" + encodeURIComponent(v); gk.appendChild(va); }
       else gk.appendChild(mk("b", null, "Nicht mehr im Spielplan"));
       box.appendChild(gk);
       if(g.ganz){
@@ -463,7 +463,7 @@ function blattInhalt(){
     var fuss = mk("div", "mt-blatt-fuss");
     if(SCHALTER.kalenderExport) fuss.appendChild(exportKnopf("Alle kommenden Spiele als Kalenderdatei", meineSpiele, "meine-teams", "dobasket – Meine Teams"));
     if(SCHALTER.kalenderExport && ANDROID) fuss.appendChild(androidHinweis());
-    var ik = mk("a", "mt-pill", "Im Kalender anzeigen"); ik.href = "kalender-v2.html?meine=1"; fuss.appendChild(ik);
+    var ik = mk("a", "mt-pill", "Im Kalender anzeigen"); ik.href = "kalender?meine=1"; fuss.appendChild(ik);
     var alle = mk("button", "mt-textknopf", "Alle entfernen"); alle.type = "button";
     alle.addEventListener("click", function(){
       if(!confirm("Alle gemerkten Teams entfernen?")) return;
@@ -474,7 +474,7 @@ function blattInhalt(){
   }
   var hw = mk("p", "mt-hinweis");
   hw.appendChild(document.createTextNode("Gespeichert nur in diesem Browser auf diesem Gerät – kein Konto, nichts geht an uns. "));
-  var ds = mk("a", null, "Datenschutz"); ds.href = "datenschutz.html"; hw.appendChild(ds);
+  var ds = mk("a", null, "Datenschutz"); ds.href = "datenschutz"; hw.appendChild(ds);
   rumpf.appendChild(hw);
   if(fokusDrin) zu.focus();
 }
@@ -517,7 +517,7 @@ function startMalen(){
     else liste.appendChild(mk("div", "widget-leer", w[4]));
     box.appendChild(liste);
     var wf = mk("div", "widget-fuss"), a = mk("a", "link", "Im Kalender: nur meine Teams ");
-    a.href = "kalender-v2.html?meine=1"; a.appendChild(symbol("i-pfeil")); wf.appendChild(a); box.appendChild(wf);
+    a.href = "kalender?meine=1"; a.appendChild(symbol("i-pfeil")); wf.appendChild(a); box.appendChild(wf);
     grid.appendChild(box);
   });
   startBox.appendChild(grid);

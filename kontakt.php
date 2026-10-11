@@ -1,5 +1,5 @@
 <?php
-/* dobasket Kontaktformular (zu kontakt.html, gebaut von baue_v2.py im Spielplan-Repo).
+/* dobasket Kontaktformular (zu kontakt (kontakt.html), gebaut von baue_v2.py im Spielplan-Repo).
 
    Nimmt das Formular per POST an und schickt es als E-Mail an das Postfach des gewaehlten Anliegens.
    Der Browser waehlt nur einen SCHLUESSEL aus ANLIEGEN -- nie eine Adresse (sonst offenes Mail-Relay).
@@ -7,7 +7,7 @@
    Datenschutzerklaerung (Abschnitt "Kontaktformular") dazu sagt, muss zu diesem Skript passen.
 
    Antwort: JSON {ok, fehler?}, wenn das Seiten-JS schickt (Header X-Dobasket-Kontakt), sonst
-   Weiterleitung auf kontakt.html?status=ok|fehler (Formular funktioniert auch ohne JavaScript).
+   Weiterleitung auf kontakt?status=ok|fehler (Formular funktioniert auch ohne JavaScript).
 */
 
 // Absender der Mail: muss ein echtes Postfach der Domain sein (SPF/DMARC), Antworten gehen per Reply-To an den Besucher.
@@ -32,7 +32,7 @@ function antwort(bool $ok, string $fehler = ''): void
         header('Cache-Control: no-store');
         echo json_encode($ok ? ['ok' => true] : ['ok' => false, 'fehler' => $fehler], JSON_UNESCAPED_UNICODE);
     } else {
-        header('Location: kontakt.html?status=' . ($ok ? 'ok' : 'fehler'), true, 303);
+        header('Location: kontakt?status=' . ($ok ? 'ok' : 'fehler'), true, 303);
     }
     exit;
 }
@@ -60,7 +60,7 @@ function kopf_utf8(string $s): string
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-    header('Location: kontakt.html', true, 303);
+    header('Location: kontakt', true, 303);
     exit;
 }
 
