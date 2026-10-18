@@ -567,6 +567,6 @@ if(!ruhig && matchMedia("(hover: hover) and (pointer: fine)").matches){
 /* /NACHOBEN */
 </script>
 <style>.news-neu{position:relative}.nav-links a.news-neu::after,.sx-links a.news-neu::after,.burger.news-neu::after{content:"";position:absolute;top:7px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--ground)}.menue a.news-neu::after{content:"";display:inline-block;width:10px;height:10px;margin-left:10px;vertical-align:.45em;border-radius:50%;background:var(--accent)}</style>
-<script>(function(){var d=document.querySelector("[data-news-neu]");if(!d)return;var t=(Date.now()-new Date(d.getAttribute("data-news-neu")+"T00:00:00"))/864e5;if(t<-1||t>14)return;document.querySelectorAll(".nav-links [data-news-neu],.sx-links [data-news-neu],.menue [data-news-neu],.burger").forEach(function(e){e.classList.add("news-neu")})})();</script>
+<script>(function(){var d=document.querySelector("[data-news-neu]");if(!d)return;var D=d.getAttribute("data-news-neu");try{if((localStorage.getItem("dobasket-news-gelesen")||"")>=D)return;}catch(e){}var t=(Date.now()-new Date(D+"T00:00:00"))/864e5;if(t<-1||t>14)return;document.querySelectorAll(".nav-links [data-news-neu],.sx-links [data-news-neu],.menue [data-news-neu],.burger").forEach(function(e){e.classList.add("news-neu")})})();</script>
 </body>
 </html>
