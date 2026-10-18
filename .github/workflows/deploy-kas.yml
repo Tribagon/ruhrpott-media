@@ -2,7 +2,7 @@ name: Website nach ALL-INKL (dobasket.de + Testseite neu.)
 
 # Laedt geaenderte Website-Dateien per FTP-TLS auf den ALL-INKL-Webspace. Zwei Ziele (seit 18.10.2026):
 #   Branch main -> LIVE dobasket.de      (/dobasket-v2/,   Secrets KAS_FTP_HOST/USER/PASS)
-#   Branch test -> TEST neu.dobasket.de  (/dobasket-test/, Secrets KAS_TEST_FTP_USER/PASS)
+#   Branch test -> TEST neu.dobasket.de  (/dobasket-test/, Secrets KAS_TEST_FTP_USER/PASS; Host = KAS_FTP_HOST)
 # Funktionsaenderungen gehen erst nach test, nach Hendriks OK nach main (Spielplan/dobasket/testseite.py).
 # News und Kalenderdaten gehen direkt nach main. Die Testseite bekommt bei jedem main-Push die aktuellen
 # Spieldaten (kalender/daten.js aus main), sonst wuerde sie veralten.
@@ -95,7 +95,6 @@ jobs:
         env:
           KAS_FTP_HOST: ${{ secrets.KAS_FTP_HOST }}
           KAS_FTP_USER: ${{ secrets.KAS_FTP_USER }}
-          KAS_TEST_FTP_HOST: ${{ secrets.KAS_TEST_FTP_HOST }}
           KAS_TEST_FTP_USER: ${{ secrets.KAS_TEST_FTP_USER }}
           KAS_TEST_FTP_PASS: ${{ secrets.KAS_TEST_FTP_PASS }}
           ALLES: ${{ inputs.alles && '--alles' || '' }}

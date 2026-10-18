@@ -318,7 +318,7 @@ h1,h2,h3,p{margin:0}
           <div class="drop-liste" data-vereine-liste></div>
           <a class="drop-alle" href="vereine">Alle Vereine im Überblick <svg aria-hidden="true"><use href="#i-pfeil"/></svg></a>
         </div>
-      </div><a href="schiedsrichter">Schiedsrichter</a><a href="news" aria-current="page">News</a><a href="./#vorstand">Vorstand</a><a href="./#dokumente">Dokumente</a><a href="kontakt">Kontakt</a>
+      </div><a href="schiedsrichter">Schiedsrichter</a><a href="news" aria-current="page" data-news-neu="2026-10-11">News</a><a href="./#vorstand">Vorstand</a><a href="./#dokumente">Dokumente</a><a href="kontakt">Kontakt</a>
     </nav>
     <a class="rund-knopf insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener" aria-label="dobasket auf Instagram"><svg><use href="#i-insta"/></svg></a>
     <button class="rund-knopf thema" type="button" aria-label="Dunkles Design einschalten"><svg><use href="#i-mond"/></svg></button>
@@ -331,7 +331,7 @@ h1,h2,h3,p{margin:0}
     <span class="eyebrow"><span>Menü</span></span>
     <button class="rund-knopf" type="button" id="menue-zu" aria-label="Menü schließen"><svg><use href="#i-zu"/></svg></button>
   </div>
-  <a href="./">Startseite</a><a href="kalender">Kalender</a><a href="vereine">Vereine</a><a href="schiedsrichter">Schiedsrichter</a><a href="news" aria-current="page">News</a><a href="./#vorstand">Vorstand</a><a href="./#dokumente">Dokumente</a><a href="kontakt">Kontakt</a>
+  <a href="./">Startseite</a><a href="kalender">Kalender</a><a href="vereine">Vereine</a><a href="schiedsrichter">Schiedsrichter</a><a href="news" aria-current="page" data-news-neu="2026-10-11">News</a><a href="./#vorstand">Vorstand</a><a href="./#dokumente">Dokumente</a><a href="kontakt">Kontakt</a>
 </div>
 
 <main id="inhalt">
@@ -391,7 +391,7 @@ h1,h2,h3,p{margin:0}
         <a class="sx-fuss-insta" href="https://www.instagram.com/dobasket/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-insta"/></svg>@dobasket</a>
       </div>
       <div><h4>Spielbetrieb</h4><ul><li><a href="kalender">Spielkalender</a></li><li><a href="vereine">Vereine &amp; Teams</a></li><li><a href="hallen">Hallen</a></li><li><a href="./#spieltag">Spieltag</a></li></ul></div>
-      <div><h4>Der Kreis</h4><ul><li><a href="news">News</a></li><li><a href="schiedsrichter">Schiedsrichter</a></li><li><a href="./#vorstand">Vorstand</a></li><li><a href="./#rechtsausschuss">Rechtsausschuss</a></li><li><a href="./#dokumente">Dokumente</a></li></ul></div>
+      <div><h4>Der Kreis</h4><ul><li><a href="news" data-news-neu="2026-10-11">News</a></li><li><a href="schiedsrichter">Schiedsrichter</a></li><li><a href="./#vorstand">Vorstand</a></li><li><a href="./#rechtsausschuss">Rechtsausschuss</a></li><li><a href="./#dokumente">Dokumente</a></li></ul></div>
       <div><h4>Rechtliches</h4><ul><li><a href="impressum">Impressum</a></li><li><a href="datenschutz">Datenschutz</a></li><li><a href="kontakt">Kontakt</a></li></ul></div>
     </div>
     <div class="sx-fuss-unten"><span>Meldung vom 24.09.2026</span><a href="news" style="color:var(--accent);font-weight:700;text-decoration:none">Alle News →</a></div>
@@ -583,5 +583,7 @@ if(!ruhig && matchMedia("(hover: hover) and (pointer: fine)").matches){
 })();
 /* /NACHOBEN */
 </script>
+<style>.news-neu{position:relative}.nav-links a.news-neu::after,.sx-links a.news-neu::after,.burger.news-neu::after{content:"";position:absolute;top:7px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--ground)}.menue a.news-neu::after{content:"";display:inline-block;width:10px;height:10px;margin-left:10px;vertical-align:.45em;border-radius:50%;background:var(--accent)}</style>
+<script>(function(){var d=document.querySelector("[data-news-neu]");if(!d)return;var t=(Date.now()-new Date(d.getAttribute("data-news-neu")+"T00:00:00"))/864e5;if(t<-1||t>14)return;document.querySelectorAll(".nav-links [data-news-neu],.sx-links [data-news-neu],.menue [data-news-neu],.burger").forEach(function(e){e.classList.add("news-neu")})})();</script>
 </body>
 </html>
