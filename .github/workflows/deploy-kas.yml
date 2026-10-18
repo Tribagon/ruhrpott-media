@@ -1,14 +1,18 @@
-name: Website nach ALL-INKL (neu.dobasket.de)
+name: Website nach ALL-INKL (dobasket.de + Testseite neu.)
 
-# Laedt geaenderte Website-Dateien per FTP-TLS auf den ALL-INKL-Webspace (Ordner /dobasket-v2/).
-# Laeuft bei jedem Push mit Website-Dateien -- vor allem nach den Kalenderdaten-Uploads der
-# Spielplan-Pipeline (die committet per PAT, das loest Workflows aus). Dieses Repo ist oeffentlich,
-# Actions-Minuten kosten hier nichts. Zugang: Secrets KAS_FTP_HOST/USER/PASS (Zusatz-FTP-Nutzer,
-# nur fuer /dobasket-v2/). Logik und Sicherungen: .github/scripts/deploy_kas.py.
+# Laedt geaenderte Website-Dateien per FTP-TLS auf den ALL-INKL-Webspace. Zwei Ziele (seit 18.10.2026):
+#   Branch main -> LIVE dobasket.de      (/dobasket-v2/,   Secrets KAS_FTP_HOST/USER/PASS)
+#   Branch test -> TEST neu.dobasket.de  (/dobasket-test/, Secrets KAS_TEST_FTP_USER/PASS)
+# Funktionsaenderungen gehen erst nach test, nach Hendriks OK nach main (Spielplan/dobasket/testseite.py).
+# News und Kalenderdaten gehen direkt nach main. Die Testseite bekommt bei jedem main-Push die aktuellen
+# Spieldaten (kalender/daten.js aus main), sonst wuerde sie veralten.
+# Laeuft vor allem nach den Kalenderdaten-Uploads der Spielplan-Pipeline (committet per PAT, das loest
+# Workflows aus). Dieses Repo ist oeffentlich, Actions-Minuten kosten hier nichts.
+# Logik und Sicherungen (u. a. Zielmarke live/test im Ordner): .github/scripts/deploy_kas.py.
 
 on:
   push:
-    branches: [main]
+    branches: [main, test]
     paths:
       - "*.html"
       - "*.js"
@@ -27,6 +31,11 @@ on:
       - ".github/workflows/deploy-kas.yml"
   workflow_dispatch:
     inputs:
+      ziel:
+        description: "live = dobasket.de (nur vom Branch main), test = neu.dobasket.de"
+        type: choice
+        options: [test, live]
+        default: test
       alles:
         description: "Alle Dateien neu hochladen (nicht nur geaenderte)"
         type: boolean
@@ -35,21 +44,59 @@ on:
 permissions:
   contents: read
 
-# Nie zwei Uploads gleichzeitig -- der spaetere wartet und uebernimmt dann den neuesten Stand
-concurrency:
-  group: deploy-kas
-  cancel-in-progress: false
-
 jobs:
-  hochladen:
+  live:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.ziel == 'live')
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # Nie zwei Uploads gleichzeitig -- der spaetere wartet und uebernimmt dann den neuesten Stand
+    concurrency:
+      group: deploy-kas-live
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
-      - name: Geaenderte Dateien hochladen
+      - name: Geaenderte Dateien hochladen (dobasket.de)
         env:
           KAS_FTP_HOST: ${{ secrets.KAS_FTP_HOST }}
           KAS_FTP_USER: ${{ secrets.KAS_FTP_USER }}
           KAS_FTP_PASS: ${{ secrets.KAS_FTP_PASS }}
+          KAS_TEST_FTP_USER: ${{ secrets.KAS_TEST_FTP_USER }}
           ALLES: ${{ inputs.alles && '--alles' || '' }}
-        run: python3 .github/scripts/deploy_kas.py --live $ALLES
+        run: python3 .github/scripts/deploy_kas.py --ziel live --live $ALLES
+
+  test:
+    # Push auf test (neue Funktion) ODER auf main (frische Spieldaten/News fuer die Testseite)
+    if: github.event_name == 'push' || inputs.ziel == 'test'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: deploy-kas-test
+      cancel-in-progress: false
+    steps:
+      - name: Gibt es den Branch test?
+        id: da
+        run: |
+          if git ls-remote --exit-code --heads "https://github.com/${{ github.repository }}" test >/dev/null; then
+            echo "ja=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "Kein Branch test -- nichts fuer die Testseite zu tun."
+          fi
+      - uses: actions/checkout@v4
+        if: steps.da.outputs.ja
+        with:
+          ref: test
+      - name: Aktuelle Spieldaten aus main uebernehmen
+        if: steps.da.outputs.ja
+        run: |
+          git fetch --depth=1 origin main
+          git checkout FETCH_HEAD -- kalender/daten.js
+      - name: Geaenderte Dateien hochladen (neu.dobasket.de)
+        if: steps.da.outputs.ja
+        env:
+          KAS_FTP_HOST: ${{ secrets.KAS_FTP_HOST }}
+          KAS_FTP_USER: ${{ secrets.KAS_FTP_USER }}
+          KAS_TEST_FTP_HOST: ${{ secrets.KAS_TEST_FTP_HOST }}
+          KAS_TEST_FTP_USER: ${{ secrets.KAS_TEST_FTP_USER }}
+          KAS_TEST_FTP_PASS: ${{ secrets.KAS_TEST_FTP_PASS }}
+          ALLES: ${{ inputs.alles && '--alles' || '' }}
+        run: python3 .github/scripts/deploy_kas.py --ziel test --live $ALLES
