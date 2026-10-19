@@ -72,6 +72,9 @@ DirectorySlash Off
   RewriteCond %{HTTP_HOST} !^(www[.])?dobasket[.]de$ [NC]
   RewriteRule ^robots\\.txt$ robots-test.txt [L]
 
+  # iPhones/Vorschau-Dienste raten Icon-Namen (-precomposed, -120x120 ...): alle liefern das eine Icon (sonst 404)
+  RewriteRule ^apple-touch-icon-(\\d+x\\d+(-precomposed)?|precomposed)\\.png$ apple-touch-icon.png [L]
+
   # --- Alte Adressen -> neue (301) ---
   # Vorschau-/Testnamen bis 10/2026
   RewriteRule ^startseite-vorschau\\.html$ / [R=301,L]
